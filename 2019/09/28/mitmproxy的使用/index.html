@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+
+
+
+
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.4.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.4.0">
+  <link rel="mask-icon" href="/images/logo.svg?v=7.4.0" color="#222">
+  <link rel="alternate" href="/atom.xml" title="一吻江山" type="application/atom+xml">
+
+<link rel="stylesheet" href="/css/main.css?v=7.4.0">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="[TOC]mitmproxy的使用mitmproxy is a free and open source interactive HTTPS proxy.官网：https://mitmproxy.org/安装：pip3 install mitmproxy 或 brew install mitmproxy安装后有3个命令行工具：mitmproxy, mitmdump, mitmweb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mitmproxy的使用">
+<meta property="og:url" content="http://yoursite.com/2019/09/28/mitmproxy的使用/index.html">
+<meta property="og:site_name" content="一吻江山">
+<meta property="og:description" content="[TOC]mitmproxy的使用mitmproxy is a free and open source interactive HTTPS proxy.官网：https://mitmproxy.org/安装：pip3 install mitmproxy 或 brew install mitmproxy安装后有3个命令行工具：mitmproxy, mitmdump, mitmweb">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/281540-af5b56b103232a27.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNc79ly1g5a4bm8fymj30xg0oqdjl.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tNc79ly1g5aqk3tgiej31r40kuwhs.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNc79ly1g5a4bm8fymj30xg0oqdjl.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006tNc79ly1g5a4hkbne2j30xg0oqjv3.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNc79ly1g5a4l0oi7lj30xg0oqwi2.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006tNc79ly1g5a4mkekpvj30xg0oqaec.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNc79ly1g5a4nxo0cgj30xg0oqjv6.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006tNc79ly1g5a4pl36xyj30xg0oqadr.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNc79ly1g5d9drzuxfj31ic0ku0uz.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNc79gy1g5d0cz6rndj30n00kgabm.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNc79ly1g5d1kj7qvvj316z0u0adk.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tNc79ly1g5d1zhmp90j316z0u0gr2.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNc79ly1g5d1un59ssj316z0u0dl4.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNc79gy1g5d2sgnjiqj316z0u0n2j.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNc79gy1g5d2va55pyj316z0u079q.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNc79gy1g5d3gwr0noj316z0u07a6.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tNc79gy1g5d3q3ou9pj316z0u0q5x.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006tNc79ly1g5ggp27f86j31c80u0dll.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNc79ly1g5ggphx21nj31c80u0ag4.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006tNc79ly1g5ghc549tnj31c80u0q7b.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNc79ly1g5ghcff17bj31c80u0q7e.jpg">
+<meta property="og:updated_time" content="2019-09-28T10:28:15.594Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mitmproxy的使用">
+<meta name="twitter:description" content="[TOC]mitmproxy的使用mitmproxy is a free and open source interactive HTTPS proxy.官网：https://mitmproxy.org/安装：pip3 install mitmproxy 或 brew install mitmproxy安装后有3个命令行工具：mitmproxy, mitmdump, mitmweb">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/281540-af5b56b103232a27.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  <link rel="canonical" href="http://yoursite.com/2019/09/28/mitmproxy的使用/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>mitmproxy的使用 | 一吻江山</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一吻江山</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+      
+      
+      
+        
+        <li class="menu-item menu-item-home">
+      
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+      
+      
+      
+        
+        <li class="menu-item menu-item-archives">
+      
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a href="javascript:;" class="popup-trigger">
+        
+          <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+      </li>
+    
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+            
+
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+      <article itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block post">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/28/mitmproxy的使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jason zhou">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一吻江山">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">mitmproxy的使用
+
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-28 18:27:26 / 修改时间：18:28:15" itemprop="dateCreated datePublished" datetime="2019-09-28T18:27:26+08:00">2019-09-28</time>
+            </span>
+          
+            
+
+            
+          
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>[TOC]</p><h1 id="mitmproxy的使用"><a href="#mitmproxy的使用" class="headerlink" title="mitmproxy的使用"></a>mitmproxy的使用</h1><p><strong>mitmproxy</strong> is a free and open source interactive HTTPS proxy.<br>官网：<a href="https://mitmproxy.org/" target="_blank" rel="noopener">https://mitmproxy.org/</a><br>安装：<code>pip3 install mitmproxy</code> 或 <code>brew install mitmproxy</code><br>安装后有3个命令行工具：mitmproxy, mitmdump, mitmweb</p><a id="more"></a>
+
+<p>这里不介绍<code>mitmweb</code>的使用，<code>mitmproxy</code>与<code>mitmdump</code>的功能重点：<br><code>mitmproxy</code>：交互式；查看流量数据(请求与响应)；执行自定义脚本<br><code>mitmdump</code>：执行自定义脚本，脚本在Mitmproxy中叫做<code>Addon</code></p>
+<p>使用<code>mitmproxy</code>：因为是命令行界面，所以需要记住一些快捷键<br>使用<code>mitmdump</code>：偏向编写python代码</p>
+<p>通过一个典型的调用，来认识下<code>Mitmproxy</code>下的核心概念：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy --set scripts=ad_short_mitm.py &apos;~u baidu\.com&apos;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>在Mitmproxy的叫法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>set</td>
+<td><code>Command</code></td>
+</tr>
+<tr>
+<td>scripts</td>
+<td><code>Options</code></td>
+</tr>
+<tr>
+<td>ad_short_mitm.py</td>
+<td><code>Addon</code></td>
+</tr>
+<tr>
+<td>‘~u baidu\.com’</td>
+<td><code>Filter expressions</code></td>
+</tr>
+</tbody></table>
+<h2 id="mitmproxy"><a href="#mitmproxy" class="headerlink" title="mitmproxy"></a>mitmproxy</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy</span><br></pre></td></tr></table></figure>
+
+<p>输入上面命令，启动mitmproxy并显示<code>Flows界面</code>：</p>
+<table>
+<thead>
+<tr>
+<th>Flows界面</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="https://upload-images.jianshu.io/upload_images/281540-af5b56b103232a27.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Flows界面"></td>
+</tr>
+</tbody></table>
+<h3 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h3><ul>
+<li>第1个也是最重要的快捷键：<code>?</code>: 进入<code>Help界面</code>：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>进入Help界面</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5a4bm8fymj30xg0oqdjl.jpg" alt="Help界面"></td>
+</tr>
+</tbody></table>
+<ul>
+<li>第2个重要的快捷键：<code>:</code>: Command prompt,进入命令输入模式</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>进入命令输入模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww3.sinaimg.cn/large/006tNc79ly1g5aqk3tgiej31r40kuwhs.jpg" alt="命令输入模式"></td>
+</tr>
+<tr>
+<td>可以输入的命令：可以在<code>Command Reference界面</code>查看</td>
+</tr>
+<tr>
+<td>可以按<code>tab</code>来命令补全：比如输入flow.m；再按tab; 补全为flow.mark</td>
+</tr>
+<tr>
+<td>可以按<code>tab</code>来路径补全</td>
+</tr>
+<tr>
+<td>按<code>enter</code>执行命令</td>
+</tr>
+<tr>
+<td>常用的命令可以用快捷键，不用进入命令输入模式，省去输入的时间</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>界面间跳转快捷键</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>界面</th>
+<th>截图</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>?</code></td>
+<td>Help界面</td>
+<td><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5a4bm8fymj30xg0oqdjl.jpg" alt="Help界面"></td>
+</tr>
+<tr>
+<td><code>K</code></td>
+<td>Key Bindings界面</td>
+<td><img src="http://ww2.sinaimg.cn/large/006tNc79ly1g5a4hkbne2j30xg0oqjv3.jpg" alt="Key Bindings界面"></td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>Flow Details界面</td>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5a4l0oi7lj30xg0oqwi2.jpg" alt="Flow Details界面"></td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td>Events界面</td>
+<td><img src="http://ww2.sinaimg.cn/large/006tNc79ly1g5a4mkekpvj30xg0oqaec.jpg" alt="Events界面"></td>
+</tr>
+<tr>
+<td><code>C</code></td>
+<td>Command Reference界面</td>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5a4nxo0cgj30xg0oqjv6.jpg" alt="Command Reference界面"></td>
+</tr>
+<tr>
+<td><code>O</code></td>
+<td>Options界面</td>
+<td><img src="http://ww2.sinaimg.cn/large/006tNc79ly1g5a4pl36xyj30xg0oqadr.jpg" alt="Options界面"></td>
+</tr>
+<tr>
+<td><strong>注意：上面的快捷键，都是大写字母，<code>mitmproxy</code>的快捷键是区分大小写的</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Flows界面居然没有快捷键？</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>导航快捷键</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>command</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>q</td>
+<td>console.view.pop</td>
+<td>返回：界面间的返回</td>
+</tr>
+<tr>
+<td>g</td>
+<td>console.nav.start</td>
+<td>跳到第一行</td>
+</tr>
+<tr>
+<td>G</td>
+<td>console.nav.end</td>
+<td>跳到最后一行</td>
+</tr>
+<tr>
+<td>h</td>
+<td>console.nav.left</td>
+<td></td>
+</tr>
+<tr>
+<td>j</td>
+<td>console.nav.down</td>
+<td>跳到下一行</td>
+</tr>
+<tr>
+<td>k</td>
+<td>console.nav.up</td>
+<td>跳到上一行</td>
+</tr>
+<tr>
+<td>l</td>
+<td>console.nav.right</td>
+<td></td>
+</tr>
+<tr>
+<td>space</td>
+<td>console.nav.pagedown</td>
+<td></td>
+</tr>
+<tr>
+<td>ctrl b</td>
+<td>console.nav.pageup</td>
+<td></td>
+</tr>
+<tr>
+<td>ctrl f</td>
+<td>console.nav.pagedown</td>
+<td></td>
+</tr>
+<tr>
+<td>tab</td>
+<td>console.nav.next</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>g\G\j\k等这样的导航键是通用的：在Flows、Events、Command、Options等界面都能用</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>刚开始学命令行界面时，有这么命令、快捷键要记，没记住怎么办？<br>这里介绍下mitmproxy的<code>--no-server, -n</code>应用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy --help</span><br><span class="line">usage: mitmproxy [options]</span><br><span class="line">...</span><br><span class="line">Proxy Options:</span><br><span class="line">  --no-server, -n</span><br><span class="line">  --server              Start a proxy server. Enabled by default.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第1个Terminal窗口里正常启动mitmproxy：<code>➜  ~ mitmproxy</code></li>
+<li>开启第2个Terminal窗口带<code>--no-server</code>选项启动mitmproxy：<code>➜  ~ mitmproxy --no-server</code>；按<code>K</code>/<code>C</code>/<code>O</code>/<code>?</code>查看快捷键、Command、Options、帮助</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>第2个mitmproxy专门用于查看快捷键、Command、Options、帮助</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5d9drzuxfj31ic0ku0uz.jpg" alt></td>
+</tr>
+</tbody></table>
+<h3 id="案例实战"><a href="#案例实战" class="headerlink" title="案例实战"></a>案例实战</h3><p>以<code>东方头条App - 幸运大转盘</code>这个游戏为实战</p>
+<table>
+<thead>
+<tr>
+<th>东方头条App - 幸运大转盘</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79gy1g5d0cz6rndj30n00kgabm.jpg" alt></td>
+</tr>
+<tr>
+<td>1.点击’领取金币’：会发出https://…/zhuanpan/get_zhuanpan_new网络请求</td>
+</tr>
+<tr>
+<td>2.点击’立即领取’：会发出https://…/zhuanpan/get_gold网络请求</td>
+</tr>
+</tbody></table>
+<p>应用目的：通过mitmproxy的replay功能来减少手动操作时间<br>知识点：<code>Filter expressions</code>, <code>Options</code>, <code>Command</code></p>
+<ul>
+<li>1.启动mitmproxy</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>2.点开<code>东方头条App</code>到<code>幸运大转盘</code>界面</li>
+<li>3.点击’领取金币’；点击’立即领取’；</li>
+<li>问题：这时候mitmrpoxy的<code>Flow界面</code>已包含上面的网络请求，网络请求非常多，怎么找到需要的请求</li>
+<li>解答：应用mitmrpoxy的<code>Filter expressions</code></li>
+<li>4.按<code>f</code>快捷键：设置<code>view_filter</code>这个<code>Option</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>按<code>f</code>快捷键, 设置<code>view_filter</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5d1kj7qvvj316z0u0adk.jpg" alt></td>
+</tr>
+<tr>
+<td>* 5.输入<code>~u zhuanpan</code>, 按回车执行命令</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>输入<code>~u zhuanpan</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww3.sinaimg.cn/large/006tNc79ly1g5d1zhmp90j316z0u0gr2.jpg" alt></td>
+</tr>
+<tr>
+<td><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5d1un59ssj316z0u0dl4.jpg" alt></td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>知识点：<code>~u zhuanpan</code>是<code>Filter expressions</code>：<code>~u regex</code>，用来过滤URL符合regex正则表达式的网络请求；可以按<code>？</code>跳转到<code>Help界面</code>查看全部的<code>Filter expressions</code></p>
+</li>
+<li><p>6.用<code>j</code>导航快捷键定位到<code>zhuanpan/get_zhuanpan_new</code>网络请求；按下<code>m</code>快捷键将这条网络请求标记</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>按下<code>m</code>标记网络请求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79gy1g5d2sgnjiqj316z0u0n2j.jpg" alt></td>
+</tr>
+</tbody></table>
+<ul>
+<li>7.用同样的操作，标记<code>zhuanpan/get_gold</code>网络请求</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>按下<code>m</code>标记网络请求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79gy1g5d2va55pyj316z0u079q.jpg" alt></td>
+</tr>
+</tbody></table>
+<ul>
+<li>8.按<code>:</code>快捷键, 进入命令输入模式；输入<code>rep</code>, 按<code>tab</code>补全命令; 输入<code>@marked</code>; 按回车执行命令</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>按<code>tab</code>补全命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww4.sinaimg.cn/large/006tNc79gy1g5d3gwr0noj316z0u07a6.jpg" alt> <img src="http://ww3.sinaimg.cn/large/006tNc79gy1g5d3q3ou9pj316z0u0q5x.jpg" alt></td>
+</tr>
+</tbody></table>
+<p>出于演示使用mitmrpoxy的目的，才增加了许多不必要的步骤；简洁方法：</p>
+<ul>
+<li>去除步骤4、5、6、7</li>
+<li>步骤8改为<code>: replay.client &quot;(~u zhuanpan/get_zhuanpan_new) | (~u zhuanpan/get_gold)&quot;</code></li>
+</ul>
+<p>案例到此结束，小结下用到的快捷键、命令：</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>command</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>f</code></td>
+<td>: set view_fliter=</td>
+<td>只显示符合条件的网络请求</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>flow.mark.toggle @focus</td>
+<td>Toggle mark on this flow</td>
+</tr>
+<tr>
+<td></td>
+<td>: replay.client @marked</td>
+<td>重放多条标记的网络请求</td>
+</tr>
+</tbody></table>
+<p>相关快捷键：</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>界面</th>
+<th>command</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M</td>
+<td>flowlist</td>
+<td>view.marked.toggle</td>
+<td>Toggle viewing marked flows</td>
+</tr>
+<tr>
+<td>U</td>
+<td>flowlist</td>
+<td>flow.mark @all false</td>
+<td>Un-set all marks</td>
+</tr>
+<tr>
+<td>r</td>
+<td>flowlist</td>
+<td>replay.client @focus</td>
+<td>Replay this flow</td>
+</tr>
+</tbody></table>
+<p>一些用到<code>Filter expressions</code>的<code>Options</code>:<br>view_filter、save_stream_filter、intercept</p>
+<p>相关文档：<br><a href="https://docs.mitmproxy.org/stable/concepts-options/" target="_blank" rel="noopener">https://docs.mitmproxy.org/stable/concepts-options/</a><br><a href="https://docs.mitmproxy.org/stable/concepts-filters/" target="_blank" rel="noopener">https://docs.mitmproxy.org/stable/concepts-filters/</a></p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>上面的实战有以下几个问题：</p>
+<ul>
+<li>第1次收集操作时，不是每次都抽到金币，也有可能抽到广告；怎样每次都跳过广告？</li>
+<li>游戏有20次机会，要手动输入多次<code>replay.client @marked</code>才能把20次机会用完；怎样才能减少手动操作？</li>
+</ul>
+<p>这些问题我们通过编写脚本来解决。这里使用<code>mitmproxy</code>的其它功能为编写脚本提供方便<br>把实战的已被标记的2个网络请求保存为文件，方便查看：</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>界面</th>
+<th>command</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>w</td>
+<td>flowlist</td>
+<td>console.command save.file @shown</td>
+<td>Save listed flows to file</td>
+</tr>
+</tbody></table>
+<ul>
+<li>1.按<code>w</code>快捷键, 把<code>@shown</code>修改为<code>@marked</code>; 指定保存路径；按回车执行命令</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>按<code>w</code>保存为文件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5ggp27f86j31c80u0dll.jpg" alt> <img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5ggphx21nj31c80u0ag4.jpg" alt></td>
+</tr>
+<tr>
+<td>输入路径时，可以按<code>tab</code>来补全路径</td>
+</tr>
+<tr>
+<td>最好不要使用<code>~</code>：像我自己Mac上输入<code>~/zhuanpan.mitm</code>，没有保存成功；当然你也可以测试下使用<code>~</code>的路径能否保存成功</td>
+</tr>
+<tr>
+<td>输入的文件的后缀名是可以随意指定的；保存的文件为二进制格式</td>
+</tr>
+</tbody></table>
+<ul>
+<li>2.开启第2个Terminal窗口带–no-server选项启动mitmproxy</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy --no-server</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>界面</th>
+<th>command</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L</td>
+<td>flowlist</td>
+<td>console.command view.load</td>
+<td>Load flows from file</td>
+</tr>
+</tbody></table>
+<ul>
+<li>3.按<code>L</code>快捷键, 把步骤1保存的文件加载进来</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>按<code>L</code>加载文件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="http://ww3.sinaimg.cn/large/006tNc79ly1g5ghc549tnj31c80u0q7b.jpg" alt> <img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5ghcff17bj31c80u0q7e.jpg" alt></td>
+</tr>
+</tbody></table>
+<p>好了，编写脚本的准备工作结束！<br>小结下用到的快捷键、命令：</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>界面</th>
+<th>command</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>w</td>
+<td>flowlist</td>
+<td>console.command save.file @shown</td>
+<td>Save listed flows to file</td>
+</tr>
+<tr>
+<td>L</td>
+<td>flowlist</td>
+<td>console.command view.load</td>
+<td>Load flows from file</td>
+</tr>
+</tbody></table>
+<p>相关快捷键：</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>界面</th>
+<th>command</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>e</td>
+<td>flowlist</td>
+<td>console.command export.file {choice} @focus</td>
+<td>Export this flow to file</td>
+</tr>
+</tbody></table>
+<p>快捷键<code>w</code>与<code>e</code>的区别</p>
+<table>
+<thead>
+<tr>
+<th>w</th>
+<th>e</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件为二进制文件</td>
+<td>文件为文本文件</td>
+</tr>
+<tr>
+<td>保存的信息完整</td>
+<td>只保存请求信息，不保存响应信息</td>
+</tr>
+<tr>
+<td>能一次保存多条网络请求信息</td>
+<td>一次只能保存一条网络请求信息</td>
+</tr>
+</tbody></table>
+<h2 id="mitmdump"><a href="#mitmdump" class="headerlink" title="mitmdump"></a>mitmdump</h2><p><code>Mitmproxy</code>是用python实现的，编写相应的<code>Addon</code>脚本也是用python</p>
+<h3 id="shell脚本"><a href="#shell脚本" class="headerlink" title="shell脚本"></a>shell脚本</h3><p>先用在<code>mitmproxy</code>的<code>e</code>快捷键来辅助编写shell脚本，来解决下上面的实战问题</p>
+<ul>
+<li><ol>
+<li>用<code>e</code>快捷键分别保存<code>zhuanpan/get_zhuanpan_new</code>、<code>zhuanpan/get_gold</code>网络请求为文件<code>get_zhuanpan_new.sh</code>、<code>get_gold.sh</code></li>
+</ol>
+</li>
+</ul>
+<p>get_zhuanpan_new.sh文件内容：[get_gold.sh内容类似，不再列出]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -H &apos;Host:zhuanpan.dftoutiao.com&apos; -H &apos;Content-Type:application/x-www-form-urlencoded&apos; -H &apos;Connection:keep-alive&apos; -H &apos;Accept:*/*&apos; -H &apos;User-Agent:DFTT/2.4.8 (iPhone; iOS 12.3.1; Scale/3.00)&apos; -H &apos;Accept-Language:zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8&apos; -H &apos;Content-Length:484&apos; -H &apos;Accept-Encoding:br, gzip, deflate&apos; -X POST &apos;https://zhuanpan.dftoutiao.com/zhuanpan/get_zhuanpan_new&apos; --data-binary &apos;accid=834536089&amp;appqid=AppStore190602&amp;apptypeid=DFTT&amp;appver=2.4.8&amp;device=iPhone%206s%20Plus%20%28A1634/A1687%29&amp;deviceid=AE9418A1-561A-4F5C-AF05-1EC222A50CF3&amp;fr=rwzx&amp;ime=F2B14555-E2EB-4556-B757-2C55799C92C2&amp;lt=d2RlWExGb015UjRqSkxMZk0rRkYwcTAzd0I3RmErMWRLbzZsYTc4dkFtakxLMmgvdW9xWFhYUEFNdU9XTHZMV3F6cWNhVXRPalBSMkJNUHlvTktRbnc9PQ%3D%3D&amp;network=wifi&amp;num=57&amp;os=iOS%2012.3.1&amp;position=%E6%B5%99%E6%B1%9F&amp;sign=5aac4e159e8d205c084c9f9e6cf4e41f&amp;softname=DFTTIOS&amp;softtype=TouTiao&amp;ts=1564368354&apos;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><ol start="2">
+<li>把<code>get_zhuanpan_new.sh</code>、<code>get_gold.sh</code>的内容合并到最终的文件中<code>zhuanpan.sh</code></li>
+</ol>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/usr/bin/env bash</span></span><br><span class="line"></span><br><span class="line">function zhuanpan</span><br><span class="line">&#123;</span><br><span class="line">    # mitmproxy用快捷键e导出的get_zhuanpan_new.sh文件内容原样写到这</span><br><span class="line">    curl -H 'Host:zhuanpan.dftoutiao.com' -H 'Content-Type:application/x-www-form-urlencoded' -H 'Connection:keep-alive' -H 'Accept:*/*' -H 'User-Agent:DFTT/2.4.8 (iPhone; iOS 12.3.1; Scale/3.00)' -H 'Accept-Language:zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8' -H 'Content-Length:484' -H 'Accept-Encoding:br, gzip, deflate' -X POST 'https://zhuanpan.dftoutiao.com/zhuanpan/get_zhuanpan_new' --data-binary 'accid=834536089&amp;appqid=AppStore190602&amp;apptypeid=DFTT&amp;appver=2.4.8&amp;device=iPhone%206s%20Plus%20%28A1634/A1687%29&amp;deviceid=AE9418A1-561A-4F5C-AF05-1EC222A50CF3&amp;fr=rwzx&amp;ime=F2B14555-E2EB-4556-B757-2C55799C92C2&amp;lt=d2RlWExGb015UjRqSkxMZk0rRkYwcTAzd0I3RmErMWRLbzZsYTc4dkFtakxLMmgvdW9xWFhYUEFNdU9XTHZMV3F6cWNhVXRPalBSMkJNUHlvTktRbnc9PQ%3D%3D&amp;network=wifi&amp;num=57&amp;os=iOS%2012.3.1&amp;position=%E6%B5%99%E6%B1%9F&amp;sign=5aac4e159e8d205c084c9f9e6cf4e41f&amp;softname=DFTTIOS&amp;softtype=TouTiao&amp;ts=1564368354'</span><br><span class="line"></span><br><span class="line">    # mitmproxy用快捷键e导出的get_gold.sh文件内容原样写到这</span><br><span class="line">    curl -H 'Host:zhuanpan.dftoutiao.com' -H 'Content-Type:application/x-www-form-urlencoded' -H 'Connection:keep-alive' -H 'Accept:*/*' -H 'User-Agent:DFTT/2.4.8 (iPhone; iOS 12.3.1; Scale/3.00)' -H 'Accept-Language:zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8' -H 'Content-Length:487' -H 'Accept-Encoding:br, gzip, deflate' -X POST 'https://zhuanpan.dftoutiao.com/zhuanpan/get_gold' --data-binary 'accid=834536089&amp;appqid=AppStore190602&amp;apptypeid=DFTT&amp;appver=2.4.8&amp;device=iPhone%206s%20Plus%20%28A1634/A1687%29&amp;deviceid=AE9418A1-561A-4F5C-AF05-1EC222A50CF3&amp;fr=rwzx&amp;ime=F2B14555-E2EB-4556-B757-2C55799C92C2&amp;isfirst=0&amp;lt=d2RlWExGb015UjRqSkxMZk0rRkYwcTAzd0I3RmErMWRLbzZsYTc4dkFtakxLMmgvdW9xWFhYUEFNdU9XTHZMV3F6cWNhVXRPalBSMkJNUHlvTktRbnc9PQ%3D%3D&amp;network=wifi&amp;os=iOS%2012.3.1&amp;position=%E6%B5%99%E6%B1%9F&amp;sign=c6f61f80d1c001ac5382ef73632e0e9e&amp;softname=DFTTIOS&amp;softtype=TouTiao&amp;ts=1564368376'</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for ((i=0; i&lt;20; i++));</span><br><span class="line">do</span><br><span class="line">    zhuanpan</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<p>ok，shell脚本以编写完成</p>
+<h3 id="python脚本"><a href="#python脚本" class="headerlink" title="python脚本"></a>python脚本</h3><p>关于<code>Addon</code>的概念可以查看：<br><a href="https://docs.mitmproxy.org/stable/addons-overview/" target="_blank" rel="noopener">https://docs.mitmproxy.org/stable/addons-overview/</a></p>
+<p>编写<code>Addon</code>脚本写些什么呢？先上一下模板：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">from mitmproxy import ctx</span><br><span class="line">from mitmproxy import flowfilter</span><br><span class="line">from mitmproxy import http</span><br><span class="line">from mitmproxy import addonmanager</span><br><span class="line"></span><br><span class="line">class Myaddon(object):</span><br><span class="line"></span><br><span class="line">    def __init__(self):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def load(self, entry: addonmanager.Loader):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def request(self, flow: http.HTTPFlow):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def response(self, flow: http.HTTPFlow):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">addons = [</span><br><span class="line">    Myaddon()</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p><strong>编写<code>Addon</code>脚本:就是选择性的实现上面的方法</strong></p>
+<p><strong>具体都有哪些方法可以选择性实现，可以查看如下文档：</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文档</td>
+<td><a href="https://docs.mitmproxy.org/stable/addons-events/" target="_blank" rel="noopener">https://docs.mitmproxy.org/stable/addons-events/</a></td>
+</tr>
+<tr>
+<td>源代码</td>
+<td>docs/src/examples/addons/events.py</td>
+</tr>
+<tr>
+<td>源代码</td>
+<td>mitmproxy/eventsequence.py</td>
+</tr>
+</tbody></table>
+<p>开始实现<code>Addon</code>脚本：</p>
+<ul>
+<li><ol>
+<li>新建文件<code>zhuangpan_mitm.py</code>, 实现<code>__init__</code>方法：</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">from mitmproxy import ctx</span><br><span class="line">from mitmproxy import flowfilter</span><br><span class="line">from mitmproxy import http</span><br><span class="line"></span><br><span class="line">class Zhuangpan(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.filter = flowfilter.parse(r&apos;(~u zhuanpan/get_zhuanpan_new) | (~u zhuanpan/get_gold)&apos;)</span><br><span class="line">        self.new_fliter = flowfilter.parse(r&apos;~u zhuanpan/get_zhuanpan_new&apos;) </span><br><span class="line">        self.get_fliter = flowfilter.parse(r&apos;~u zhuanpan/get_gold&apos;)</span><br><span class="line">        self.flows = []</span><br><span class="line">        self.urls = set()</span><br><span class="line">        self.remain = 0</span><br><span class="line"></span><br><span class="line">addons = [</span><br><span class="line">    Zhuangpan()</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>这里用到了Mitmproxy的api:<code>flowfilter.parse</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># mitmproxy/flowfilter.py文件</span><br><span class="line">def parse(s: str) -&gt; TFilter:</span><br><span class="line"></span><br><span class="line"># 还定义了：</span><br><span class="line">def match(flt, flow):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">        Matches a flow against a compiled filter expression.</span><br><span class="line">        Returns True if matched, False if not.</span><br><span class="line">        ....</span><br><span class="line">    &quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><ol start="2">
+<li>实现<code>request</code>方法：</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Zhuangpan(object):</span><br><span class="line">    ...</span><br><span class="line">    def request(self, flow: http.HTTPFlow):               </span><br><span class="line">        if flowfilter.match(self.filter, flow):</span><br><span class="line">            url = flow.request.url</span><br><span class="line">            if not url in self.urls: </span><br><span class="line">                ctx.log.alert(url)</span><br><span class="line">                self.flows.append(flow)</span><br><span class="line">                self.urls.add(url)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><ol start="3">
+<li>实现<code>response</code>方法：</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Zhuangpan(object):                       </span><br><span class="line">    ...</span><br><span class="line">    def response(self, flow: http.HTTPFlow):</span><br><span class="line">        if flowfilter.match(self.new_fliter, flow):</span><br><span class="line">            flow.response.replace(r&apos;&quot;gold&quot;:0&apos;, &apos;&quot;gold&quot;:999&apos;)</span><br><span class="line"></span><br><span class="line">            text = flow.response.text</span><br><span class="line">            data = json.loads(text)</span><br><span class="line">            self.remain = data.get(&apos;data&apos;).get(&apos;cur_num&apos;)</span><br><span class="line">            ctx.log.alert(&apos;remain count:&#123;&#125;&apos;.format(self.remain))</span><br><span class="line"></span><br><span class="line">        if flowfilter.match(self.get_fliter, flow):</span><br><span class="line">            if self.remain &gt; 0 and len(self.urls) &gt;= 2:                </span><br><span class="line">                flows = [f.copy() for f in self.flows]</span><br><span class="line">                ctx.master.commands.call(&quot;replay.client&quot;, flows)</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>ctx.log.xxx</code>等方法来代替使用<code>print</code>或<code>logging.warning</code>等方法：  </p>
+<ul>
+<li>在mitmproxy中，<code>ctx.log.xxx</code>记录的信息会出现在<code>Event</code>界面,         而其它方法不会出现在<code>Event</code>界面</li>
+<li>在mitmdump中，<code>ctx.log.xxx</code>记录的信息事件显示的顺序正确,         而其它方法显示的顺序不正确</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmdump --scripts zhuangpan_mitm.py</span><br><span class="line">Loading script zhuangpan_mitm.py</span><br><span class="line">Proxy server listening at http://*:8080</span><br><span class="line"></span><br><span class="line">  # --scripts SCRIPT, -s SCRIPT</span><br><span class="line">                        Execute a script. May be passed multiple times.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set userid=zhj -s &quot;mitm_user_xxx.py&quot;  -s math_mitm.py &apos;~u mapi.hddgood.com&apos;</span><br><span class="line"></span><br><span class="line">mitmdump --set replacements=&apos;/~s/&quot;video_url&quot;:&quot;(.+)&quot;&#125;/&quot;video_url&quot;:&quot;https://vd3.bdstatic.com/abc.mp4&quot;&#125;&apos;</span><br><span class="line"></span><br><span class="line"># 代码里可以调用</span><br><span class="line">ctx.master.commands.call(&quot;replay.client&quot;, [flow])</span><br><span class="line"></span><br><span class="line">ctx.master.commands.execute(&quot;view.focus.go 0&quot;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>问题：只关注某个域名下的流量，怎么设置？<br>解决：ignore_hosts<br><a href="https://docs.mitmproxy.org/stable/howto-ignoredomains/" target="_blank" rel="noopener">https://docs.mitmproxy.org/stable/howto-ignoredomains/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Ignore everything but example.com and mitmproxy.org:</span><br><span class="line">--ignore-hosts &apos;^(?!example\.com)(?!mitmproxy\.org)&apos;</span><br><span class="line"></span><br><span class="line">正则表达式：反前瞻</span><br><span class="line">反前瞻：要匹配某个模式时，需要在它 后面找不到含有给定前瞻模式的内容</span><br><span class="line">foo(?!bar)  Negative lookahead assertion. The pattern foo will only match if not followed by a match of pattern bar.</span><br></pre></td></tr></table></figure>
+
+<h2 id="代码阅读"><a href="#代码阅读" class="headerlink" title="代码阅读"></a>代码阅读</h2><p>源码地址：<a href="https://github.com/mitmproxy/mitmproxy" target="_blank" rel="noopener">https://github.com/mitmproxy/mitmproxy</a></p>
+<p>mitmproxy/tools/_main.py</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">入口方法：</span><br><span class="line">def mitmproxy(args=None) -&gt; typing.Optional[int]:</span><br><span class="line">    run(console.master.ConsoleMaster)</span><br><span class="line"></span><br><span class="line">def mitmdump(args=None) -&gt; typing.Optional[int]:</span><br><span class="line">    run(dump.DumpMaster)</span><br><span class="line">    </span><br><span class="line">主要代码</span><br><span class="line">def run(master_cls):</span><br><span class="line"></span><br><span class="line">    opts   = options.Options()</span><br><span class="line">    master = master_cls(opts)</span><br><span class="line">    </span><br><span class="line">    pconf  = proxy.config.ProxyConfig(opts)</span><br><span class="line">    server = proxy.server.ProxyServer(pconf)</span><br><span class="line">    </span><br><span class="line">    master.server = server</span><br><span class="line">    master.run()</span><br><span class="line">    return master</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">master.Master</span><br><span class="line">    console.master.ConsoleMaster</span><br><span class="line">    dump.DumpMaster</span><br><span class="line">    web.master.WebMaster</span><br><span class="line"></span><br><span class="line">Server</span><br><span class="line">    proxy.server.ProxyServer</span><br><span class="line">    proxy.server.DummyServer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Master与Server关系：</span><br><span class="line">    master.server = server</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Master和Server对象生成：</span><br><span class="line">    Master(opts: options.Options)</span><br><span class="line">    Server(config: config.ProxyConfig)</span><br><span class="line"></span><br><span class="line">ProxyConfig与Options关系：</span><br><span class="line">    ProxyConfig(options: options.Options)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">开始运行：</span><br><span class="line">    master.run()</span><br><span class="line">        master.start()</span><br><span class="line"></span><br><span class="line">    def start(self):</span><br><span class="line">        if self.server:</span><br><span class="line">            ServerThread(self.server).start()</span><br><span class="line"></span><br><span class="line">class ServerThread(basethread.BaseThread):</span><br><span class="line">    def __init__(self, server):</span><br><span class="line">        self.server = server</span><br><span class="line">        address = getattr(self.server, &quot;address&quot;, None)</span><br><span class="line">        super().__init__(</span><br><span class="line">            &quot;ServerThread (&#123;&#125;)&quot;.format(repr(address))</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    def run(self):</span><br><span class="line">        self.server.serve_forever()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">线程：</span><br><span class="line">    ServerThread</span><br><span class="line">    connection_thread</span><br><span class="line"></span><br><span class="line">    def connection_thread(self, connection, client_address):</span><br><span class="line">        with self.handler_counter:</span><br><span class="line">            try:</span><br><span class="line">                self.handle_client_connection(connection, client_address)</span><br><span class="line">            finally:</span><br><span class="line">                close_socket(connection)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def handle_client_connection(self, conn, client_address):</span><br><span class="line">        h = ConnectionHandler(</span><br><span class="line">            conn,</span><br><span class="line">            client_address,</span><br><span class="line">            self.config,</span><br><span class="line">            self.channel</span><br><span class="line">        )</span><br><span class="line">        h.handle()</span><br><span class="line"></span><br><span class="line">    def handle(self):</span><br><span class="line">        self.log(&quot;clientconnect&quot;, &quot;info&quot;)</span><br><span class="line"></span><br><span class="line">        root_layer = None</span><br><span class="line">        root_layer = self._create_root_layer()</span><br><span class="line">        root_layer = self.channel.ask(&quot;clientconnect&quot;, root_layer)</span><br><span class="line">        root_layer()</span><br><span class="line"></span><br><span class="line">        self.log(&quot;clientdisconnect&quot;, &quot;info&quot;)</span><br><span class="line"></span><br><span class="line">    def _create_root_layer(self):</span><br><span class="line">        root_ctx = ...</span><br><span class="line">        mode = self.config.options.mode</span><br><span class="line">        if mode.startswith(&quot;upstream:&quot;):</span><br><span class="line">            return modes.HttpUpstreamProxy</span><br><span class="line">        elif mode == &quot;transparent&quot;:</span><br><span class="line">            return modes.TransparentProxy(root_ctx)</span><br><span class="line">        elif mode == &quot;regular&quot;:</span><br><span class="line">            return modes.HttpProxy(root_ctx)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">addons的运行过程[生命周期]</span><br><span class="line">[1]. &quot;load&quot;</span><br><span class="line">[2]. &quot;running&quot;</span><br><span class="line">[3]. &quot;configure&quot;</span><br><span class="line"></span><br><span class="line">[1]. &quot;load&quot;</span><br><span class="line">DumpMaster.__init__(self,options):</span><br><span class="line">    super().__init__(options)</span><br><span class="line">    self.addons.add(*addons.default_addons())</span><br><span class="line"></span><br><span class="line">AddonManager.add(self, *addons):</span><br><span class="line">    for i in addons:</span><br><span class="line">        self.chain.append(self.register(i))</span><br><span class="line">        </span><br><span class="line">AddonManager.register(self, addon):</span><br><span class="line">    l = Loader(self.master)</span><br><span class="line">    self.invoke_addon(addon, &quot;load&quot;, l)</span><br><span class="line">    </span><br><span class="line">[2]. &quot;running&quot;</span><br><span class="line">master.run():</span><br><span class="line">    loop = asyncio.get_event_loop()</span><br><span class="line">    self.run_loop(loop.run_forever)</span><br><span class="line">        </span><br><span class="line">    master.run_loop(self, loop):</span><br><span class="line">        asyncio.ensure_future(self.running())</span><br><span class="line">        </span><br><span class="line">    master.running(self):</span><br><span class="line">        self.addons.trigger(&quot;running&quot;)</span><br><span class="line">        </span><br><span class="line">[3]. &quot;configure&quot;</span><br><span class="line">class AddonManager:</span><br><span class="line">    def __init__(self, master):</span><br><span class="line">        self.lookup = &#123;&#125;</span><br><span class="line">        self.chain = []</span><br><span class="line">        self.master = master</span><br><span class="line">        master.options.changed.connect(self._configure_all)</span><br><span class="line"></span><br><span class="line">    def _configure_all(self, options, updated):</span><br><span class="line">        self.trigger(&quot;configure&quot;, updated)</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://stackoverflow.com/questions/51893788/using-mitmproxy-inside-python-script" target="_blank" rel="noopener">https://stackoverflow.com/questions/51893788/using-mitmproxy-inside-python-script</a></p>
+<p><a href="https://dev.to/kevcui/3-mitmproxy-tips-you-might-not-know-about-5dbg" target="_blank" rel="noopener">https://dev.to/kevcui/3-mitmproxy-tips-you-might-not-know-about-5dbg</a></p>
+<p><a href="https://github.com/KevCui/mitm-scripts" target="_blank" rel="noopener">https://github.com/KevCui/mitm-scripts</a></p>
+
+    </div>
+
+    
+    
+    
+        
+      
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+              
+                <a href="/2019/09/28/ios-switch-proxy/" rel="next" title="iOS快速设置代理">
+                  <i class="fa fa-chevron-left"></i> iOS快速设置代理
+                </a>
+              
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+              
+            </div>
+          </div>
+        
+      </footer>
+    
+  </div>
+  
+  
+  
+  </article>
+
+  </div>
+
+
+          </div>
+          
+    
+    <div class="comments" id="gitalk-container"></div>
+  
+
+        </div>
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+        
+        
+        
+        
+      
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#mitmproxy的使用"><span class="nav-number">1.</span> <span class="nav-text">mitmproxy的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mitmproxy"><span class="nav-number">1.1.</span> <span class="nav-text">mitmproxy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#快捷键"><span class="nav-number">1.1.1.</span> <span class="nav-text">快捷键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例实战"><span class="nav-number">1.1.2.</span> <span class="nav-text">案例实战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">1.1.3.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mitmdump"><span class="nav-number">1.2.</span> <span class="nav-text">mitmdump</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shell脚本"><span class="nav-number">1.2.1.</span> <span class="nav-text">shell脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python脚本"><span class="nav-number">1.2.2.</span> <span class="nav-text">python脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">1.2.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">1.3.</span> <span class="nav-text">其它</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码阅读"><span class="nav-number">1.4.</span> <span class="nav-text">代码阅读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.5.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+        
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image"
+      src="/images/avatar.jpg"
+      alt="jason zhou">
+  <p class="site-author-name" itemprop="name">jason zhou</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+  <nav class="site-state motion-element">
+      <div class="site-state-item site-state-posts">
+        
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+    
+      
+      
+      <div class="site-state-item site-state-tags">
+        
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+        
+      </div>
+    
+  </nav>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jason zhou</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.0</div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+  <script src="/lib/anime.min.js?v=3.1.0"></script>
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script src="/lib/pjax/pjax.min.js?v=0.2.8"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
+<script src="/js/schemes/pisces.js?v=7.4.0"></script>
+<script src="/js/next-boot.js?v=7.4.0"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var id = element.id || '';
+    var src = element.src || '';
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (id !=='') {
+      script.id = element.id;
+    }
+    if (src !== '') {
+      script.src = src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="/js/local-search.js?v=7.4.0"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID: '3b42fe56a13632632be3',
+      clientSecret: '0eb83e99602861634ce78d1ced5c4e9bfb047fd6',
+      repo: 'zhoujie903.github.io',
+      owner: 'zhoujie903',
+      admin: ['zhoujie903'],
+      id: 'bc508eb67acbae19466610c91f139e09',
+        language: 'zh-CN',
+      
+      distractionFreeMode: 'true'
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+</script>
+
+    </div>
+</body>
+</html>
