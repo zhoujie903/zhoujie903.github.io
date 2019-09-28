@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-09-27T15:39:39.000Z</updated>
+  <updated>2019-09-28T01:50:26.278Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>iOS快速设置代理</title>
+    <link href="http://yoursite.com/2019/09/28/ios-switch-proxy/"/>
+    <id>http://yoursite.com/2019/09/28/ios-switch-proxy/</id>
+    <published>2019-09-28T01:48:46.000Z</published>
+    <updated>2019-09-28T01:50:26.278Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>手动设置wifi的步骤非常长：</p><ol><li>点击“设置”</li><li>点击“无线局域网”</li><li>点击已连接的wifi</li><li>点击“配置代理”</li><li>点击“手动”</li><li>定位服务器输入框，输入ip</li><li>定位端口输入框，输入port</li><li>点击“存储”</li></ol><h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>用iOS上的Shadowrocket和Mac上的Charles来快速设置代理<br>iOS和Mac在同一wifi</p><ol><li>启动Charles，假设代理地址为：192.168.0.100:8888</li><li>Shadowrocket设置<code>全局路由</code>为<code>代理</code></li><li>Shadowrocket添加<code>HTTP</code>类型的节点</li><li>Shadowrocket打开连接</li></ol><p><strong>添加<code>HTTP</code>类型的节点:</strong><br><img src="http://upload-images.jianshu.io/upload_images/281540-3a3a4df908ac1248.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加节点"></p><p><strong>结果:</strong><br><img src="http://upload-images.jianshu.io/upload_images/281540-c94d3b52048e63e7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="结果"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h2&gt;&lt;p&gt;手动设置wifi的步骤非常长：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;点击“设置”&lt;/li&gt;
+&lt;li&gt;点击“无线局域网”&lt;/li&gt;
+&lt;li&gt;点击已连接的
+      
+    
+    </summary>
+    
+    
+    
+      <category term="代理" scheme="http://yoursite.com/tags/%E4%BB%A3%E7%90%86/"/>
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+  </entry>
   
   <entry>
     <title>mitmproxy与charles的抓包应用</title>
