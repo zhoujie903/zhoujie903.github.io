@@ -67,7 +67,7 @@
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s2bq3vglj30u01hcaak.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s2ks0wauj31am0qe76x.jpg">
 <meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s4idpz9gj31fa0u045o.jpg">
-<meta property="og:updated_time" content="2019-09-29T08:18:43.088Z">
+<meta property="og:updated_time" content="2019-11-21T03:43:11.973Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mitmproxy与charles的抓包应用">
 <meta name="twitter:description" content="[TOC]问题mitmproxy是命令行界面，不太方便查看，自己遇到的问题有： 在Flow Details界面不知道用哪个快捷键查看下一条或上一条网络请求详情 json中的中文显示为 \ua9b4 或 ？不能看清是哪个中文 不知道怎么复制界面中显示的内容 Charles的编程能力弱把Charles和mitmproxy结合起来使用，可以查看方便、编程扩展">
@@ -257,11 +257,19 @@
                 
               
 
-              <time title="创建时间：2019-09-29 16:14:57 / 修改时间：16:18:43" itemprop="dateCreated datePublished" datetime="2019-09-29T16:14:57+08:00">2019-09-29</time>
+              <time title="创建时间：2019-09-29 16:14:57" itemprop="dateCreated datePublished" datetime="2019-09-29T16:14:57+08:00">2019-09-29</time>
             </span>
           
             
 
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-21 11:43:11" itemprop="dateModified" datetime="2019-11-21T11:43:11+08:00">2019-11-21</time>
+              </span>
             
           
 
@@ -313,6 +321,8 @@
 <td align="center"><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s2ks0wauj31am0qe76x.jpg" alt></td>
 </tr>
 </tbody></table>
+<h2 id="补充-mitmproxy设置上游代理"><a href="#补充-mitmproxy设置上游代理" class="headerlink" title="补充: mitmproxy设置上游代理"></a>补充: mitmproxy设置上游代理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --mode=upstream:http://127.0.0.1:8888 --ssl-insecure</span><br></pre></td></tr></table></figure>
+
 <h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>应用：自动生成接口的python代码</p>
 <p>以<code>趣头条App</code>为例：<br>阅读得积分的接口为: <code>https://api.1sapp.com/readtimer/report</code><br>自动生成的代码大约如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">def readtimer_report(self):</span><br><span class="line"></span><br><span class="line">    headers = &#123;</span><br><span class="line">		&apos;User-Agent&apos;: &apos;qukan_android;retrofit/2.4.0 okhttp/3.11.0;os/7.0 M5 Note Meizu;device/862546036581345;version/3.9.41.000.0904.1121;channel/012&apos;,</span><br><span class="line">		&apos;Host&apos;: &apos;api.1sapp.com&apos;,</span><br><span class="line">		&apos;Accept-Encoding&apos;: &apos;gzip&apos;,</span><br><span class="line">		&apos;Connection&apos;: &apos;keep-alive&apos;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    params = &#123;</span><br><span class="line">		&apos;qdata&apos;: &apos;NzVFNkE3Mjc0RjEzRkYwRTM5OTEzNjAyRUZBMDMzQTAuY0dGeVlXMGZPR0kyTldKalltTXRNVGczT1MwME9EZGlMVGszT0RBdE1EUmlOVEV3TWpOak9UazRIblpsY25OcGIyNGZNVEVlY0d4aGRHWnZjbTBmWVc1a2NtOXBaQjVsWXg4eC46LxvyIvgD62/T93SlANmywpigTwlOwcfCHe0iZ1D8mH1zpslt2JCRPdiHOj1M20bU0zDX0odUOBig6Kt51mheNJuQYeDvp15R8RSGTT3LR9s55nBCGvWyTLq+3pjEvkyERElR9E2I384/nHQR4iqxqv7LKQ4rBA0R6bNG8sksHqNl1izSbF87G/4/Qw5vVYcuNUfU0BM6vvIbsy2CTPWlJ51YCzadQZZLONuaYTpyhuOiUV4vnx6qkvpYDNp9XpPPjbXxJAb7fikqjWSdyx167hXDPzUkNZGndjZsv7kQANDkIk2Dm+g5YW1I49xnkOzJkmxvyrLevnsSb9S5fSEUEyfq0GlPHE0RRBeSjFxVltH1zdZraTtk13Z+MvA7HBYQONz/0OwyMnujc1Ety91uKh6YCCVEDvBO+RTOzoRDa3nlRo3FTo9OeRBsyL20qIP24977MMYXEoxinTuwNonipCjnjSYIrhOu6cyv7uxuLd6FxtmTsydawNGMPI/K+habIKXNUFsQMCUcAGhYpoKQJvkQqHEq6lPyZZzXDot1EsN6bsGj56xQdiuJZLMFyZaGNR6E9FmVlI0LAVT8ttVpOvs+5f08T0iMxMNb0VQk6DOySpYHp7EVjc9YFpPcVxj8aXvuTjoPkaNGhSKQ0fgBd8HVRLslcnzX0QLJkTuU7NQ9aili6m2M2hWvh/q8ghWrvtLT+izCiFNKHE+4GTC9J6jqgyjHsXkAjcOSBAaIXMQKnOd664hdoR2GqV+GAy95fc5zZCJ7EFvzmTbJQrpMOwW+Y2NvYPZtgjw1uJEyU7AR7nVw7VqMjPpCDYeWBWoQ1W4OjlXTqgBR4MIu1sTag6a+my/0hItf91SNa58zCN3YmE2NnsWwwiCC+ZP91moV/KqPwX3vMLKW4/3Vsziqe8gl&apos;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    data = &#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    url = &apos;http://api.1sapp.com/readtimer/report&apos;</span><br><span class="line">    result = self._get(url, headers=headers, params=params, data=data)</span><br><span class="line">    return result</span><br></pre></td></tr></table></figure>
@@ -434,7 +444,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">3.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件"><span class="nav-number">4.</span> <span class="nav-text">文件</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充-mitmproxy设置上游代理"><span class="nav-number">3.</span> <span class="nav-text">补充: mitmproxy设置上游代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">4.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件"><span class="nav-number">5.</span> <span class="nav-text">文件</span></a></li></ol></div>
         
       </div>
       <!--/noindex-->
