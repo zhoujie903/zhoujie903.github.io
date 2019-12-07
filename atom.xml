@@ -84,9 +84,9 @@
     
     
     
-      <category term="charles" scheme="http://yoursite.com/tags/charles/"/>
-    
       <category term="mitmproxy" scheme="http://yoursite.com/tags/mitmproxy/"/>
+    
+      <category term="charles" scheme="http://yoursite.com/tags/charles/"/>
     
   </entry>
   
@@ -128,9 +128,9 @@
     
     
     
-      <category term="charles" scheme="http://yoursite.com/tags/charles/"/>
-    
       <category term="mitmproxy" scheme="http://yoursite.com/tags/mitmproxy/"/>
+    
+      <category term="charles" scheme="http://yoursite.com/tags/charles/"/>
     
   </entry>
   
@@ -178,6 +178,31 @@
     <summary type="html">
     
       &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Python阅读列表</title>
+    <link href="http://yoursite.com/2019/09/27/Python%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/"/>
+    <id>http://yoursite.com/2019/09/27/Python阅读列表/</id>
+    <published>2019-09-27T11:35:38.000Z</published>
+    <updated>2019-12-07T11:46:52.130Z</updated>
+    
+    <content type="html"><![CDATA[<p>[TOC]</p><h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><ul><li><a href="https://juejin.im/post/5c13960bf265da6134384ae5" target="_blank" rel="noopener">time date datetme timestamp 傻傻分不清楚</a></li><li><a href="https://cuiqingcai.com/6921.html" target="_blank" rel="noopener">一看就懂，Python 日志 logging 模块详解及应用</a></li><li><a href="https://cuiqingcai.com/6598.html" target="_blank" rel="noopener">Python3 中使用 Pathlib 模块进行文件操作</a></li><li><a href="https://mp.weixin.qq.com/s/NQEKTuSf3rPCloJJw1bPYA" target="_blank" rel="noopener">你还在用 os.path？快来感受一下 pathlib 给你带来的便捷吧</a></li><li><a href="https://cuiqingcai.com/7071.html" target="_blank" rel="noopener">Python 中 typing 模块和类型注解的使用</a></li></ul><a id="more"></a><h2 id="并发-amp-异步"><a href="#并发-amp-异步" class="headerlink" title="并发 &amp; 异步"></a>并发 &amp; 异步</h2><ul><li><a href="https://zhuanlan.zhihu.com/p/25228075" target="_blank" rel="noopener">从0到1，Python异步编程的演进之路</a></li><li><a href="https://zhuanlan.zhihu.com/p/27258289" target="_blank" rel="noopener">Python Async/Await入门指南</a></li><li><a href="https://lotabout.me/2017/Python-Generator/" target="_blank" rel="noopener">Python Generator</a></li><li><a href="https://lotabout.me/2017/understand-python-asyncio/" target="_blank" rel="noopener">理解 Python asyncio</a></li><li><a href="https://www.dongwm.com/post/understand-asyncio-2/" target="_blank" rel="noopener">深入理解asyncio(二)</a></li><li><a href="https://zhuanlan.zhihu.com/p/25228075" target="_blank" rel="noopener">Python中异步协程的使用方法介绍</a></li></ul><h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul><li><a href="https://github.com/piglei/one-python-craftsman" target="_blank" rel="noopener">Python 工匠</a></li><li><a href="https://coding.imooc.com/class/213.html" target="_blank" rel="noopener">Python3实用编程技巧进阶</a></li><li><a href="https://mp.weixin.qq.com/s/ztMEpv4-MJ0y7ad6gb7dyQ" target="_blank" rel="noopener">python3中的unicode和bytes，让编码更流畅</a></li><li><a href="http://cizixs.com/2014/11/08/understand-wsgi/" target="_blank" rel="noopener">python wsgi 简介</a></li><li><a href="https://manjusaka.itscoder.com/posts/2018/02/23/something-about-decorator/" target="_blank" rel="noopener">怎么样去理解 Python 中的装饰器 </a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;[TOC]&lt;/p&gt;&lt;h2 id=&quot;模块&quot;&gt;&lt;a href=&quot;#模块&quot; class=&quot;headerlink&quot; title=&quot;模块&quot;&gt;&lt;/a&gt;模块&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://juejin.im/post/5c13960bf265da6134384ae5&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;time date datetme timestamp 傻傻分不清楚&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://cuiqingcai.com/6921.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;一看就懂，Python 日志 logging 模块详解及应用&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://cuiqingcai.com/6598.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Python3 中使用 Pathlib 模块进行文件操作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://mp.weixin.qq.com/s/NQEKTuSf3rPCloJJw1bPYA&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;你还在用 os.path？快来感受一下 pathlib 给你带来的便捷吧&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://cuiqingcai.com/7071.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Python 中 typing 模块和类型注解的使用&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
     
     </summary>
     
