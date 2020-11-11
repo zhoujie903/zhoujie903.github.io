@@ -1,12 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-  
-  <title>Charles的应用 | 一吻江山</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
   <meta name="description" content="[TOC] Rewrite应用案例01问题：今日头条极速版App每天的阅读推送文章任务因为每天收到的推送很少，因而不能得很高的积分，怎样把普通文章的阅读变为推送文章的阅读呢？ 思考：对比普通文章的阅读与推送文章的阅读发出的网络数据，找出差异 普通文章的阅读与推送文章的阅读达到奖励标准时，都用相同的接口https:&#x2F;&#x2F;is.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Charles的应用">
@@ -30,87 +43,206 @@
 <meta property="article:tag" content="charles">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/281540-64acc9462bb437c4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-  
-    <link rel="alternate" href="/atom.xml" title="一吻江山" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
 
-<meta name="generator" content="Hexo 5.2.0"></head>
+<link rel="canonical" href="http://example.com/2019/09/28/Charles%E7%9A%84%E5%BA%94%E7%94%A8/">
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">一吻江山</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Charles的应用 | 一吻江山</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="一吻江山" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-Charles的应用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/28/Charles%E7%9A%84%E5%BA%94%E7%94%A8/" class="article-date">
-  <time datetime="2019-09-28T10:27:26.000Z" itemprop="datePublished">2019-09-28</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Charles的应用
-    </h1>
-  
 
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">一吻江山</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/09/28/Charles%E7%9A%84%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="jason zhou">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一吻江山">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Charles的应用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-28 18:27:26" itemprop="dateCreated datePublished" datetime="2019-09-28T18:27:26+08:00">2019-09-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-09-29 16:18:45" itemprop="dateModified" datetime="2019-09-29T16:18:45+08:00">2019-09-29</time>
+              </span>
+
+          
+
+        </div>
       </header>
+
     
-    <div class="article-entry" itemprop="articleBody">
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
         <p>[TOC]</p>
 <h2 id="Rewrite应用"><a href="#Rewrite应用" class="headerlink" title="Rewrite应用"></a>Rewrite应用</h2><h3 id="案例01"><a href="#案例01" class="headerlink" title="案例01"></a>案例01</h3><p>问题：<code>今日头条极速版</code>App每天的<code>阅读推送文章</code>任务因为每天收到的推送很少，因而不能得很高的积分，怎样把普通文章的阅读变为推送文章的阅读呢？</p>
 <p>思考：对比普通文章的阅读与推送文章的阅读发出的网络数据，找出差异</p>
-<p>普通文章的阅读与推送文章的阅读达到奖励标准时，都用相同的接口<code>https://is.snssdk.com/score_task/v1/task/get_read_bonus/</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 普通阅读文章&#x2F;视频</span><br><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;?fp&#x3D;xxx&amp;...&amp;group_id&#x3D;6689697061983486472</span><br><span class="line"></span><br><span class="line"># 推送文章的阅读</span><br><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;?fp&#x3D;xxx&amp;...&amp;&amp;impression_type&#x3D;push&amp;group_id&#x3D;6689697061983486472</span><br></pre></td></tr></table></figure>
-<p>对比上面的接口数据发现：<br>推送阅读只比普通阅读<strong>多出了impression_type=push</strong>的Query String</p>
+<p>普通文章的阅读与推送文章的阅读达到奖励标准时，都用相同的接口<code>https://is.snssdk.com/score_task/v1/task/get_read_bonus/</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 普通阅读文章&#x2F;视频</span><br><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;?fp&#x3D;xxx&amp;...&amp;group_id&#x3D;6689697061983486472</span><br><span class="line"></span><br><span class="line"># 推送文章的阅读</span><br><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;?fp&#x3D;xxx&amp;...&amp;&amp;impression_type&#x3D;push&amp;group_id&#x3D;6689697061983486472</span><br></pre></td></tr></table></figure><br>对比上面的接口数据发现：<br>推送阅读只比普通阅读<strong>多出了impression_type=push</strong>的Query String</p>
 <p>解决：用Charles的<code>Rewrite功能Add Query Param</code>来增加impression_type=push解决问题</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/281540-64acc9462bb437c4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Rewrite功能-Type:Add Query Param"></p>
-<p>上面的get_read_bonus重写规则Export导出的get_read_bonus.xml文件内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&#39;1.0&#39; encoding&#x3D;&#39;UTF-8&#39; ?&gt;</span><br><span class="line">&lt;?charles serialisation-version&#x3D;&#39;2.0&#39; ?&gt;</span><br><span class="line">&lt;rewriteSet-array&gt;</span><br><span class="line">  &lt;rewriteSet&gt;</span><br><span class="line">    &lt;active&gt;true&lt;&#x2F;active&gt;</span><br><span class="line">    &lt;name&gt;get_read_bonus&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;hosts&gt;</span><br><span class="line">      &lt;locationPatterns&gt;</span><br><span class="line">        &lt;locationMatch&gt;</span><br><span class="line">          &lt;location&gt;</span><br><span class="line">            &lt;protocol&gt;https&lt;&#x2F;protocol&gt;</span><br><span class="line">            &lt;host&gt;is.snssdk.com&lt;&#x2F;host&gt;</span><br><span class="line">            &lt;path&gt;&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;&lt;&#x2F;path&gt;</span><br><span class="line">          &lt;&#x2F;location&gt;</span><br><span class="line">          &lt;enabled&gt;true&lt;&#x2F;enabled&gt;</span><br><span class="line">        &lt;&#x2F;locationMatch&gt;</span><br><span class="line">      &lt;&#x2F;locationPatterns&gt;</span><br><span class="line">    &lt;&#x2F;hosts&gt;</span><br><span class="line">    &lt;rules&gt;</span><br><span class="line">      &lt;rewriteRule&gt;</span><br><span class="line">        &lt;active&gt;true&lt;&#x2F;active&gt;</span><br><span class="line">        &lt;ruleType&gt;8&lt;&#x2F;ruleType&gt;</span><br><span class="line">        &lt;matchHeader&gt;&lt;&#x2F;matchHeader&gt;</span><br><span class="line">        &lt;matchValue&gt;&lt;&#x2F;matchValue&gt;</span><br><span class="line">        &lt;matchHeaderRegex&gt;false&lt;&#x2F;matchHeaderRegex&gt;</span><br><span class="line">        &lt;matchValueRegex&gt;false&lt;&#x2F;matchValueRegex&gt;</span><br><span class="line">        &lt;matchRequest&gt;false&lt;&#x2F;matchRequest&gt;</span><br><span class="line">        &lt;matchResponse&gt;false&lt;&#x2F;matchResponse&gt;</span><br><span class="line">        &lt;newHeader&gt;impression_type&lt;&#x2F;newHeader&gt;</span><br><span class="line">        &lt;newValue&gt;push&lt;&#x2F;newValue&gt;</span><br><span class="line">        &lt;newHeaderRegex&gt;false&lt;&#x2F;newHeaderRegex&gt;</span><br><span class="line">        &lt;newValueRegex&gt;false&lt;&#x2F;newValueRegex&gt;</span><br><span class="line">        &lt;matchWholeValue&gt;false&lt;&#x2F;matchWholeValue&gt;</span><br><span class="line">        &lt;caseSensitive&gt;false&lt;&#x2F;caseSensitive&gt;</span><br><span class="line">        &lt;replaceType&gt;2&lt;&#x2F;replaceType&gt;</span><br><span class="line">      &lt;&#x2F;rewriteRule&gt;</span><br><span class="line">    &lt;&#x2F;rules&gt;</span><br><span class="line">  &lt;&#x2F;rewriteSet&gt;</span><br><span class="line">&lt;&#x2F;rewriteSet-array&gt;</span><br></pre></td></tr></table></figure>
-
+<p>上面的get_read_bonus重写规则Export导出的get_read_bonus.xml文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&#39;1.0&#39; encoding&#x3D;&#39;UTF-8&#39; ?&gt;</span><br><span class="line">&lt;?charles serialisation-version&#x3D;&#39;2.0&#39; ?&gt;</span><br><span class="line">&lt;rewriteSet-array&gt;</span><br><span class="line">  &lt;rewriteSet&gt;</span><br><span class="line">    &lt;active&gt;true&lt;&#x2F;active&gt;</span><br><span class="line">    &lt;name&gt;get_read_bonus&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;hosts&gt;</span><br><span class="line">      &lt;locationPatterns&gt;</span><br><span class="line">        &lt;locationMatch&gt;</span><br><span class="line">          &lt;location&gt;</span><br><span class="line">            &lt;protocol&gt;https&lt;&#x2F;protocol&gt;</span><br><span class="line">            &lt;host&gt;is.snssdk.com&lt;&#x2F;host&gt;</span><br><span class="line">            &lt;path&gt;&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;&lt;&#x2F;path&gt;</span><br><span class="line">          &lt;&#x2F;location&gt;</span><br><span class="line">          &lt;enabled&gt;true&lt;&#x2F;enabled&gt;</span><br><span class="line">        &lt;&#x2F;locationMatch&gt;</span><br><span class="line">      &lt;&#x2F;locationPatterns&gt;</span><br><span class="line">    &lt;&#x2F;hosts&gt;</span><br><span class="line">    &lt;rules&gt;</span><br><span class="line">      &lt;rewriteRule&gt;</span><br><span class="line">        &lt;active&gt;true&lt;&#x2F;active&gt;</span><br><span class="line">        &lt;ruleType&gt;8&lt;&#x2F;ruleType&gt;</span><br><span class="line">        &lt;matchHeader&gt;&lt;&#x2F;matchHeader&gt;</span><br><span class="line">        &lt;matchValue&gt;&lt;&#x2F;matchValue&gt;</span><br><span class="line">        &lt;matchHeaderRegex&gt;false&lt;&#x2F;matchHeaderRegex&gt;</span><br><span class="line">        &lt;matchValueRegex&gt;false&lt;&#x2F;matchValueRegex&gt;</span><br><span class="line">        &lt;matchRequest&gt;false&lt;&#x2F;matchRequest&gt;</span><br><span class="line">        &lt;matchResponse&gt;false&lt;&#x2F;matchResponse&gt;</span><br><span class="line">        &lt;newHeader&gt;impression_type&lt;&#x2F;newHeader&gt;</span><br><span class="line">        &lt;newValue&gt;push&lt;&#x2F;newValue&gt;</span><br><span class="line">        &lt;newHeaderRegex&gt;false&lt;&#x2F;newHeaderRegex&gt;</span><br><span class="line">        &lt;newValueRegex&gt;false&lt;&#x2F;newValueRegex&gt;</span><br><span class="line">        &lt;matchWholeValue&gt;false&lt;&#x2F;matchWholeValue&gt;</span><br><span class="line">        &lt;caseSensitive&gt;false&lt;&#x2F;caseSensitive&gt;</span><br><span class="line">        &lt;replaceType&gt;2&lt;&#x2F;replaceType&gt;</span><br><span class="line">      &lt;&#x2F;rewriteRule&gt;</span><br><span class="line">    &lt;&#x2F;rules&gt;</span><br><span class="line">  &lt;&#x2F;rewriteSet&gt;</span><br><span class="line">&lt;&#x2F;rewriteSet-array&gt;</span><br></pre></td></tr></table></figure></p>
 <p>重写规则设置正确与否验证：<br><img src="http://upload-images.jianshu.io/upload_images/281540-ea8dc4743ec32001.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="规则设置正确与否验证"></p>
 <p>在上面的<code>Notes</code>列上会显示<code>Rewrite Tool: query added &quot;impression_type: push&quot;</code></p>
 <p><strong>应用：</strong></p>
@@ -121,20 +253,12 @@
 <li>查找<code>我的收益</code>页面，验证成功与否</li>
 </ol>
 <h3 id="案例02"><a href="#案例02" class="headerlink" title="案例02"></a>案例02</h3><p>问题：<code>趣消除</code>、<code>趣键盘</code>、<code>东方头条</code>等App都看广告得金币，怎样减少广告的时间？</p>
-<p>思考：广告是哪里来的？广告时长是怎么来的？<br>当点击App上的按钮弹出广告时，3个App都调用了接口：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;api&#x2F;ad&#x2F;union&#x2F;sdk&#x2F;get_ads&#x2F;</span><br></pre></td></tr></table></figure>
-<p>响应如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">......</span><br><span class="line">		&quot;video&quot;: &#123;</span><br><span class="line">			&quot;cover_height&quot;: 1280,</span><br><span class="line">			&quot;cover_url&quot;: &quot;http:&#x2F;&#x2F;sf1-ttcdn-tos.pstatp.com&#x2F;img&#x2F;mosaic-legacy&#x2F;1be91000a8c62c6ba6221~noop.jpg&quot;,</span><br><span class="line">			&quot;cover_width&quot;: 720,</span><br><span class="line">			&quot;endcard&quot;: &quot;https:&#x2F;&#x2F;www.toutiaopage.com&#x2F;union&#x2F;endcard&#x2F;1629848424707111&#x2F;?rit&#x3D;909946692\u0026req_id&#x3D;ED6EC127-C359-4C18-A41E-3A5F6F499250u3183\u0026ad_sdk_version&#x3D;1.9.9.0\u0026os&#x3D;ios\u0026lang&#x3D;cn\u0026style_id&#x3D;1104\u0026ad_id&#x3D;1629844369912839\u0026_toutiao_params&#x3D;%7B%22cid%22%3A1629848424707111%2C%22device_id%22%3A9724339963504202%2C%22log_extra%22%3A%22%7B%5C%22ad_price%5C%22%3A%5C%22XOub4AAGRWZc65vgAAZFZgz-hMMMgth42hwxAg%5C%22%2C%5C%22convert_id%5C%22%3A1629408290774020%2C%5C%22orit%5C%22%3A900000000%2C%5C%22req_id%5C%22%3A%5C%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%5C%22%2C%5C%22rit%5C%22%3A909946692%7D%22%2C%22orit%22%3A900000000%2C%22req_id%22%3A%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%22%2C%22rit%22%3A909946692%2C%22sign%22%3A%22D41D8CD98F00B204E9800998ECF8427E%22%2C%22uid%22%3A9724339963504202%2C%22ut%22%3A14%7D\u0026append&#x3D;%7B%22openurl%22%3A%22%22%2C%22postdata%22%3A%5B%7B%22__type__%22%3A%22req_id%22%2C%22cid%22%3A1629848424707111%2C%22req_id%22%3A%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%22%2C%22rit%22%3A909946692%7D%5D%7D&quot;,</span><br><span class="line">			&quot;resolution&quot;: &quot;720x1280&quot;,</span><br><span class="line">			&quot;size&quot;: 5628226,</span><br><span class="line">			&quot;video_duration&quot;: 29.04,</span><br><span class="line">			&quot;video_url&quot;: &quot;http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda-jesntzw6569xqudw.mp4&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;],</span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>广告就是从上面的接口获取而来的，广告时长由<code>video_url</code>字段对应的mp4的时长决定</p>
+<p>思考：广告是哪里来的？广告时长是怎么来的？<br>当点击App上的按钮弹出广告时，3个App都调用了接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;api&#x2F;ad&#x2F;union&#x2F;sdk&#x2F;get_ads&#x2F;</span><br></pre></td></tr></table></figure><br>响应如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">......</span><br><span class="line">		&quot;video&quot;: &#123;</span><br><span class="line">			&quot;cover_height&quot;: 1280,</span><br><span class="line">			&quot;cover_url&quot;: &quot;http:&#x2F;&#x2F;sf1-ttcdn-tos.pstatp.com&#x2F;img&#x2F;mosaic-legacy&#x2F;1be91000a8c62c6ba6221~noop.jpg&quot;,</span><br><span class="line">			&quot;cover_width&quot;: 720,</span><br><span class="line">			&quot;endcard&quot;: &quot;https:&#x2F;&#x2F;www.toutiaopage.com&#x2F;union&#x2F;endcard&#x2F;1629848424707111&#x2F;?rit&#x3D;909946692\u0026req_id&#x3D;ED6EC127-C359-4C18-A41E-3A5F6F499250u3183\u0026ad_sdk_version&#x3D;1.9.9.0\u0026os&#x3D;ios\u0026lang&#x3D;cn\u0026style_id&#x3D;1104\u0026ad_id&#x3D;1629844369912839\u0026_toutiao_params&#x3D;%7B%22cid%22%3A1629848424707111%2C%22device_id%22%3A9724339963504202%2C%22log_extra%22%3A%22%7B%5C%22ad_price%5C%22%3A%5C%22XOub4AAGRWZc65vgAAZFZgz-hMMMgth42hwxAg%5C%22%2C%5C%22convert_id%5C%22%3A1629408290774020%2C%5C%22orit%5C%22%3A900000000%2C%5C%22req_id%5C%22%3A%5C%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%5C%22%2C%5C%22rit%5C%22%3A909946692%7D%22%2C%22orit%22%3A900000000%2C%22req_id%22%3A%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%22%2C%22rit%22%3A909946692%2C%22sign%22%3A%22D41D8CD98F00B204E9800998ECF8427E%22%2C%22uid%22%3A9724339963504202%2C%22ut%22%3A14%7D\u0026append&#x3D;%7B%22openurl%22%3A%22%22%2C%22postdata%22%3A%5B%7B%22__type__%22%3A%22req_id%22%2C%22cid%22%3A1629848424707111%2C%22req_id%22%3A%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%22%2C%22rit%22%3A909946692%7D%5D%7D&quot;,</span><br><span class="line">			&quot;resolution&quot;: &quot;720x1280&quot;,</span><br><span class="line">			&quot;size&quot;: 5628226,</span><br><span class="line">			&quot;video_duration&quot;: 29.04,</span><br><span class="line">			&quot;video_url&quot;: &quot;http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda-jesntzw6569xqudw.mp4&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;],</span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>广告就是从上面的接口获取而来的，广告时长由<code>video_url</code>字段对应的mp4的时长决定</p>
 <p>解决：用Charles的<code>Rewrite功能Body</code>替换<code>video_url</code>字段的值<br><img src="https://upload-images.jianshu.io/upload_images/281540-e80209bd2b222ac6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Rewrite功能-Type:Body"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Match Value:</span><br><span class="line">&quot;video_url&quot;:&quot;(.+)&quot;&#125;</span><br><span class="line"></span><br><span class="line">Replace Value:</span><br><span class="line">&quot;video_url&quot;:&quot;http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda.mp4&quot;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>提供一个只有3秒的素材：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda-jesntzw6569xqudw.mp4</span><br></pre></td></tr></table></figure>
+<p>提供一个只有3秒的素材：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda-jesntzw6569xqudw.mp4</span><br></pre></td></tr></table></figure></p>
 <h3 id="案例03"><a href="#案例03" class="headerlink" title="案例03"></a>案例03</h3><p>问题：<code>章鱼输入法</code>App有看广告得金币，没有像<code>案例02</code>那样找到相应的接口api返回广告视频的URL，怎样减少广告的时间？</p>
-<p>思考：尝试替换广告视频的请求<br>比如广告视频的请求如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Get https:&#x2F;&#x2F;v3-ad.ixigua.com&#x2F;...&#x2F;video&#x2F;m&#x2F;...&#x2F;toutiao.mp4</span><br><span class="line"></span><br><span class="line">替换为只有3秒的视频地址</span><br><span class="line">Get http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;...&#x2F;3seconds.mp4</span><br></pre></td></tr></table></figure>
-
+<p>思考：尝试替换广告视频的请求<br>比如广告视频的请求如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Get https:&#x2F;&#x2F;v3-ad.ixigua.com&#x2F;...&#x2F;video&#x2F;m&#x2F;...&#x2F;toutiao.mp4</span><br><span class="line"></span><br><span class="line">替换为只有3秒的视频地址</span><br><span class="line">Get http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;...&#x2F;3seconds.mp4</span><br></pre></td></tr></table></figure></p>
 <p>解决：用Charles的<code>Rewrite功能URL</code>替换请求<br><img src="https://upload-images.jianshu.io/upload_images/281540-aa27f7180fd280a7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Rewrite功能-Type:URL"></p>
 <h3 id="案例04"><a href="#案例04" class="headerlink" title="案例04"></a>案例04</h3><p>问题：<code>扶我起来学数学</code>App的<code>作战休息区</code>有一个游戏<code>伪装者</code>，在上报成绩时，接口有hash字段，修改成绩字段，hash会验证不通过，达到了防止伪造成绩的功能，怎样在hash前伪造成绩？<br><img src="https://upload-images.jianshu.io/upload_images/281540-88406cb857175e0b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="成绩上报接口"><br>思考：hash算法一般难破解，与其破解hash算法，不如转变思路：修改传入hash的值</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">value肯定与成绩相关</span><br><span class="line">hash(value)</span><br></pre></td></tr></table></figure>
@@ -164,13 +288,15 @@
 <p><img src="https://upload-images.jianshu.io/upload_images/281540-9a4d5b1810506685.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/281540-64531455206484fc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Mirror保存下来的文件"></p>
 <h2 id="No-Caching-和-Block-Cookies应用"><a href="#No-Caching-和-Block-Cookies应用" class="headerlink" title="No Caching 和 Block Cookies应用"></a>No Caching 和 Block Cookies应用</h2><p>在案例：<code>扶我起来学数学</code>App的<code>伪装者</code>游戏通过Rewrite功能修改了js文件中的内容；但有时js文件不是每次都会传输，而是使用了缓存，这时Rewrite功能就失效了，因为没有发生网络请求；通过<code>No Caching 和 Block Cookies</code>使网络请求每次都发生</p>
-<h2 id="Map-Local应用"><a href="#Map-Local应用" class="headerlink" title="Map Local应用"></a>Map Local应用</h2><table>
+<h2 id="Map-Local应用"><a href="#Map-Local应用" class="headerlink" title="Map Local应用"></a>Map Local应用</h2><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>Map Local应用场景</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>修改js文件来改变App行为:</td>
 </tr>
 <tr>
@@ -182,148 +308,289 @@
 <tr>
 <td>3. 使用Map Local功能使App加载修改后的js文件</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 
-      
     </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2019/09/28/Charles%E7%9A%84%E5%BA%94%E7%94%A8/" data-id="ckhddd8we00034xub8pqs1qe0" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/charles/" rel="tag">charles</a></li></ul>
 
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/charles/" rel="tag"># charles</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/28/mitmproxy%E7%9A%84%E4%BD%BF%E7%94%A8/" rel="prev" title="mitmproxy的使用">
+      <i class="fa fa-chevron-left"></i> mitmproxy的使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/09/29/mitmproxy-and-charles-use/" rel="next" title="mitmproxy与charles的抓包应用">
+      mitmproxy与charles的抓包应用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rewrite%E5%BA%94%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">Rewrite应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B01"><span class="nav-number">1.1.</span> <span class="nav-text">案例01</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B02"><span class="nav-number">1.2.</span> <span class="nav-text">案例02</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B03"><span class="nav-number">1.3.</span> <span class="nav-text">案例03</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B04"><span class="nav-number">1.4.</span> <span class="nav-text">案例04</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mirror%E5%BA%94%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">Mirror应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#No-Caching-%E5%92%8C-Block-Cookies%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">No Caching 和 Block Cookies应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map-Local%E5%BA%94%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">Map Local应用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="jason zhou"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">jason zhou</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jason zhou</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
     </footer>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2019/09/29/mitmproxy-and-charles-use/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          mitmproxy与charles的抓包应用
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/09/28/mitmproxy%E7%9A%84%E4%BD%BF%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">mitmproxy的使用</div>
-    </a>
-  
-</nav>
 
   
-</article>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
 
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/charles/" rel="tag">charles</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/" rel="tag">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mitmproxy/" rel="tag">mitmproxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mitmproxy-python/" rel="tag">mitmproxy, python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '',
+      clientSecret: '',
+      repo        : 'zhoujie903.github.io',
+      owner       : 'zhoujie903',
+      admin       : [''],
+      id          : '43e2ba41d46ab23e833f2da4edc8e5aa',
+        language: '',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
     </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/charles/" style="font-size: 20px;">charles</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/mitmproxy/" style="font-size: 15px;">mitmproxy</a> <a href="/tags/mitmproxy-python/" style="font-size: 10px;">mitmproxy, python</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 10px;">代理</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 15px;">算法</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/10/13/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%B0%8F%E7%81%B0-%E6%BC%AB%E7%94%BB%E7%B3%BB%E5%88%97/">程序员小灰-漫画系列</a>
-          </li>
-        
-          <li>
-            <a href="/2020/10/12/%E8%B6%8A%E6%88%98%E8%B6%8A%E5%8B%87-%E5%96%9C%E5%89%A7%E7%89%88/">越战越勇-喜剧版</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/28/mitmproxy%E7%9A%84%E5%BA%94%E7%94%A8-%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/">mitmproxy的应用-代码生成</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/29/%E6%88%90%E8%AF%AD%E6%B6%88%E6%B6%88%E4%B9%90-%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96/">趣消除App自动化 - 成语消消乐-全自动化</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/29/%E6%88%90%E8%AF%AD%E6%B6%88%E6%B6%88%E4%B9%90-%E5%8D%8A%E8%87%AA%E5%8A%A8%E5%8C%96/">趣消除App自动化-成语消消乐-半自动化</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 jason zhou<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-  </div>
 </body>
 </html>
