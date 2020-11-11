@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>mitmproxy的应用-代码生成 | 一吻江山</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="[TOC] 需求很多手机App都有做任务，得金币兑换现金的功能手动做任务有很多限制；写代码自动化运行可以消除一些限制但写代码时的敲键盘有点费时间，这篇文章就是要解决自动生成代码的问题 运行环境背景知识: python、mitmproxy、jinja2python: 3.8.1python第三方库: mitmproxy, requests, Jinja2手机代理地址: mitmproxy的地址 因为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mitmproxy的应用-代码生成">
+<meta property="og:url" content="http://example.com/2019/12/28/mitmproxy%E7%9A%84%E5%BA%94%E7%94%A8-%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/index.html">
+<meta property="og:site_name" content="一吻江山">
+<meta property="og:description" content="[TOC] 需求很多手机App都有做任务，得金币兑换现金的功能手动做任务有很多限制；写代码自动化运行可以消除一些限制但写代码时的敲键盘有点费时间，这篇文章就是要解决自动生成代码的问题 运行环境背景知识: python、mitmproxy、jinja2python: 3.8.1python第三方库: mitmproxy, requests, Jinja2手机代理地址: mitmproxy的地址 因为">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-12-28T05:48:17.000Z">
+<meta property="article:modified_time" content="2020-05-06T17:45:40.000Z">
+<meta property="article:author" content="jason zhou">
+<meta property="article:tag" content="mitmproxy, python">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="一吻江山" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">一吻江山</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mitmproxy的应用-代码生成" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/28/mitmproxy%E7%9A%84%E5%BA%94%E7%94%A8-%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/" class="article-date">
+  <time datetime="2019-12-28T05:48:17.000Z" itemprop="datePublished">2019-12-28</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mitmproxy的应用-代码生成
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>[TOC]</p>
+<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>很多手机App都有做任务，得金币兑换现金的功能<br>手动做任务有很多限制；写代码自动化运行可以消除一些限制<br>但写代码时的敲键盘有点费时间，这篇文章就是要解决自动生成代码的问题</p>
+<h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>背景知识: python、mitmproxy、jinja2<br>python: 3.8.1<br>python第三方库: mitmproxy, requests, Jinja2<br>手机代理地址: mitmproxy的地址</p>
+<p>因为有多个文件，这里贴部分代码，完整代码地址：<br><a target="_blank" rel="noopener" href="https://github.com/zhoujie903/LearnPython/tree/master/mitmproxy_addons/gen_code">https://github.com/zhoujie903/LearnPython/tree/master/mitmproxy_addons/gen_code</a></p>
+<h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>设置:<br>设置1：设置<code>self.api_dir</code>: 存放<code>App目录</code>的父目录<br><code>代码目录</code>下的<code>gen_code_mitm.py</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class GenCode(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        ctx.log.info(&#39;__init__&#39;)</span><br><span class="line">        # 设置代码文件生成的目录\文件夹</span><br><span class="line">        self.api_dir &#x3D; &#39;&#x2F;Users&#x2F;zhoujie&#x2F;Desktop&#x2F;api&#x2F;&#39;</span><br></pre></td></tr></table></figure>
+<p>设置2: 后面说明…</p>
+<p>步骤: </p>
+<ol>
+<li>电脑上运行起mitmproxy；手机设置代理地址为mitmproxy的地址</li>
+<li>打开手机App，正常操作：点击、滑动触发相应网络请求被触发，这时各个api方法代码已生成<code>&lt;api-name&gt;.text</code></li>
+<li>正常结束mitmproxy，这时在done方法里会生成整体代码<code>code-&lt;app-name&gt;.py</code></li>
+<li>微修改<code>code-&lt;app-name&gt;.py</code>并运行</li>
+</ol>
+<p>步骤说明:<br>步骤1: 启动mitmproxy</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set session&#x3D;&#39;huawei&#39; -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>session的值在后面说明…</strong></p>
+<h3 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h3><p><code>gen_code_mitm.py</code>并不会自动生成全部网络请求的代码，只会生成已配置好的网络请求的代码</p>
+<p>配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">class Api(object):</span><br><span class="line">    ...</span><br><span class="line">class GenCode(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        ctx.log.info(&#39;__init__&#39;)</span><br><span class="line">        ...</span><br><span class="line">        </span><br><span class="line">        # 趣头条</span><br><span class="line">        # 步骤1: urls里增加用URL path代表的网络请求</span><br><span class="line">        urls &#x3D; [</span><br><span class="line">            r&#39;x&#x2F;tree-game&#x2F;&#39;,</span><br><span class="line">            Api(r&#39;&#x2F;app&#x2F;re&#x2F;taskCenter&#x2F;info&#x2F;v1&#x2F;get&#39;,params_as_all&#x3D;True),            ,</span><br><span class="line">        ]</span><br><span class="line">        </span><br><span class="line">        # 步骤2: 创建代表App的App对象</span><br><span class="line">        self.qu_tou_tiao &#x3D; App(urls, &#39;qu-tou-tiao&#39;)</span><br><span class="line">        </span><br><span class="line">        # 百度 - 好看视频</span><br><span class="line">        urls &#x3D; [...]      </span><br><span class="line">        self.hao_kan &#x3D; App(urls, &#39;hao-kan&#39;) </span><br><span class="line">        </span><br><span class="line">        # 步骤3: 把App添加进来</span><br><span class="line">        self.flowfilters &#x3D; [</span><br><span class="line">            self.qu_tou_tiao, </span><br><span class="line">            self.hao_kan,</span><br><span class="line">            ...</span><br><span class="line">        ] </span><br></pre></td></tr></table></figure>
+<ul>
+<li><ol>
+<li><code>urls</code>里增加用URL path代表的网络请求</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">urls &#x3D; [</span><br><span class="line">    r&#39;x&#x2F;tree-game&#x2F;&#39;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><ol start="2">
+<li>创建代表App的App对象</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># &#39;qu-tou-tiao&#39;中给App取的名字</span><br><span class="line">self.qu_tou_tiao &#x3D; App(urls, &#39;qu-tou-tiao&#39;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><ol start="3">
+<li>把App对象加入到self.flowfilters中，代表要生成这个App的代码</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">self.flowfilters &#x3D; [</span><br><span class="line">    self.qu_tou_tiao, </span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p><strong>urls的配置在后面说明…</strong></p>
+<h3 id="目录-文件夹"><a href="#目录-文件夹" class="headerlink" title="目录/文件夹"></a>目录/文件夹</h3><p>先约定2个概念：<code>代码目录</code>、<code>App目录</code><br><code>代码目录</code>：生成<code>App目录</code>的代码、模板等文件的目录<br><code>App目录</code>：保存自动生成的App代码文件的目录</p>
+<p><code>代码目录</code>有2类文件：</p>
+<ul>
+<li><pre><code>*.py    - 代码文件 `gen_code_mitm.py`</code></pre>
+</li>
+<li><pre><code>*.j2.py - 模板文件</code></pre>
+</li>
+</ul>
+<p><code>App目录</code>有2类文件：</p>
+<ul>
+<li>*.py - 代码文件：sessions.py、code-xxx.py、session_xxx.py</li>
+<li>*.text - api文件，包含2个版本的代码文件、响应http_resopnse_body，不会被py文件读取</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">依赖关系[import关系]</span><br><span class="line">code-xxx.py</span><br><span class="line">    sessions.py</span><br><span class="line">        session_xxx.py    </span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>session_xxx.py: 保存着像账号ID、cookie、token等用户登录数据 </p>
+</li>
+<li><p>每个App都有自己的目录: 比如这里有 今天头条极速版本[‘jin-ri-tou-tiao’], 趣头条[‘qu-tou-tiao’] 两个目录/文件夹</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">➜  api tree</span><br><span class="line">.</span><br><span class="line">├── jin-ri-tou-tiao</span><br><span class="line">│   ├── api_news_feed_v47.text</span><br><span class="line">│   ├── code-jin-ri-tou-tiao.py</span><br><span class="line">│   ├── search_suggest_homepage_suggest.text</span><br><span class="line">│   ├── session_huawei.py</span><br><span class="line">│   ├── session_ios.py</span><br><span class="line">│   ├── session_xiaomi.py</span><br><span class="line">│   └── sessions.py</span><br><span class="line">└── qu-tou-tiao</span><br><span class="line">    ├── app_re_taskcenter_info_v1_get.text</span><br><span class="line">    ├── code-qu-tou-tiao.py</span><br><span class="line">    ├── xxx.json</span><br><span class="line">    ├── session_huawei.py</span><br><span class="line">    ├── session_xiaomi.py</span><br><span class="line">    ├── sessions.py</span><br><span class="line">    └── sign_sign.text</span><br><span class="line">    </span><br><span class="line">2 directories, 40 files</span><br></pre></td></tr></table></figure>
+<ul>
+<li>每个App会有多份session_xxx.py：比如session_huawei.py, session_ios.py, session_xiaomi.py; 表示有华为、iPhone、小米三台手机的运行数据</li>
+</ul>
+<h3 id="session"><a href="#session" class="headerlink" title="session"></a>session</h3><p>这里有一个需求与实现方案的问题：</p>
+<p>需求: 一份代码[code-xxx.py] - 维护成本低; 多份账号数据[session_xxx.py] - 批量运行, 效率高<br>问题: 一个网络请求的数据怎么知道写入哪个账号数据文件中[session_xxx.py]<br>解决: </p>
+<ul>
+<li>推断: 从网络请求的headers、parameters、query、body中的值来推断为某个session</li>
+<li>指定: 启动时指定为某个session</li>
+</ul>
+<p>先约定1个概念：<code>一次mitmproxy运行</code><br><code>一次mitmproxy运行</code>: 启动mitmproxy -&gt; 1或多部手机操作相同App -&gt;退出\停止mitmproxy[ctrl+c或Q]</p>
+<p><strong>方案一: 指定</strong></p>
+<p>在启动时指定<code>--set session=&#39;huawei&#39;</code>, 则所有数据写入session_huawei.py文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set session&#x3D;&#39;huawei&#39; -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>问题:</strong> 多部手机[代表不同账号]操作相同App时，多个账号数据都写入到了同一个账号文件中[session_huawei.py]</p>
+<p><strong>最佳实践: <code>一次mitmproxy运行</code>只操作一个手机[一个账号]</strong></p>
+<p><strong>方案二: 推断</strong><br>在启动时不指定session, 代码自动推断</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure>
+
+<p>举例：<br><code>今日头条极速版</code>有一个api: <code>/search/suggest/homepage_suggest/</code><br>在parameters\query有<code>&quot;device_platform&quot;: &quot;iphone&quot;</code>字段值, 那就写入session_ios.py中。</p>
+<p><strong>问题：</strong><br>如果有一个api无法从headers、parameters、query、body等信息中判断出该写入哪个文件？</p>
+<p>这时会写入session_default.py文件中，这时一个账号的数据被写到2个文件中: session_default.py、session_xxx.py, 生成的代码会被认为是2个账号，无法”正常运行”</p>
+<p><strong>最佳实践: <code>一次mitmproxy运行</code>只操作一个手机[一个账号], 且启动时设置<code>guess_as_session</code></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set guess_as_session&#x3D;&#39;huawei&#39; -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure>
+<p>guess_as_session不能像session那样设定任意值<br>guess_as_session的取值：ios, huawei, xiaomi [自己手头只有这些设备]<br>若要guess_as_session可以取其它值，需要设置：</p>
+<p><code>gen_code_mitm.py</code> - <code>class GenCode(object)</code> - <code>__init__</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">self.guess_session &#x3D; collections.OrderedDict(</span><br><span class="line">    ios&#x3D;re.compile(r&#39;iphone|ios&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">    xiaomi&#x3D;re.compile(r&#39;xiaomi|mi\+5|miui&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">    huawei&#x3D;re.compile(r&#39;huawei&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">    # 在这里增加其它的自己想要的值</span><br><span class="line">    # meizhu&#x3D;re.compile(r&#39;meizhu&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="urls的配置-Api"><a href="#urls的配置-Api" class="headerlink" title="urls的配置 - Api"></a>urls的配置 - Api</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">urls &#x3D; [</span><br><span class="line">    r&#39;x&#x2F;tree-game&#x2F;&#39;,</span><br><span class="line">    Api(r&#39;&#x2F;app&#x2F;re&#x2F;taskCenter&#x2F;info&#x2F;v1&#x2F;get&#39;,params_as_all&#x3D;True),            ,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>urls中可以添加2类对象: str, Api</p>
+<p><strong>Api类说明</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class Api(object):</span><br><span class="line">    def __init__(self, url, f_name&#x3D;&#39;&#39;, log&#x3D;&#39;&#39;, params_as_all&#x3D;False, p_as_all_limit&#x3D;50, body_as_all&#x3D;False, f_p_enc: set&#x3D;None, f_b_enc: set&#x3D;None, f_p_arg: set&#x3D;None, f_p_kwarg: dict&#x3D;None, f_b_arg: set&#x3D;None, f_b_kwarg: dict&#x3D;None, content_type&#x3D;&#39;&#39;):</span><br></pre></td></tr></table></figure>
+<p>参数说明</p>
+<ul>
+<li>url - 不需要完整的URL</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">urls &#x3D; [</span><br><span class="line">    # 方式01：包含host</span><br><span class="line">    &#39;game-center-new.1sapp.com&#x2F;x&#x2F;open&#x2F;game&#39;,</span><br><span class="line">    </span><br><span class="line">    # 方式02：只有path</span><br><span class="line">    &#39;&#x2F;x&#x2F;open&#x2F;game&#39;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>url - 通配: 一个URL生成多个api方法代码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">urls &#x3D; [</span><br><span class="line">    # 只要写&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;&#39;路径前缀, 所有以它为前缀的方法都会生成相应代码</span><br><span class="line">    # &#39;score_task&#x2F;v1&#x2F;sleep&#x2F;status&#x2F;&#39;,</span><br><span class="line">    # &#39;score_task&#x2F;v1&#x2F;sleep&#x2F;start&#x2F;&#39;,</span><br><span class="line">    # &#39;score_task&#x2F;v1&#x2F;sleep&#x2F;stop&#x2F;&#39;,</span><br><span class="line">    # &#39;score_task&#x2F;v1&#x2F;sleep&#x2F;done_task&#x2F;&#39;,</span><br><span class="line">    &#39;score_task&#x2F;v1&#x2F;sleep&#x2F;&#39;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>url - 通配与匹配顺序</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">urls &#x3D; [</span><br><span class="line">    # 当触发&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;done_task&#x2F;&#39;时，</span><br><span class="line">    # 因为&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;&#39;先添加并且也匹配</span><br><span class="line">    # 不会再寻找最佳匹配&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;done_task&#x2F;&#39;</span><br><span class="line">    # 所以会生成默认的方法名：score_task_v1_sleep_done_task</span><br><span class="line">    # 而不是：sleep_done_task</span><br><span class="line">    &#39;score_task&#x2F;v1&#x2F;sleep&#x2F;&#39;,</span><br><span class="line">    Api(&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;done_task&#x2F;&#39;, f_name&#x3D;&#39;sleep_done_task&#39;)   </span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">最佳实践：先具体[长], 后模糊[前缀]</span><br><span class="line"></span><br><span class="line">urls &#x3D; [</span><br><span class="line">    Api(&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;done_task&#x2F;&#39;, f_name&#x3D;&#39;sleep_done_task&#39;)</span><br><span class="line">    &#39;score_task&#x2F;v1&#x2F;sleep&#x2F;&#39;,       </span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>f_name - 指定方法名</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">默认方法名：</span><br><span class="line">    parse_result &#x3D; urlparse(request.url)</span><br><span class="line">    url_path &#x3D; parse_result.path</span><br><span class="line">    function_name &#x3D; re.sub(r&#39;[.&#x2F;-]&#39;, &#39;_&#39;, url_path).strip(&#39;_&#39;).lower()</span><br><span class="line">    </span><br><span class="line">比如：</span><br><span class="line">    urls &#x3D; [&#39;&#x2F;score_task&#x2F;v1&#x2F;walk&#x2F;count&#x2F;&#39;]</span><br><span class="line">    触发的url为：https:&#x2F;&#x2F;i-hl.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;walk&#x2F;count&#x2F;</span><br><span class="line">默认：</span><br><span class="line">    def score_task_v1_walk_count(self)</span><br><span class="line">    </span><br><span class="line">指定后：    </span><br><span class="line">    urls &#x3D; [Api(&#39;&#x2F;score_task&#x2F;v1&#x2F;walk&#x2F;count&#x2F;&#39;,f_name&#x3D;&#39;walk_count&#39;)]</span><br><span class="line">    def walk_count(self):</span><br></pre></td></tr></table></figure>
+<ul>
+<li>log - 指定打印的日志信息</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">默认：</span><br><span class="line">    def score_task_v1_walk_count(self):</span><br><span class="line">        logging.info(&#39;score_task_v1_walk_count&#39;)</span><br><span class="line">指定后：</span><br><span class="line">    urls &#x3D; [Api(&#39;&#x2F;score_task&#x2F;v1&#x2F;walk&#x2F;count&#x2F;&#39;,log&#x3D;&#39;睡觉 - 领金币&#39;)]</span><br><span class="line">    def score_task_v1_walk_count(self):</span><br><span class="line">        logging.info(&#39;睡觉 - 领金币&#39;)     </span><br></pre></td></tr></table></figure>
+<ul>
+<li>params_as_all\body_as_all - 应对sign签名的问题</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">比如：</span><br><span class="line">    趣头条的&#39;任务&#39;界面，会调用</span><br><span class="line">    http:&#x2F;&#x2F;api.1sapp.com&#x2F;app&#x2F;re&#x2F;taskCenter&#x2F;info&#x2F;v1&#x2F;get</span><br><span class="line">    来获取任务列表\进度信息</span><br><span class="line">    params有一个字段：&quot;sign&quot;: &quot;1ad43dd2b7dbacc62b0e2b98e325483a&quot;</span><br><span class="line">    这个字段和其它字段是一个整体，且我们不能伪造sign的值</span><br><span class="line">    直接把整个params值拿来用</span><br><span class="line">默认：</span><br><span class="line">    def app_re_taskcenter_info_v1_get(self):</span><br><span class="line">        url &#x3D; self.urls[&#39;app&#x2F;re&#x2F;taskcenter&#x2F;info&#x2F;v1&#x2F;get&#39;]</span><br><span class="line">        params &#x3D; self._params_from(url)</span><br><span class="line">指定后：</span><br><span class="line">    urls &#x3D; [Api(r&#39;&#x2F;app&#x2F;re&#x2F;taskCenter&#x2F;info&#x2F;v1&#x2F;get&#39;,params_as_all&#x3D;True)]</span><br><span class="line">    def app_re_taskcenter_info_v1_get(self, params_as_all):</span><br><span class="line">        url &#x3D; self.urls[&#39;app&#x2F;re&#x2F;taskcenter&#x2F;info&#x2F;v1&#x2F;get&#39;]</span><br><span class="line">        params &#x3D; self._params_from(url)</span><br><span class="line">        params &#x3D; params_as_all</span><br><span class="line"></span><br><span class="line">    并会生成一个全局方法</span><br><span class="line">    def app_re_taskcenter_info_v1_get(user: User):</span><br><span class="line">        for item in user.params_as_all[&#39;&#x2F;app&#x2F;re&#x2F;taskCenter&#x2F;info&#x2F;v1&#x2F;get&#39;]:</span><br><span class="line">            user.app_re_taskcenter_info_v1_get(item)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>p_as_all_limit - 没有实现</li>
+<li>f_p_arg\f_b_arg - 输入参数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">默认：</span><br><span class="line">    def actcenter_piggy_videoconfirm(self):</span><br><span class="line">        params &#x3D; self._params_from(url)     </span><br><span class="line">指定后：</span><br><span class="line">    urls &#x3D; [Api(r&#39;&#x2F;actcenter&#x2F;piggy&#x2F;videoConfirm&#39;, f_p_arg&#x3D;&#123;&#39;tag&#39;,&#39;count&#39;&#125;)]</span><br><span class="line">    def actcenter_piggy_videoconfirm(self, tag, count):</span><br><span class="line">        params &#x3D; self._params_from(url)</span><br><span class="line">        params[&#39;tag&#39;] &#x3D; tag</span><br><span class="line">        params[&#39;count&#39;] &#x3D; count</span><br><span class="line">&#96;&#96;&#96; </span><br><span class="line">* f_p_enc\f_b_enc - params_as_all 与 f_p_arg 的结合体</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;    </span><br><span class="line">类中方法 与f_p_arg\f_b_arg相同</span><br><span class="line">并会生成一个像params_as_all\body_as_all相似的全局方法</span><br><span class="line">    def v5_user_rewar_video_callback_json(self, p):</span><br><span class="line">        url &#x3D; self.urls[&#39;&#x2F;v5&#x2F;user&#x2F;rewar_video_callback.json&#39;]</span><br><span class="line">        data &#x3D; self._bodys_from(url)</span><br><span class="line">        data[&#39;p&#39;] &#x3D; p</span><br><span class="line">        </span><br><span class="line">def v5_user_rewar_video_callback_json(user: User):</span><br><span class="line">    for item in user.bodys_encry[&#39;&#x2F;v5&#x2F;user&#x2F;rewar_video_callback.json&#39;][&#39;p&#39;]:</span><br><span class="line">        user.v5_user_rewar_video_callback_json(item)    </span><br></pre></td></tr></table></figure>
+<ul>
+<li>f_p_kwarg\f_b_kwarg - 有默认值的输入参数</li>
+</ul>
+<h3 id="未实现需求"><a href="#未实现需求" class="headerlink" title="未实现需求"></a>未实现需求</h3><ol>
+<li><p>类似动态变化可伪造的值，比如时间戳，没有实现自动生成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def api_contains_timstamp(self):</span><br><span class="line">    #这句需要自己输入</span><br><span class="line">    params[&#39;ts&#39;] &#x3D; time.time() </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同品牌的2台手机，无法区分出session</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/12/28/mitmproxy%E7%9A%84%E5%BA%94%E7%94%A8-%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/" data-id="ckhdd60gi0008n7ub3rdjh4dz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mitmproxy-python/" rel="tag">mitmproxy, python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/10/13/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%B0%8F%E7%81%B0-%E6%BC%AB%E7%94%BB%E7%B3%BB%E5%88%97/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          程序员小灰-漫画系列
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/29/%E6%88%90%E8%AF%AD%E6%B6%88%E6%B6%88%E4%B9%90-%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">趣消除App自动化 - 成语消消乐-全自动化</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/charles/" rel="tag">charles</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/" rel="tag">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mitmproxy/" rel="tag">mitmproxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mitmproxy-python/" rel="tag">mitmproxy, python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/charles/" style="font-size: 20px;">charles</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/mitmproxy/" style="font-size: 15px;">mitmproxy</a> <a href="/tags/mitmproxy-python/" style="font-size: 10px;">mitmproxy, python</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 10px;">代理</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/11/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/05/%E8%B6%8A%E6%88%98%E8%B6%8A%E5%8B%87-%E5%96%9C%E5%89%A7%E7%89%88/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/13/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%B0%8F%E7%81%B0-%E6%BC%AB%E7%94%BB%E7%B3%BB%E5%88%97/">程序员小灰-漫画系列</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/28/mitmproxy%E7%9A%84%E5%BA%94%E7%94%A8-%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/">mitmproxy的应用-代码生成</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/%E6%88%90%E8%AF%AD%E6%B6%88%E6%B6%88%E4%B9%90-%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96/">趣消除App自动化 - 成语消消乐-全自动化</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 jason zhou<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

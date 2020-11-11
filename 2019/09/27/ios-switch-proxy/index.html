@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>iOS快速设置代理 | 一吻江山</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="问题手动设置wifi的步骤非常长：  点击“设置” 点击“无线局域网” 点击已连接的wifi 点击“配置代理” 点击“手动” 定位服务器输入框，输入ip 定位端口输入框，输入port 点击“存储”  解决用iOS上的Shadowrocket和Mac上的Charles来快速设置代理iOS和Mac在同一wifi  启动Charles，假设代理地址为：192.168.0.100:8888 Shadowr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS快速设置代理">
+<meta property="og:url" content="http://example.com/2019/09/27/ios-switch-proxy/index.html">
+<meta property="og:site_name" content="一吻江山">
+<meta property="og:description" content="问题手动设置wifi的步骤非常长：  点击“设置” 点击“无线局域网” 点击已连接的wifi 点击“配置代理” 点击“手动” 定位服务器输入框，输入ip 定位端口输入框，输入port 点击“存储”  解决用iOS上的Shadowrocket和Mac上的Charles来快速设置代理iOS和Mac在同一wifi  启动Charles，假设代理地址为：192.168.0.100:8888 Shadowr">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/281540-3a3a4df908ac1248.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/281540-c94d3b52048e63e7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="article:published_time" content="2019-09-27T14:30:52.000Z">
+<meta property="article:modified_time" content="2019-09-29T07:58:27.000Z">
+<meta property="article:author" content="jason zhou">
+<meta property="article:tag" content="代理">
+<meta property="article:tag" content="iOS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/281540-3a3a4df908ac1248.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="一吻江山" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">一吻江山</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-ios-switch-proxy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/27/ios-switch-proxy/" class="article-date">
+  <time datetime="2019-09-27T14:30:52.000Z" itemprop="datePublished">2019-09-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS快速设置代理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>手动设置wifi的步骤非常长：</p>
+<ol>
+<li>点击“设置”</li>
+<li>点击“无线局域网”</li>
+<li>点击已连接的wifi</li>
+<li>点击“配置代理”</li>
+<li>点击“手动”</li>
+<li>定位服务器输入框，输入ip</li>
+<li>定位端口输入框，输入port</li>
+<li>点击“存储”</li>
+</ol>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>用iOS上的Shadowrocket和Mac上的Charles来快速设置代理<br>iOS和Mac在同一wifi</p>
+<ol>
+<li>启动Charles，假设代理地址为：192.168.0.100:8888</li>
+<li>Shadowrocket设置<code>全局路由</code>为<code>代理</code></li>
+<li>Shadowrocket添加<code>HTTP</code>类型的节点</li>
+<li>Shadowrocket打开连接</li>
+</ol>
+<p><strong>添加<code>HTTP</code>类型的节点:</strong><br><img src="http://upload-images.jianshu.io/upload_images/281540-3a3a4df908ac1248.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加节点"></p>
+<p><strong>结果:</strong><br><img src="http://upload-images.jianshu.io/upload_images/281540-c94d3b52048e63e7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="结果"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/09/27/ios-switch-proxy/" data-id="ckhdd60gf0004n7ub5azu4zbl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/" rel="tag">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/28/mitmproxy%E7%9A%84%E4%BD%BF%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          mitmproxy的使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/27/Python%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python阅读列表</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/charles/" rel="tag">charles</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/" rel="tag">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mitmproxy/" rel="tag">mitmproxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mitmproxy-python/" rel="tag">mitmproxy, python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/charles/" style="font-size: 20px;">charles</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/mitmproxy/" style="font-size: 15px;">mitmproxy</a> <a href="/tags/mitmproxy-python/" style="font-size: 10px;">mitmproxy, python</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 10px;">代理</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/11/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/05/%E8%B6%8A%E6%88%98%E8%B6%8A%E5%8B%87-%E5%96%9C%E5%89%A7%E7%89%88/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/13/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%B0%8F%E7%81%B0-%E6%BC%AB%E7%94%BB%E7%B3%BB%E5%88%97/">程序员小灰-漫画系列</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/28/mitmproxy%E7%9A%84%E5%BA%94%E7%94%A8-%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/">mitmproxy的应用-代码生成</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/%E6%88%90%E8%AF%AD%E6%B6%88%E6%B6%88%E4%B9%90-%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96/">趣消除App自动化 - 成语消消乐-全自动化</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 jason zhou<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

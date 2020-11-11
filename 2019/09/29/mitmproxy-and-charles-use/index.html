@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>mitmproxy与charles的抓包应用 | 一吻江山</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="[TOC] 问题mitmproxy是命令行界面，不太方便查看，自己遇到的问题有：  在Flow Details界面不知道用哪个快捷键查看下一条或上一条网络请求详情 json中的中文显示为 \ua9b4 或 ？不能看清是哪个中文 不知道怎么复制界面中显示的内容  Charles的编程能力弱 把Charles和mitmproxy结合起来使用，可以查看方便、编程扩展 环境电脑和手机都连接到同一个Wi-F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mitmproxy与charles的抓包应用">
+<meta property="og:url" content="http://example.com/2019/09/29/mitmproxy-and-charles-use/index.html">
+<meta property="og:site_name" content="一吻江山">
+<meta property="og:description" content="[TOC] 问题mitmproxy是命令行界面，不太方便查看，自己遇到的问题有：  在Flow Details界面不知道用哪个快捷键查看下一条或上一条网络请求详情 json中的中文显示为 \ua9b4 或 ？不能看清是哪个中文 不知道怎么复制界面中显示的内容  Charles的编程能力弱 把Charles和mitmproxy结合起来使用，可以查看方便、编程扩展 环境电脑和手机都连接到同一个Wi-F">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s2bq3vglj30u01hcaak.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s2ks0wauj31am0qe76x.jpg">
+<meta property="og:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s4idpz9gj31fa0u045o.jpg">
+<meta property="article:published_time" content="2019-09-29T08:14:57.000Z">
+<meta property="article:modified_time" content="2019-11-21T03:43:11.000Z">
+<meta property="article:author" content="jason zhou">
+<meta property="article:tag" content="charles">
+<meta property="article:tag" content="mitmproxy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s2bq3vglj30u01hcaak.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="一吻江山" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">一吻江山</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mitmproxy-and-charles-use" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/29/mitmproxy-and-charles-use/" class="article-date">
+  <time datetime="2019-09-29T08:14:57.000Z" itemprop="datePublished">2019-09-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mitmproxy与charles的抓包应用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>[TOC]</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>mitmproxy是命令行界面，不太方便查看，自己遇到的问题有：</p>
+<ul>
+<li>在Flow Details界面不知道用哪个快捷键查看下一条或上一条网络请求详情</li>
+<li>json中的中文显示为 \ua9b4 或 ？不能看清是哪个中文</li>
+<li>不知道怎么复制界面中显示的内容</li>
+</ul>
+<p>Charles的编程能力弱</p>
+<p>把Charles和mitmproxy结合起来使用，可以查看方便、编程扩展</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>电脑和手机都连接到同一个Wi-Fi, 比如TP_LINK_629F<br>电脑: ip=192.168.1.100; 运行着Charles、mitmproxy<br>Charles: 192.168.1.100:8888<br>mitmproxy: 192.168.1.100:8080<br>手机: 设置代理地址为Charles的地址192.168.1.100:8888</p>
+<p>Charles - External Proxy Settings功能开启：</p>
+<ul>
+<li>Web Proxy(HTTP) - Web Proxy Server设置为mitmproxy的地址192.168.1.100:8080</li>
+<li>Secure Web Proxy(HTTPS) - Secure Web Proxy Server设置为mitmproxy的地址192.168.1.100:8080</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">手机</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s2bq3vglj30u01hcaak.jpg"></td>
+</tr>
+<tr>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">Charles - External Proxy Settings</td>
+</tr>
+<tr>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s2ks0wauj31am0qe76x.jpg"></td>
+</tr>
+</tbody></table>
+<h2 id="补充-mitmproxy设置上游代理"><a href="#补充-mitmproxy设置上游代理" class="headerlink" title="补充: mitmproxy设置上游代理"></a>补充: mitmproxy设置上游代理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --mode&#x3D;upstream:http:&#x2F;&#x2F;127.0.0.1:8888 --ssl-insecure</span><br></pre></td></tr></table></figure>
+
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>应用：自动生成接口的python代码</p>
+<p>以<code>趣头条App</code>为例：<br>阅读得积分的接口为: <code>https://api.1sapp.com/readtimer/report</code><br>自动生成的代码大约如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def readtimer_report(self):</span><br><span class="line"></span><br><span class="line">    headers &#x3D; &#123;</span><br><span class="line">		&#39;User-Agent&#39;: &#39;qukan_android;retrofit&#x2F;2.4.0 okhttp&#x2F;3.11.0;os&#x2F;7.0 M5 Note Meizu;device&#x2F;862546036581345;version&#x2F;3.9.41.000.0904.1121;channel&#x2F;012&#39;,</span><br><span class="line">		&#39;Host&#39;: &#39;api.1sapp.com&#39;,</span><br><span class="line">		&#39;Accept-Encoding&#39;: &#39;gzip&#39;,</span><br><span class="line">		&#39;Connection&#39;: &#39;keep-alive&#39;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    params &#x3D; &#123;</span><br><span class="line">		&#39;qdata&#39;: &#39;NzVFNkE3Mjc0RjEzRkYwRTM5OTEzNjAyRUZBMDMzQTAuY0dGeVlXMGZPR0kyTldKalltTXRNVGczT1MwME9EZGlMVGszT0RBdE1EUmlOVEV3TWpOak9UazRIblpsY25OcGIyNGZNVEVlY0d4aGRHWnZjbTBmWVc1a2NtOXBaQjVsWXg4eC46LxvyIvgD62&#x2F;T93SlANmywpigTwlOwcfCHe0iZ1D8mH1zpslt2JCRPdiHOj1M20bU0zDX0odUOBig6Kt51mheNJuQYeDvp15R8RSGTT3LR9s55nBCGvWyTLq+3pjEvkyERElR9E2I384&#x2F;nHQR4iqxqv7LKQ4rBA0R6bNG8sksHqNl1izSbF87G&#x2F;4&#x2F;Qw5vVYcuNUfU0BM6vvIbsy2CTPWlJ51YCzadQZZLONuaYTpyhuOiUV4vnx6qkvpYDNp9XpPPjbXxJAb7fikqjWSdyx167hXDPzUkNZGndjZsv7kQANDkIk2Dm+g5YW1I49xnkOzJkmxvyrLevnsSb9S5fSEUEyfq0GlPHE0RRBeSjFxVltH1zdZraTtk13Z+MvA7HBYQONz&#x2F;0OwyMnujc1Ety91uKh6YCCVEDvBO+RTOzoRDa3nlRo3FTo9OeRBsyL20qIP24977MMYXEoxinTuwNonipCjnjSYIrhOu6cyv7uxuLd6FxtmTsydawNGMPI&#x2F;K+habIKXNUFsQMCUcAGhYpoKQJvkQqHEq6lPyZZzXDot1EsN6bsGj56xQdiuJZLMFyZaGNR6E9FmVlI0LAVT8ttVpOvs+5f08T0iMxMNb0VQk6DOySpYHp7EVjc9YFpPcVxj8aXvuTjoPkaNGhSKQ0fgBd8HVRLslcnzX0QLJkTuU7NQ9aili6m2M2hWvh&#x2F;q8ghWrvtLT+izCiFNKHE+4GTC9J6jqgyjHsXkAjcOSBAaIXMQKnOd664hdoR2GqV+GAy95fc5zZCJ7EFvzmTbJQrpMOwW+Y2NvYPZtgjw1uJEyU7AR7nVw7VqMjPpCDYeWBWoQ1W4OjlXTqgBR4MIu1sTag6a+my&#x2F;0hItf91SNa58zCN3YmE2NnsWwwiCC+ZP91moV&#x2F;KqPwX3vMLKW4&#x2F;3Vsziqe8gl&#39;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    data &#x3D; &#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    url &#x3D; &#39;http:&#x2F;&#x2F;api.1sapp.com&#x2F;readtimer&#x2F;report&#39;</span><br><span class="line">    result &#x3D; self._get(url, headers&#x3D;headers, params&#x3D;params, data&#x3D;data)</span><br><span class="line">    return result</span><br><span class="line">     </span><br></pre></td></tr></table></figure>
+
+<p>应用步骤：</p>
+<ol>
+<li>手机按上面环境设置好代理地址</li>
+<li>在电脑上启动Charles，Charles按上面环境设置</li>
+<li>在电脑上启动mitimproxy, 启动命令如下：<code>mitmproxy -s gen_code_mitm.py</code></li>
+<li>文件gen_code_mitm.py内容参考下面</li>
+<li>在手机<code>趣头条App</code>阅读文章或看视频一定时间</li>
+<li>会在<code>~/Desktop/api/</code>目录下生成一个叫<code>readtimer_report.text</code></li>
+<li>把<code>readtimer_report.text</code>的相应代码复制粘帖到<code>文件qu_tou_tiao.py</code>中</li>
+<li>按需要修改自动生成的代码为希望的样子</li>
+<li>运行<code>qu_tou_tiao.py</code></li>
+</ol>
+<p>注意：</p>
+<ul>
+<li><code>readtimer_report.text</code>的名字和所在目录是由代码<code>gen_code_mitm.py</code>决定的，请自行阅读修改</li>
+<li><code>readtimer_report</code>方法名由代码<code>gen_code_mitm.py</code>决定的，请自行阅读修改</li>
+<li>对body为复杂json格式的代码自动生成会有错误，有能力的自行修改</li>
+<li><code>readtimer/report</code>这个接口自动生成的代码数据是不能重复获取积分的，这里只是演示</li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g6s4idpz9gj31fa0u045o.jpg"></p>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p>文件qu_tou_tiao.py: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&#39;&#39;&#39;</span><br><span class="line">代码模板</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">import requests</span><br><span class="line">import json</span><br><span class="line">import logging</span><br><span class="line"></span><br><span class="line">logging.basicConfig(format&#x3D;&#39;%(asctime)s:%(message)s&#39;, datefmt&#x3D;&#39;%m-%d %H:%M:%S&#39;, level&#x3D;logging.INFO)</span><br><span class="line"></span><br><span class="line">class User(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        pass</span><br><span class="line">        </span><br><span class="line">    def api_need_implement(self):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def _header(self):</span><br><span class="line">        return &#123;</span><br><span class="line">            &#39;User-Agent&#39;: &#39;&#39;,</span><br><span class="line">            &#39;Cookie&#39;:self.cookie</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    @staticmethod</span><br><span class="line">    def _post(url, data&#x3D;None, json&#x3D;None, p&#x3D;logging.warning, **kwargs):</span><br><span class="line">        res &#x3D; requests.post(url, data&#x3D;data, **kwargs)</span><br><span class="line">        result &#x3D; res.text</span><br><span class="line">        p(res.json())</span><br><span class="line">        logging.info(&#39;&#39;)</span><br><span class="line">        return result</span><br><span class="line"></span><br><span class="line">    @staticmethod</span><br><span class="line">    def _get(url, params&#x3D;None, p&#x3D;logging.warning, **kwargs):</span><br><span class="line">        res &#x3D; requests.get(url, params&#x3D;params, **kwargs)</span><br><span class="line">        result &#x3D; res.text</span><br><span class="line">        p(json.loads(result))</span><br><span class="line">        logging.info(&#39;&#39;)</span><br><span class="line">        return result</span><br><span class="line"></span><br><span class="line">def genUsers():</span><br><span class="line">    yield User()</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    for user in genUsers():</span><br><span class="line">        user.api_need_implement()  </span><br></pre></td></tr></table></figure>
+
+
+<p>文件gen_code_mitm.py</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">import re</span><br><span class="line">from urllib.parse import urlparse</span><br><span class="line"></span><br><span class="line">from mitmproxy import ctx</span><br><span class="line">from mitmproxy import flowfilter</span><br><span class="line">from mitmproxy import http</span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">生成接口python代码</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line"></span><br><span class="line">class GenCode(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        ctx.log.info(&#39;__init__&#39;)</span><br><span class="line"></span><br><span class="line">        # 趣头条</span><br><span class="line">        urls &#x3D; [</span><br><span class="line">            r&#39;taskcenter&#x2F;getListV2&#39;,#tab页：任务</span><br><span class="line">            r&#39;readtimer&#x2F;report&#39;,</span><br><span class="line">        ]</span><br><span class="line">        self.qu_tou_tiao &#x3D; flowfilter.parse(&#39;|&#39;.join(urls)) </span><br><span class="line"></span><br><span class="line">        # 百度 - 全民小视频 </span><br><span class="line">        urls &#x3D; [</span><br><span class="line">            r&#39;mvideo&#x2F;api&#39;, # 每日签到</span><br><span class="line">        ]</span><br><span class="line">        self.quan_ming &#x3D; flowfilter.parse(&#39;|&#39;.join(urls)) </span><br><span class="line"></span><br><span class="line">        self.flowfilters &#x3D; [</span><br><span class="line">            self.qu_tou_tiao, </span><br><span class="line">            self.quan_ming,</span><br><span class="line">        ]      </span><br><span class="line"></span><br><span class="line">    def load(self, loader):</span><br><span class="line">        ctx.log.info(&#39;event: load&#39;)</span><br><span class="line"></span><br><span class="line">    def configure(self, updated):</span><br><span class="line">        ctx.log.info(&#39;event: configure&#39;)</span><br><span class="line"></span><br><span class="line">    def running(self):</span><br><span class="line">        ctx.log.info(&#39;event: running&#39;)</span><br><span class="line"></span><br><span class="line">    def done(self):</span><br><span class="line">        ctx.log.info(&#39;event: done&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def response(self, flow: http.HTTPFlow):</span><br><span class="line">        if any( [ filter(flow) for filter in self.flowfilters ] ):</span><br><span class="line"></span><br><span class="line">            request: http.HTTPRequest &#x3D; flow.request</span><br><span class="line"></span><br><span class="line">            parse_result &#x3D; urlparse(request.url)</span><br><span class="line">            url_path &#x3D; parse_result.path</span><br><span class="line"></span><br><span class="line">            function_name &#x3D; re.sub(r&#39;[&#x2F;-]&#39;,&#39;_&#39;, url_path).strip(&#39;_&#39;)</span><br><span class="line">            headers_code &#x3D; self.headers_string(flow)</span><br><span class="line">            params_code &#x3D; self.params_string(flow)</span><br><span class="line">            data_code &#x3D; self.data_string(flow) </span><br><span class="line"></span><br><span class="line">            path &#x3D; f&#39;&#39;&#39;&#x2F;Users&#x2F;zhoujie&#x2F;Desktop&#x2F;api&#x2F;&#123;function_name&#125;.text&#39;&#39;&#39;  </span><br><span class="line">            with open(path, &#39;a&#39;) as f:</span><br><span class="line">                print(f&#39;&#39;&#39;# ---------------------&#39;&#39;&#39;,file&#x3D;f)</span><br><span class="line"></span><br><span class="line">                code &#x3D; f&#39;&#39;&#39;</span><br><span class="line">def &#123;function_name&#125;(self):</span><br><span class="line"></span><br><span class="line">    &#123;headers_code&#125;</span><br><span class="line"></span><br><span class="line">    &#123;params_code&#125;</span><br><span class="line"></span><br><span class="line">    &#123;data_code&#125;</span><br><span class="line"></span><br><span class="line">    url &#x3D; &#39;&#123;request.scheme&#125;:&#x2F;&#x2F;&#123;request.pretty_host&#125;&#123;url_path&#125;&#39;</span><br><span class="line">    result &#x3D; self._&#123;request.method.lower()&#125;(url, headers&#x3D;headers, params&#x3D;params, data&#x3D;data)</span><br><span class="line">    return result</span><br><span class="line">                </span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">                f.write(code)</span><br><span class="line"></span><br><span class="line">                print(f&#39;&#39;&#39;Response:&#39;&#39;&#39;,file&#x3D;f)</span><br><span class="line">                print(f&#39;&#39;&#39;&#123;flow.response.text&#125;&#39;&#39;&#39;,file&#x3D;f)</span><br><span class="line">                print(f&#39;&#39;&#39;# ---------------------\n\n&#39;&#39;&#39;,file&#x3D;f)</span><br><span class="line"></span><br><span class="line">    def headers_string(self, flow: http.HTTPFlow):</span><br><span class="line">        lines &#x3D; &#39;&#39;</span><br><span class="line">        for key,value in flow.request.headers.items():</span><br><span class="line">            lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#39;&#123;value&#125;&#39;,&quot;</span><br><span class="line">        s &#x3D; f&#39;&#39;&#39;headers &#x3D; &#123;&#123;&#123;lines&#125;\n\t&#125;&#125;&#39;&#39;&#39;        </span><br><span class="line">        return s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def params_string(self, flow: http.HTTPFlow):</span><br><span class="line">        lines &#x3D; &#39;&#39;</span><br><span class="line">        for key,value in flow.request.query.items():</span><br><span class="line">            lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#39;&#123;value&#125;&#39;,&quot;</span><br><span class="line">        s &#x3D; f&#39;&#39;&#39;params &#x3D; &#123;&#123;&#123;lines&#125;\n\t&#125;&#125;&#39;&#39;&#39;        </span><br><span class="line">        return s</span><br><span class="line"></span><br><span class="line">    def data_string(self, flow: http.HTTPFlow):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">        Content-Type: application&#x2F;json; charset&#x3D;utf-8</span><br><span class="line">        Content-Type: text&#x2F;plain;charset&#x3D;utf-8</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        lines &#x3D; &#39;&#39;</span><br><span class="line"></span><br><span class="line">        # [urlencoded_form, multipart_form, plan, json]取其一</span><br><span class="line">        for key,value in flow.request.urlencoded_form.items():</span><br><span class="line">            lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#39;&#123;value&#125;&#39;,&quot;</span><br><span class="line"></span><br><span class="line">        for key,value in flow.request.multipart_form.items():</span><br><span class="line">            key &#x3D; key.decode(encoding&#x3D;&#39;utf-8&#39;)</span><br><span class="line">            value &#x3D; value.decode(encoding&#x3D;&#39;utf-8&#39;) </span><br><span class="line">            lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#39;&#123;value&#125;&#39;,&quot;</span><br><span class="line"></span><br><span class="line">        # Todo:复杂json数据还不能代码化</span><br><span class="line">        if &#39;application&#x2F;json&#39; in flow.request.headers.get(&#39;content-type&#39;,&#39;&#39;):</span><br><span class="line">            d &#x3D; json.loads(flow.request.text)</span><br><span class="line">            for key,value in d.items():</span><br><span class="line">                lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#123;value&#125;,&quot;</span><br><span class="line">        </span><br><span class="line">        s &#x3D; f&#39;&#39;&#39;data &#x3D; &#123;&#123;&#123;lines&#125;\n\t&#125;&#125;&#39;&#39;&#39;        </span><br><span class="line">        return s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">addons &#x3D; [</span><br><span class="line">    GenCode()</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/09/29/mitmproxy-and-charles-use/" data-id="ckhdd60ge0003n7ub6lr01zey" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/charles/" rel="tag">charles</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mitmproxy/" rel="tag">mitmproxy</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/09/29/%E6%88%90%E8%AF%AD%E6%B6%88%E6%B6%88%E4%B9%90-%E5%8D%8A%E8%87%AA%E5%8A%A8%E5%8C%96/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          趣消除App自动化-成语消消乐-半自动化
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/09/28/Charles%E7%9A%84%E5%BA%94%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Charles的应用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/charles/" rel="tag">charles</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/" rel="tag">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mitmproxy/" rel="tag">mitmproxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mitmproxy-python/" rel="tag">mitmproxy, python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/charles/" style="font-size: 20px;">charles</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/mitmproxy/" style="font-size: 15px;">mitmproxy</a> <a href="/tags/mitmproxy-python/" style="font-size: 10px;">mitmproxy, python</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 10px;">代理</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 10px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">十月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/11/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/05/%E8%B6%8A%E6%88%98%E8%B6%8A%E5%8B%87-%E5%96%9C%E5%89%A7%E7%89%88/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/13/%E7%A8%8B%E5%BA%8F%E5%91%98%E5%B0%8F%E7%81%B0-%E6%BC%AB%E7%94%BB%E7%B3%BB%E5%88%97/">程序员小灰-漫画系列</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/28/mitmproxy%E7%9A%84%E5%BA%94%E7%94%A8-%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/">mitmproxy的应用-代码生成</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/29/%E6%88%90%E8%AF%AD%E6%B6%88%E6%B6%88%E4%B9%90-%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96/">趣消除App自动化 - 成语消消乐-全自动化</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 jason zhou<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
