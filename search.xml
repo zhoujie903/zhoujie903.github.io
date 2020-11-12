@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>iOS快速设置代理</title>
+    <url>/2019/09/27/ios-switch-proxy/</url>
+    <content><![CDATA[<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>手动设置wifi的步骤非常长：</p>
+<ol>
+<li>点击“设置”</li>
+<li>点击“无线局域网”</li>
+<li>点击已连接的wifi</li>
+<li>点击“配置代理”</li>
+<li>点击“手动”</li>
+<li>定位服务器输入框，输入ip</li>
+<li>定位端口输入框，输入port</li>
+<li>点击“存储”</li>
+</ol>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>用iOS上的Shadowrocket和Mac上的Charles来快速设置代理<br>iOS和Mac在同一wifi</p>
+<ol>
+<li>启动Charles，假设代理地址为：192.168.0.100:8888</li>
+<li>Shadowrocket设置<code>全局路由</code>为<code>代理</code></li>
+<li>Shadowrocket添加<code>HTTP</code>类型的节点</li>
+<li>Shadowrocket打开连接</li>
+</ol>
+<p><strong>添加<code>HTTP</code>类型的节点:</strong><br><img src="http://upload-images.jianshu.io/upload_images/281540-3a3a4df908ac1248.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加节点"></p>
+<p><strong>结果:</strong><br><img src="http://upload-images.jianshu.io/upload_images/281540-c94d3b52048e63e7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="结果"></p>
+]]></content>
+      <tags>
+        <tag>代理</tag>
+        <tag>iOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python阅读列表</title>
+    <url>/2019/09/27/Python%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li><a href="https://www.kawabangga.com/posts/2340">理解Python的import</a></li>
+<li><a href="https://www.kawabangga.com/posts/2772">理解Python的Iterable和Iterator</a></li>
+</ul>
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><ul>
+<li><a href="http://wklken.me/posts/2013/08/20/python-extra-itertools.html">Python-进阶-itertools模块小结</a></li>
+<li><a href="https://www.jianshu.com/p/a8cb5375171a">Python Traceback详解</a></li>
+<li><a href="https://yanbin.blog/python-execute-system-command/">Python 执行系统命令 - subprocess 模块的使用</a></li>
+<li><a href="https://juejin.im/post/5c13960bf265da6134384ae5">time date datetme timestamp 傻傻分不清楚</a></li>
+<li><a href="https://cuiqingcai.com/6921.html">一看就懂，Python 日志 logging 模块详解及应用</a></li>
+<li><a href="https://cuiqingcai.com/6598.html">Python3 中使用 Pathlib 模块进行文件操作</a></li>
+<li><a href="https://mp.weixin.qq.com/s/NQEKTuSf3rPCloJJw1bPYA">你还在用 os.path？快来感受一下 pathlib 给你带来的便捷吧</a></li>
+<li><a href="https://cuiqingcai.com/7071.html">Python 中 typing 模块和类型注解的使用</a></li>
+</ul>
+<h2 id="并发-amp-异步"><a href="#并发-amp-异步" class="headerlink" title="并发 &amp; 异步"></a>并发 &amp; 异步</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/25228075">从0到1，Python异步编程的演进之路</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/27258289">Python Async/Await入门指南</a></li>
+<li><a href="https://lotabout.me/2017/Python-Generator/">Python Generator</a></li>
+<li><a href="https://lotabout.me/2017/understand-python-asyncio/">理解 Python asyncio</a></li>
+<li><a href="https://www.dongwm.com/post/understand-asyncio-1/">深入理解asyncio(一)</a></li>
+<li><a href="https://www.dongwm.com/post/understand-asyncio-2/">深入理解asyncio(二)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/25228075">Python中异步协程的使用方法介绍</a></li>
+</ul>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul>
+<li><a href="https://github.com/piglei/one-python-craftsman">Python 工匠</a></li>
+<li><a href="https://coding.imooc.com/class/213.html">Python3实用编程技巧进阶</a></li>
+<li><a href="https://mp.weixin.qq.com/s/ztMEpv4-MJ0y7ad6gb7dyQ">python3中的unicode和bytes，让编码更流畅</a></li>
+<li><a href="http://cizixs.com/2014/11/08/understand-wsgi/">python wsgi 简介</a></li>
+<li><a href="https://manjusaka.itscoder.com/posts/2018/02/23/something-about-decorator/">怎么样去理解 Python 中的装饰器 </a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Charles的应用</title>
     <url>/2019/09/28/Charles%E7%9A%84%E5%BA%94%E7%94%A8/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -81,74 +149,6 @@
 ]]></content>
       <tags>
         <tag>charles</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>iOS快速设置代理</title>
-    <url>/2019/09/27/ios-switch-proxy/</url>
-    <content><![CDATA[<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>手动设置wifi的步骤非常长：</p>
-<ol>
-<li>点击“设置”</li>
-<li>点击“无线局域网”</li>
-<li>点击已连接的wifi</li>
-<li>点击“配置代理”</li>
-<li>点击“手动”</li>
-<li>定位服务器输入框，输入ip</li>
-<li>定位端口输入框，输入port</li>
-<li>点击“存储”</li>
-</ol>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>用iOS上的Shadowrocket和Mac上的Charles来快速设置代理<br>iOS和Mac在同一wifi</p>
-<ol>
-<li>启动Charles，假设代理地址为：192.168.0.100:8888</li>
-<li>Shadowrocket设置<code>全局路由</code>为<code>代理</code></li>
-<li>Shadowrocket添加<code>HTTP</code>类型的节点</li>
-<li>Shadowrocket打开连接</li>
-</ol>
-<p><strong>添加<code>HTTP</code>类型的节点:</strong><br><img src="http://upload-images.jianshu.io/upload_images/281540-3a3a4df908ac1248.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="添加节点"></p>
-<p><strong>结果:</strong><br><img src="http://upload-images.jianshu.io/upload_images/281540-c94d3b52048e63e7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="结果"></p>
-]]></content>
-      <tags>
-        <tag>代理</tag>
-        <tag>iOS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python阅读列表</title>
-    <url>/2019/09/27/Python%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
-<li><a href="https://www.kawabangga.com/posts/2340">理解Python的import</a></li>
-<li><a href="https://www.kawabangga.com/posts/2772">理解Python的Iterable和Iterator</a></li>
-</ul>
-<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><ul>
-<li><a href="http://wklken.me/posts/2013/08/20/python-extra-itertools.html">Python-进阶-itertools模块小结</a></li>
-<li><a href="https://www.jianshu.com/p/a8cb5375171a">Python Traceback详解</a></li>
-<li><a href="https://yanbin.blog/python-execute-system-command/">Python 执行系统命令 - subprocess 模块的使用</a></li>
-<li><a href="https://juejin.im/post/5c13960bf265da6134384ae5">time date datetme timestamp 傻傻分不清楚</a></li>
-<li><a href="https://cuiqingcai.com/6921.html">一看就懂，Python 日志 logging 模块详解及应用</a></li>
-<li><a href="https://cuiqingcai.com/6598.html">Python3 中使用 Pathlib 模块进行文件操作</a></li>
-<li><a href="https://mp.weixin.qq.com/s/NQEKTuSf3rPCloJJw1bPYA">你还在用 os.path？快来感受一下 pathlib 给你带来的便捷吧</a></li>
-<li><a href="https://cuiqingcai.com/7071.html">Python 中 typing 模块和类型注解的使用</a></li>
-</ul>
-<h2 id="并发-amp-异步"><a href="#并发-amp-异步" class="headerlink" title="并发 &amp; 异步"></a>并发 &amp; 异步</h2><ul>
-<li><a href="https://zhuanlan.zhihu.com/p/25228075">从0到1，Python异步编程的演进之路</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/27258289">Python Async/Await入门指南</a></li>
-<li><a href="https://lotabout.me/2017/Python-Generator/">Python Generator</a></li>
-<li><a href="https://lotabout.me/2017/understand-python-asyncio/">理解 Python asyncio</a></li>
-<li><a href="https://www.dongwm.com/post/understand-asyncio-1/">深入理解asyncio(一)</a></li>
-<li><a href="https://www.dongwm.com/post/understand-asyncio-2/">深入理解asyncio(二)</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/25228075">Python中异步协程的使用方法介绍</a></li>
-</ul>
-<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul>
-<li><a href="https://github.com/piglei/one-python-craftsman">Python 工匠</a></li>
-<li><a href="https://coding.imooc.com/class/213.html">Python3实用编程技巧进阶</a></li>
-<li><a href="https://mp.weixin.qq.com/s/ztMEpv4-MJ0y7ad6gb7dyQ">python3中的unicode和bytes，让编码更流畅</a></li>
-<li><a href="http://cizixs.com/2014/11/08/understand-wsgi/">python wsgi 简介</a></li>
-<li><a href="https://manjusaka.itscoder.com/posts/2018/02/23/something-about-decorator/">怎么样去理解 Python 中的装饰器 </a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -440,6 +440,7 @@
 <li><a href="https://book.douban.com/subject/30175598/">Python 3网络爬虫开发实战</a></li>
 <li><a href="https://kaiwu.lagou.com/course/courseInfo.htm?courseId=46&amp;sid=30-aggregation-0#/sale">52讲轻松搞定网络爬虫</a></li>
 <li><a href="https://github.com/scrapy/scrapy">github scrapy</a></li>
+<li><a href="https://github.com/rmax/scrapy-redis">github scrapy-redis</a></li>
 </ul>
 <h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><ul>
 <li><a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html">WebSocket 教程</a></li>
