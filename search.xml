@@ -1,8 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Charles的应用</title>
-    <url>/2019/09/28/Charles%E7%9A%84%E5%BA%94%E7%94%A8/</url>
+    <title>Python阅读列表</title>
+    <url>/2019/09/27/Python%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li><a href="https://www.kawabangga.com/posts/2340">理解Python的import</a></li>
+<li><a href="https://www.kawabangga.com/posts/2772">理解Python的Iterable和Iterator</a></li>
+<li><a href="https://www.dongwm.com/post/124/">详解Python元类</a></li>
+</ul>
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><ul>
+<li><a href="http://wklken.me/posts/2013/08/20/python-extra-itertools.html">Python-进阶-itertools模块小结</a></li>
+<li><a href="https://www.jianshu.com/p/a8cb5375171a">Python Traceback详解</a></li>
+<li><a href="https://yanbin.blog/python-execute-system-command/">Python 执行系统命令 - subprocess 模块的使用</a></li>
+<li><a href="https://juejin.im/post/5c13960bf265da6134384ae5">time date datetme timestamp 傻傻分不清楚</a></li>
+<li><a href="https://cuiqingcai.com/6921.html">一看就懂，Python 日志 logging 模块详解及应用</a></li>
+<li><a href="https://cuiqingcai.com/6598.html">Python3 中使用 Pathlib 模块进行文件操作</a></li>
+<li><a href="https://mp.weixin.qq.com/s/NQEKTuSf3rPCloJJw1bPYA">你还在用 os.path？快来感受一下 pathlib 给你带来的便捷吧</a></li>
+<li><a href="https://cuiqingcai.com/7071.html">Python 中 typing 模块和类型注解的使用</a></li>
+</ul>
+<h2 id="并发-amp-异步"><a href="#并发-amp-异步" class="headerlink" title="并发 &amp; 异步"></a>并发 &amp; 异步</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/25228075">从0到1，Python异步编程的演进之路</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/27258289">Python Async/Await入门指南</a></li>
+<li><a href="https://lotabout.me/2017/Python-Generator/">Python Generator</a></li>
+<li><a href="https://lotabout.me/2017/understand-python-asyncio/">理解 Python asyncio</a></li>
+<li><a href="https://www.dongwm.com/post/understand-asyncio-1/">深入理解asyncio(一)</a></li>
+<li><a href="https://www.dongwm.com/post/understand-asyncio-2/">深入理解asyncio(二)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/25228075">Python中异步协程的使用方法介绍</a></li>
+</ul>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul>
+<li><a href="https://github.com/piglei/one-python-craftsman">Python 工匠</a></li>
+<li><a href="https://coding.imooc.com/class/213.html">Python3实用编程技巧进阶</a></li>
+<li><a href="https://mp.weixin.qq.com/s/ztMEpv4-MJ0y7ad6gb7dyQ">python3中的unicode和bytes，让编码更流畅</a></li>
+<li><a href="http://cizixs.com/2014/11/08/understand-wsgi/">python wsgi 简介</a></li>
+<li><a href="https://manjusaka.itscoder.com/posts/2018/02/23/something-about-decorator/">怎么样去理解 Python 中的装饰器 </a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>cizixs的博客文章</title>
+    <url>/2020/11/25/Charles%E7%9A%84%E5%BA%94%E7%94%A8/</url>
     <content><![CDATA[<p>[TOC]</p>
 <h2 id="Rewrite应用"><a href="#Rewrite应用" class="headerlink" title="Rewrite应用"></a>Rewrite应用</h2><h3 id="案例01"><a href="#案例01" class="headerlink" title="案例01"></a>案例01</h3><p>问题：<code>今日头条极速版</code>App每天的<code>阅读推送文章</code>任务因为每天收到的推送很少，因而不能得很高的积分，怎样把普通文章的阅读变为推送文章的阅读呢？</p>
 <p>思考：对比普通文章的阅读与推送文章的阅读发出的网络数据，找出差异</p>
@@ -88,46 +128,127 @@
 </tbody></table>
 ]]></content>
       <tags>
-        <tag>charles</tag>
+        <tag>cizixs</tag>
       </tags>
   </entry>
   <entry>
-    <title>Python阅读列表</title>
-    <url>/2019/09/27/Python%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
-<li><a href="https://www.kawabangga.com/posts/2340">理解Python的import</a></li>
-<li><a href="https://www.kawabangga.com/posts/2772">理解Python的Iterable和Iterator</a></li>
-</ul>
-<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><ul>
-<li><a href="http://wklken.me/posts/2013/08/20/python-extra-itertools.html">Python-进阶-itertools模块小结</a></li>
-<li><a href="https://www.jianshu.com/p/a8cb5375171a">Python Traceback详解</a></li>
-<li><a href="https://yanbin.blog/python-execute-system-command/">Python 执行系统命令 - subprocess 模块的使用</a></li>
-<li><a href="https://juejin.im/post/5c13960bf265da6134384ae5">time date datetme timestamp 傻傻分不清楚</a></li>
-<li><a href="https://cuiqingcai.com/6921.html">一看就懂，Python 日志 logging 模块详解及应用</a></li>
-<li><a href="https://cuiqingcai.com/6598.html">Python3 中使用 Pathlib 模块进行文件操作</a></li>
-<li><a href="https://mp.weixin.qq.com/s/NQEKTuSf3rPCloJJw1bPYA">你还在用 os.path？快来感受一下 pathlib 给你带来的便捷吧</a></li>
-<li><a href="https://cuiqingcai.com/7071.html">Python 中 typing 模块和类型注解的使用</a></li>
-</ul>
-<h2 id="并发-amp-异步"><a href="#并发-amp-异步" class="headerlink" title="并发 &amp; 异步"></a>并发 &amp; 异步</h2><ul>
-<li><a href="https://zhuanlan.zhihu.com/p/25228075">从0到1，Python异步编程的演进之路</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/27258289">Python Async/Await入门指南</a></li>
-<li><a href="https://lotabout.me/2017/Python-Generator/">Python Generator</a></li>
-<li><a href="https://lotabout.me/2017/understand-python-asyncio/">理解 Python asyncio</a></li>
-<li><a href="https://www.dongwm.com/post/understand-asyncio-1/">深入理解asyncio(一)</a></li>
-<li><a href="https://www.dongwm.com/post/understand-asyncio-2/">深入理解asyncio(二)</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/25228075">Python中异步协程的使用方法介绍</a></li>
-</ul>
-<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul>
-<li><a href="https://github.com/piglei/one-python-craftsman">Python 工匠</a></li>
-<li><a href="https://coding.imooc.com/class/213.html">Python3实用编程技巧进阶</a></li>
-<li><a href="https://mp.weixin.qq.com/s/ztMEpv4-MJ0y7ad6gb7dyQ">python3中的unicode和bytes，让编码更流畅</a></li>
-<li><a href="http://cizixs.com/2014/11/08/understand-wsgi/">python wsgi 简介</a></li>
-<li><a href="https://manjusaka.itscoder.com/posts/2018/02/23/something-about-decorator/">怎么样去理解 Python 中的装饰器 </a></li>
+    <title>cizixs的博客文章</title>
+    <url>/2020/11/25/cizixs/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://cizixs.com/2015/04/23/docker-basic-in-a-mindmap/"> 一张图入门 docker</a></li>
+<li><a href="https://cizixs.com/2017/07/31/arp-protocol/">ARP 协议解析</a></li>
+<li><a href="https://cizixs.com/2013/07/29/basic-regular-expression/">Basic Regular Expression</a></li>
+<li><a href="https://cizixs.com/2017/12/30/cncf-cloud-native-landscape/">CNCF 云原生容器生态系统概要</a></li>
+<li><a href="https://cizixs.com/2017/05/23/container-network-cni/">CNI：容器网络接口</a></li>
+<li><a href="https://cizixs.com/2016/12/19/golang-json-guide/">Go 语言 JSON 简介</a></li>
+<li><a href="https://cizixs.com/2017/03/21/http-proxy-and-golang-implementation/">HTTP 代理原理和实现</a></li>
+<li><a href="https://cizixs.com/2015/10/06/http-resume-download/">HTTP 断点下载功能实现</a></li>
+<li><a href="https://cizixs.com/2017/03/22/http-tunnel-proxy-and-golang-implementation/">HTTP 隧道代理原理和实现</a></li>
+<li><a href="https://cizixs.com/2014/10/19/text-manipulation-in-linux/">Linux 文本处理</a></li>
+<li><a href="https://cizixs.com/2017/11/05/oci-and-runc/">OCI 和 runc：容器标准化和 docker</a></li>
+<li><a href="https://cizixs.com/2013/08/04/several-problems-working-with-githubjekyll-bootstrap/">Problems Working with Github+Jekyll</a></li>
+<li><a href="https://cizixs.com/2016/05/20/python-httpserver/">Python BaseHTTPServer 介绍</a></li>
+<li><a href="https://cizixs.com/2013/08/10/python-configparser-module/">Python ConfigParser Module</a></li>
+<li><a href="https://cizixs.com/2013/09/07/python-encoding/">Python 编码那些事</a></li>
+<li><a href="https://cizixs.com/2013/09/06/RESTful-API-design/">RESTful API design</a></li>
+<li><a href="https://cizixs.com/2014/12/20/sublime-tutorial-for-pythoner/">Sublime Text: python 程序员不完全指南</a></li>
+<li><a href="https://cizixs.com/2013/08/10/use-jekyll-to-write-blog/">Use Jekyll to Write Blog</a></li>
+<li><a href="https://cizixs.com/2014/04/10/ubuntu_repository_format_explained/">apt 背后的故事</a></li>
+<li><a href="https://cizixs.com/2017/09/13/docker-aufs-storage-driver/">aufs 简介以及在 docker 中的使用</a></li>
+<li><a href="https://cizixs.com/2016/01/20/dive-into-bottle/">bottle 源码解析</a></li>
+<li><a href="https://cizixs.com/2014/03/05/c-string-function-implementation/">c string function implementation</a></li>
+<li><a href="https://cizixs.com/2017/08/25/linux-cgroup/">docker 容器基础技术：linux cgroup 简介</a></li>
+<li><a href="https://cizixs.com/2017/08/29/linux-namespace/">docker 容器基础技术：linux namespace 简介</a></li>
+<li><a href="https://cizixs.com/2016/06/12/docker-network-modes-explained/">docker 容器的网络模式</a></li>
+<li><a href="https://cizixs.com/2017/08/21/docker-udp-issue/">docker 容器网络下 UDP 协议的一个问题</a></li>
+<li><a href="https://cizixs.com/2017/10/19/docker-calico-network/">docker 容器网络方案：calico 网络模型</a></li>
+<li><a href="https://cizixs.com/2016/06/01/docker-default-network/">docker 容器默认的网络模型</a></li>
+<li><a href="https://cizixs.com/2016/06/13/docker-overlay-network/">docker 跨主机网络：overlay 简介</a></li>
+<li><a href="https://cizixs.com/2016/04/06/docker-images/">docker 镜像介绍</a></li>
+<li><a href="https://cizixs.com/2017/12/03/etcd-v2-go-client/">etcd go 语言 v2 客户端开发介绍</a></li>
+<li><a href="https://cizixs.com/2016/08/02/intro-to-etcd/">etcd 使用入门</a></li>
+<li><a href="https://cizixs.com/2016/07/16/flannel-source-code-insight/">flannel 源码分析</a></li>
+<li><a href="https://cizixs.com/2016/06/15/flannel-overlay-network/">flannel 网络模型</a></li>
+<li><a href="https://cizixs.com/2017/03/08/flask-insight-session/">flask 源码解析：session</a></li>
+<li><a href="https://cizixs.com/2017/01/13/flask-insight-context/">flask 源码解析：上下文</a></li>
+<li><a href="https://cizixs.com/2017/01/22/flask-insight-response/">flask 源码解析：响应</a></li>
+<li><a href="https://cizixs.com/2017/01/11/flask-insight-start-process/">flask 源码解析：应用启动流程</a></li>
+<li><a href="https://cizixs.com/2017/01/10/flask-insight-introduction/">flask 源码解析：简介</a></li>
+<li><a href="https://cizixs.com/2017/01/18/flask-insight-request/">flask 源码解析：请求</a></li>
+<li><a href="https://cizixs.com/2017/01/12/flask-insight-routing/">flask 源码解析：路由</a></li>
+<li><a href="https://cizixs.com/2016/08/17/golang-http-server-side/">go http 服务器编程</a></li>
+<li><a href="https://cizixs.com/2017/04/07/kube-proxy-source-code-analysis/">kube-proxy 源码解析</a></li>
+<li><a href="https://cizixs.com/2017/07/19/kubernetes-scheduler-source-code-analysis/">kubelet scheduler 源码分析：调度器的工作原理</a></li>
+<li><a href="https://cizixs.com/2017/06/22/kubelet-source-code-analysis-part4-event/">kubelet 源码分析： 事件处理</a></li>
+<li><a href="https://cizixs.com/2017/06/09/kubelet-source-code-analysis-part-3/">kubelet 源码分析：Garbage Collect</a></li>
+<li><a href="https://cizixs.com/2017/06/07/kubelet-source-code-analysis-part-2/">kubelet 源码分析：pod 新建流程</a></li>
+<li><a href="https://cizixs.com/2017/06/12/kubelet-source-code-analysis-part4-status-manager/">kubelet 源码分析：statusManager 和 probeManager</a></li>
+<li><a href="https://cizixs.com/2017/06/06/kubelet-source-code-analysis-part-1/">kubelet 源码分析：启动流程</a></li>
+<li><a href="https://cizixs.com/2017/05/17/kubernetes-scheulder-affinity/">kubernetes 亲和性调度</a></li>
+<li><a href="https://cizixs.com/2017/06/16/kubernetes-authentication-and-authorization/">kubernetes 权限管理</a></li>
+<li><a href="https://cizixs.com/2016/10/25/kubernetes-intro-kubelet/">kubernetes 简介： kubelet 和 pod</a></li>
+<li><a href="https://cizixs.com/2016/11/07/kubernetes-intro-api-server/">kubernetes 简介：API Server 和 node</a></li>
+<li><a href="https://cizixs.com/2017/03/27/kubernetes-introduction-controller-manager/">kubernetes 简介：controller manager 和自动扩容</a></li>
+<li><a href="https://cizixs.com/2017/04/11/kubernetes-intro-kube-dns/">kubernetes 简介：kube-dns 和服务发现</a></li>
+<li><a href="https://cizixs.com/2016/07/12/kubernetes-intro/">kubernetes 简介：kubernetes 架构介绍</a></li>
+<li><a href="https://cizixs.com/2017/03/30/kubernetes-introduction-service-and-kube-proxy/">kubernetes 简介：service 和 kube-proxy 原理</a></li>
+<li><a href="https://cizixs.com/2017/03/10/kubernetes-intro-scheduler/">kubernetes 简介：调度器和调度算法</a></li>
+<li><a href="https://cizixs.com/2018/06/25/kubernetes-resource-management/">kubernetes 资源管理概述</a></li>
+<li><a href="https://cizixs.com/2017/05/16/linux-lsof-primer/">linux lsof 命令使用指南</a></li>
+<li><a href="https://cizixs.com/2017/09/28/linux-vxlan/">linux 上实现 vxlan 网络</a></li>
+<li><a href="https://cizixs.com/2018/01/13/linux-udp-packet-drop-debug/">linux 系统 UDP 丢包问题分析思路</a></li>
+<li><a href="https://cizixs.com/2015/01/18/linux-boot-process/">linux 系统启动过程</a></li>
+<li><a href="https://cizixs.com/2017/02/17/network-virtualization-ipvlan/">linux 网络虚拟化： ipvlan</a></li>
+<li><a href="https://cizixs.com/2017/02/14/network-virtualization-macvlan/">linux 网络虚拟化： macvlan</a></li>
+<li><a href="https://cizixs.com/2017/02/10/network-virtualization-network-namespace/">linux 网络虚拟化： network namespace 简介</a></li>
+<li><a href="https://cizixs.com/2015/04/19/love-story-in-a-python-function/">love story in a python function</a></li>
+<li><a href="https://cizixs.com/2016/02/25/nova-service-insight/">nova compute service 启动过程</a></li>
+<li><a href="https://cizixs.com/2016/02/01/nova-scheduler-insight/">nova scheduler 原理介绍和源码解析</a></li>
+<li><a href="https://cizixs.com/2017/01/09/pxe-boot-process/">pxe 自动安装系统流程分析</a></li>
+<li><a href="https://cizixs.com/2015/06/11/python-collections-library-intruduction/">python collections 学习教程</a></li>
+<li><a href="https://cizixs.com/2015/08/30/metaclass-in-python/">python metaclass 入门简介</a></li>
+<li><a href="https://cizixs.com/2015/05/28/python-mock-usage/">python mock 库的使用</a></li>
+<li><a href="https://cizixs.com/2014/11/08/understand-wsgi/">python wsgi 简介</a></li>
+<li><a href="https://cizixs.com/2015/05/13/python-and-message-queue-one/">python 和消息机制（一）：消息队列简介</a></li>
+<li><a href="https://cizixs.com/2015/11/23/rabbitmq-concept-and-usage/">python 和消息机制（二）：Rabbitmq 概念和使用</a></li>
+<li><a href="https://cizixs.com/2015/12/31/python-descriptor-introduction/">python 描述器简介</a></li>
+<li><a href="https://cizixs.com/2017/12/04/raft-consensus-algorithm/">raft 一致性算法</a></li>
+<li><a href="https://cizixs.com/2015/03/24/salt-api-usage/">salt api 配置和使用</a></li>
+<li><a href="https://cizixs.com/2018/08/25/knative-serverless-platform/">serverless 平台 knative 简介</a></li>
+<li><a href="https://cizixs.com/2015/03/29/basic-socket-programming/">socket 编程基础知识</a></li>
+<li><a href="https://cizixs.com/2013/08/14/solve-sudoers-error-problem/">solve sudoers error problem</a></li>
+<li><a href="https://cizixs.com/2017/03/09/virtualbox-network-mode-explained/">virtualbox 常用网络模式解释和配置</a></li>
+<li><a href="https://cizixs.com/2017/09/25/vxlan-protocol-introduction/">vxlan 协议原理简介</a></li>
+<li><a href="https://cizixs.com/2016/06/30/weave-network/">weave 网络模型</a></li>
+<li><a href="https://cizixs.com/2013/12/08/why-evolution-is-true/">why evolution is true</a></li>
+<li><a href="https://cizixs.com/2014/11/09/dive-into-wsgiref/">wsgiref 源码解析</a></li>
+<li><a href="https://cizixs.com/2014/05/14/curl-automate-http/">【翻译】curl自动化http操作</a></li>
+<li><a href="https://cizixs.com/2015/09/21/what-is-a-web-framework/">【翻译】什么是 web 框架？</a></li>
+<li><a href="https://cizixs.com/2017/07/27/understand-tcp-ip-network-stack/">【翻译】理解 TCP/IP 网络栈</a></li>
+<li><a href="https://cizixs.com/2018/08/26/what-is-istio/">什么是 istio</a></li>
+<li><a href="https://cizixs.com/2016/11/22/coreos-docker-netns-issue/">使用 coreos 运行 docker 的 netns 问题</a></li>
+<li><a href="https://cizixs.com/2017/04/11/use-curl-to-analyze-request/">使用 curl 命令分析请求的耗时情况</a></li>
+<li><a href="https://cizixs.com/2017/08/04/docker-resources-limit/">使用 docker 对容器资源进行限制</a></li>
+<li><a href="https://cizixs.com/2017/09/11/profiling-golang-program/">使用 pprof 和火焰图调试 golang 应用</a></li>
+<li><a href="https://cizixs.com/2018/01/24/use-prometheus-and-grafana-to-monitor-linux-machine/">使用 promethues 和 grafana 监控自己的 linux 机器</a></li>
+<li><a href="https://cizixs.com/2017/04/27/sysdig-for-linux-system-monitor-and-analysis/">使用 sysdig 进行监控和调试 linux 机器</a></li>
+<li><a href="https://cizixs.com/2017/10/23/tc-netem-for-terrible-network/">使用 tc netem 模拟网络异常</a></li>
+<li><a href="https://cizixs.com/2015/08/16/vi-mode-in-tmux/">使用 vi 模式操作tmux 屏幕</a></li>
+<li><a href="https://cizixs.com/2014/11/30/two-encryption-methods-and-cracks/">凯撒密码和维吉尼亚密码</a></li>
+<li><a href="https://cizixs.com/2016/05/31/install-docker-dev-environment-on-mac/">在 mac 系统配置 docker 开发环境</a></li>
+<li><a href="https://cizixs.com/2017/03/15/container-ecosystem/">容器生态系统简介</a></li>
+<li><a href="https://cizixs.com/2015/03/12/tcpdump-introduction/">抓包神器 tcpdump 使用介绍</a></li>
+<li><a href="https://cizixs.com/2013/07/31/programmer-hacker-and-others/">程序员、黑客、自由即其他</a></li>
+<li><a href="https://cizixs.com/2017/03/28/dockerfile-best-practice/">编写 Dockerfile 的最佳实践</a></li>
+<li><a href="https://cizixs.com/2015/04/12/write-tftp-with-python-1/">编写自己的 tftp 客户端（1）</a></li>
+<li><a href="https://cizixs.com/2014/12/21/python-decorator/">解析 python decorator </a></li>
+<li><a href="https://cizixs.com/2017/01/03/how-slow-is-disk-and-network/">让 CPU 告诉你硬盘和网络到底有多慢</a></li>
+<li><a href="https://cizixs.com/2016/12/12/restful-api-design-guide/">跟着 Github 学习 Restful HTTP API 设计</a></li>
+<li><a href="https://cizixs.com/2015/10/01/linux-memory-management-through-free/">通过 free 命令理解 linux 内存管理</a></li>
 </ul>
 ]]></content>
       <tags>
-        <tag>python</tag>
+        <tag>cizixs</tag>
       </tags>
   </entry>
   <entry>
@@ -233,9 +354,185 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import json</span><br><span class="line">import re</span><br><span class="line">from urllib.parse import urlparse</span><br><span class="line"></span><br><span class="line">from mitmproxy import ctx</span><br><span class="line">from mitmproxy import flowfilter</span><br><span class="line">from mitmproxy import http</span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">生成接口python代码</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line"></span><br><span class="line">class GenCode(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        ctx.log.info(&#39;__init__&#39;)</span><br><span class="line"></span><br><span class="line">        # 趣头条</span><br><span class="line">        urls &#x3D; [</span><br><span class="line">            r&#39;taskcenter&#x2F;getListV2&#39;,#tab页：任务</span><br><span class="line">            r&#39;readtimer&#x2F;report&#39;,</span><br><span class="line">        ]</span><br><span class="line">        self.qu_tou_tiao &#x3D; flowfilter.parse(&#39;|&#39;.join(urls)) </span><br><span class="line"></span><br><span class="line">        # 百度 - 全民小视频 </span><br><span class="line">        urls &#x3D; [</span><br><span class="line">            r&#39;mvideo&#x2F;api&#39;, # 每日签到</span><br><span class="line">        ]</span><br><span class="line">        self.quan_ming &#x3D; flowfilter.parse(&#39;|&#39;.join(urls)) </span><br><span class="line"></span><br><span class="line">        self.flowfilters &#x3D; [</span><br><span class="line">            self.qu_tou_tiao, </span><br><span class="line">            self.quan_ming,</span><br><span class="line">        ]      </span><br><span class="line"></span><br><span class="line">    def load(self, loader):</span><br><span class="line">        ctx.log.info(&#39;event: load&#39;)</span><br><span class="line"></span><br><span class="line">    def configure(self, updated):</span><br><span class="line">        ctx.log.info(&#39;event: configure&#39;)</span><br><span class="line"></span><br><span class="line">    def running(self):</span><br><span class="line">        ctx.log.info(&#39;event: running&#39;)</span><br><span class="line"></span><br><span class="line">    def done(self):</span><br><span class="line">        ctx.log.info(&#39;event: done&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def response(self, flow: http.HTTPFlow):</span><br><span class="line">        if any( [ filter(flow) for filter in self.flowfilters ] ):</span><br><span class="line"></span><br><span class="line">            request: http.HTTPRequest &#x3D; flow.request</span><br><span class="line"></span><br><span class="line">            parse_result &#x3D; urlparse(request.url)</span><br><span class="line">            url_path &#x3D; parse_result.path</span><br><span class="line"></span><br><span class="line">            function_name &#x3D; re.sub(r&#39;[&#x2F;-]&#39;,&#39;_&#39;, url_path).strip(&#39;_&#39;)</span><br><span class="line">            headers_code &#x3D; self.headers_string(flow)</span><br><span class="line">            params_code &#x3D; self.params_string(flow)</span><br><span class="line">            data_code &#x3D; self.data_string(flow) </span><br><span class="line"></span><br><span class="line">            path &#x3D; f&#39;&#39;&#39;&#x2F;Users&#x2F;zhoujie&#x2F;Desktop&#x2F;api&#x2F;&#123;function_name&#125;.text&#39;&#39;&#39;  </span><br><span class="line">            with open(path, &#39;a&#39;) as f:</span><br><span class="line">                print(f&#39;&#39;&#39;# ---------------------&#39;&#39;&#39;,file&#x3D;f)</span><br><span class="line"></span><br><span class="line">                code &#x3D; f&#39;&#39;&#39;</span><br><span class="line">def &#123;function_name&#125;(self):</span><br><span class="line"></span><br><span class="line">    &#123;headers_code&#125;</span><br><span class="line"></span><br><span class="line">    &#123;params_code&#125;</span><br><span class="line"></span><br><span class="line">    &#123;data_code&#125;</span><br><span class="line"></span><br><span class="line">    url &#x3D; &#39;&#123;request.scheme&#125;:&#x2F;&#x2F;&#123;request.pretty_host&#125;&#123;url_path&#125;&#39;</span><br><span class="line">    result &#x3D; self._&#123;request.method.lower()&#125;(url, headers&#x3D;headers, params&#x3D;params, data&#x3D;data)</span><br><span class="line">    return result</span><br><span class="line">                </span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">                f.write(code)</span><br><span class="line"></span><br><span class="line">                print(f&#39;&#39;&#39;Response:&#39;&#39;&#39;,file&#x3D;f)</span><br><span class="line">                print(f&#39;&#39;&#39;&#123;flow.response.text&#125;&#39;&#39;&#39;,file&#x3D;f)</span><br><span class="line">                print(f&#39;&#39;&#39;# ---------------------\n\n&#39;&#39;&#39;,file&#x3D;f)</span><br><span class="line"></span><br><span class="line">    def headers_string(self, flow: http.HTTPFlow):</span><br><span class="line">        lines &#x3D; &#39;&#39;</span><br><span class="line">        for key,value in flow.request.headers.items():</span><br><span class="line">            lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#39;&#123;value&#125;&#39;,&quot;</span><br><span class="line">        s &#x3D; f&#39;&#39;&#39;headers &#x3D; &#123;&#123;&#123;lines&#125;\n\t&#125;&#125;&#39;&#39;&#39;        </span><br><span class="line">        return s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def params_string(self, flow: http.HTTPFlow):</span><br><span class="line">        lines &#x3D; &#39;&#39;</span><br><span class="line">        for key,value in flow.request.query.items():</span><br><span class="line">            lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#39;&#123;value&#125;&#39;,&quot;</span><br><span class="line">        s &#x3D; f&#39;&#39;&#39;params &#x3D; &#123;&#123;&#123;lines&#125;\n\t&#125;&#125;&#39;&#39;&#39;        </span><br><span class="line">        return s</span><br><span class="line"></span><br><span class="line">    def data_string(self, flow: http.HTTPFlow):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        Content-Type: application&#x2F;x-www-form-urlencoded</span><br><span class="line">        Content-Type: application&#x2F;json; charset&#x3D;utf-8</span><br><span class="line">        Content-Type: text&#x2F;plain;charset&#x3D;utf-8</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        lines &#x3D; &#39;&#39;</span><br><span class="line"></span><br><span class="line">        # [urlencoded_form, multipart_form, plan, json]取其一</span><br><span class="line">        for key,value in flow.request.urlencoded_form.items():</span><br><span class="line">            lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#39;&#123;value&#125;&#39;,&quot;</span><br><span class="line"></span><br><span class="line">        for key,value in flow.request.multipart_form.items():</span><br><span class="line">            key &#x3D; key.decode(encoding&#x3D;&#39;utf-8&#39;)</span><br><span class="line">            value &#x3D; value.decode(encoding&#x3D;&#39;utf-8&#39;) </span><br><span class="line">            lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#39;&#123;value&#125;&#39;,&quot;</span><br><span class="line"></span><br><span class="line">        # Todo:复杂json数据还不能代码化</span><br><span class="line">        if &#39;application&#x2F;json&#39; in flow.request.headers.get(&#39;content-type&#39;,&#39;&#39;):</span><br><span class="line">            d &#x3D; json.loads(flow.request.text)</span><br><span class="line">            for key,value in d.items():</span><br><span class="line">                lines +&#x3D; f&quot;\n\t\t&#39;&#123;key&#125;&#39;: &#123;value&#125;,&quot;</span><br><span class="line">        </span><br><span class="line">        s &#x3D; f&#39;&#39;&#39;data &#x3D; &#123;&#123;&#123;lines&#125;\n\t&#125;&#125;&#39;&#39;&#39;        </span><br><span class="line">        return s</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">addons &#x3D; [</span><br><span class="line">    GenCode()</span><br><span class="line">]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
-        <tag>charles</tag>
         <tag>mitmproxy</tag>
+        <tag>charles</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>我的阅读列表</title>
+    <url>/2019/09/27/%E6%88%91%E7%9A%84%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
+<li><a href="https://cloverkits.github.io/2018/08/12/%E5%A6%82%E4%BD%95%E7%94%A8%E5%A5%BD%E8%B0%B7%E6%AD%8C%E7%AD%89%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">如何用好谷歌等搜索引擎</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/01/assembly-language-primer.html">汇编语言入门教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html">理解字节序</a></li>
+<li><a href="http://jalan.space/2019/11/26/2019/binary-show/">深入浅出：举个例子解读原码、反码与补码</a></li>
+<li><a href="http://deerchao.net/tutorials/regex/regex.htm">正则表达式30分钟入门教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/07/yaml.html">YAML 语言教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html">理解OAuth 2.0</a></li>
+<li><a href="https://www.jianshu.com/p/65225f50fe76">基于python flask详述 OAuth 2.0 的运作流程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html">RESTful API 最佳实践</a></li>
+<li><a href="https://www.zhihu.com/question/19793879">基于python的scrapy爬虫，关于增量爬取是怎么处理的？</a></li>
+</ul>
+<h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><ul>
+<li><a href="https://www.kawabangga.com/vim%e7%b3%bb%e5%88%97">Vim系列教程</a></li>
+<li><a href="https://github.com/iggredible/Learn-Vim">Learn-Vim</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/09/vimrc.html">Vim 配置入门</a></li>
+<li><a href="https://www.jianshu.com/p/923aec861af3">Mac下配置Vim</a></li>
+<li><a href="https://blog.csdn.net/JasonDing1354/article/details/45372007">使用map自定义快捷键</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/37352209">VimScript 五分钟入门</a></li>
+</ul>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><ul>
+<li><a href="https://book.douban.com/subject/30357170/">《我的第一本算法书》</a></li>
+<li><a href="https://time.geekbang.org/column/intro/126">极客时间-数据结构与算法之美</a></li>
+<li><a href="https://time.geekbang.org/course/intro/130">极客时间-算法面试通关40讲</a></li>
+<li><a href="http://aaaron7.github.io/blog/algorithm/kmp-explain">可能是最容易理解的 KMP 教程</a></li>
+<li><a href="https://github.com/halfrost/LeetCode-Go">LeetCode-Go</a></li>
+</ul>
+<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><ul>
+<li><a href="https://time.geekbang.org/column/intro/85">极客时间-趣谈网络协议</a></li>
+<li><a href="https://www.amazon.cn/dp/B00VE6RYPS">《Wireshark网络分析就这么简单》</a></li>
+<li><a href="https://mp.weixin.qq.com/s/WvjQQRRdpMIeArblGV94Tg">《Wireshark网络抓包从入门到熟练》</a> </li>
+<li><a href="http://www.moserware.com/2009/06/first-few-milliseconds-of-https.html">The First Few Milliseconds of an HTTPS Connection</a> </li>
+<li><a href="https://blog.csdn.net/linuxnews/article/details/51900900">为什么Wireshark无法解密HTTPS数据</a></li>
+<li><a href="https://juejin.im/post/5cc313755188252d6f11b463">Android平台HTTPS抓包解决方案及问题分析</a></li>
+<li><a href="https://juejin.im/post/5c98482c5188252d9559247e">Android 网络优化，使用 HTTPDNS 优化 DNS，从原理到 OkHttp 集成</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2019/09/curl-reference.html">curl 的用法指南</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2011/09/curl.html">curl 网站开发指南</a></li>
+<li><a href="http://cizixs.com/2017/04/11/use-curl-to-analyze-request/">使用 curl 命令分析请求的耗时情况</a></li>
+<li><a href="https://mp.weixin.qq.com/s/nAY46Cs5TURFnINv_BLb7Q">在Linux中使用curl命令参数详解</a></li>
+<li><a href="https://www.open-open.com/lib/view/open1419826381531.html">Nginx 配置从零开始</a></li>
+<li><a href="https://www.open-open.com/news/view/19493be">https://www.open-open.com/news/view/19493be</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/34474787">室友不敢深夜打游戏篇一：ping/ICMP学以致用</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/34897282">室友不敢深夜打游戏篇二：如何用python-scapy进行arp欺骗</a></li>
+</ul>
+<h2 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h2><ul>
+<li><a href="https://cizixs.com/2017/03/28/dockerfile-best-practice/">编写 Dockerfile 的最佳实践</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html">Docker 入门教程</a></li>
+<li><a href="https://www.dongwm.com/post/docker-machine-and-swarm/">Python项目容器化实践(二) - Docker Machine和Docker Swarm</a></li>
+</ul>
+<h2 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h2><ul>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739271&idx=1&sn=2ca3269df75d5f734f44d8ea0d26d7f7&chksm=ff448859c833014ff0c6e747f1786d4ba331dc07787007f25ff5250a4180a35d21fea2db3cc4&scene=21#wechat_redirect">总结一些网站加密和混淆技术</a></li>
+<li><a href="https://mp.weixin.qq.com/s/F7hOcwPBLk0we3kpAsZ6zg">JavaScript 逆向爬取实战</a></li>
+<li><a href="https://mp.weixin.qq.com/s/S9qtrcLx4tbspjFk61GaUg">JavaScript 逆向爬取实战（下）</a></li>
+<li><a href="https://mp.weixin.qq.com/s/WbyQt6CWYUWZviY4omKBWw">如何用 Hook 实时处理和保存 Ajax 数据</a></li>
+<li><a href="https://scrape.center/">scrape.center</a></li>
+<li><a href="https://mp.weixin.qq.com/s/0c13Uhqoxd8mNMmY-Mmpgg">JavaScript 混淆与逆向必读之 AST 节点类型名词基础</a></li>
+<li><a href="https://mp.weixin.qq.com/s/e7MqoNGvb04teFcFszlYYw">Scrapy 和 Pyppeteer 更优雅的对接方案</a></li>
+<li><a href="https://mp.weixin.qq.com/s/r3MUVEPos2Rm5uKno8HysQ">如何通过 Tampermonkey 快速查找 JavaScript 加密入口</a></li>
+<li><a href="https://germey.gitbooks.io/python3webspider/content/">Python 3网络爬虫开发实战</a></li>
+<li><a href="https://book.douban.com/subject/30175598/">Python 3网络爬虫开发实战</a></li>
+<li><a href="https://kaiwu.lagou.com/course/courseInfo.htm?courseId=46&sid=30-aggregation-0#/sale">52讲轻松搞定网络爬虫</a></li>
+<li><a href="https://github.com/scrapy/scrapy">github scrapy</a></li>
+<li><a href="https://github.com/rmax/scrapy-redis">github scrapy-redis</a></li>
+</ul>
+<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><ul>
+<li><a href="https://cjting.me/2020/10/31/tinytorrent-a-deno-bt-downloader">从头写一个 Deno 的 BitTorrent 下载器</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html">WebSocket 教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用（一）：远程登录</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html">SSH原理与运用（二）：远程登录</a></li>
+<li><a href="https://lotabout.me/2019/SSH-Port-Forwarding/">SSH 端口转发教程</a></li>
+<li><a href="https://www.jianshu.com/p/defcfdc49b89?utm_campaign=hugo&utm_medium=reader_share&utm_content=note">SSH 技巧</a></li>
+<li><a href="https://mp.weixin.qq.com/s/KvP55uhq8fGd8NPvXdw0Vg">ssh密钥对登录安全吗？原理篇</a></li>
+<li><a href="https://imququ.com/post/multiple-ssh-keys-with-different-hosts.html">针对不同主机使用不同 SSH Key</a></li>
+</ul>
+<h2 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h2><ul>
+<li><a href="https://www.kawabangga.com/posts/3084">一些命令行工具的增强版</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2019/12/mktemp.html">Bash 脚本如何创建临时文件：mktemp 命令和 trap 命令教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/11/awk.html">awk 入门教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2020/08/rsync.html">rsync 用法教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2019/08/xargs-tutorial.html">xargs 命令教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2017/11/bash-set.html">Bash 脚本 set 命令教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/09/bash-wildcards.html">命令行通配符教程</a></li>
+<li><a href="https://www.kawabangga.com/posts/2819">Shell单引号、双引号和反引号的区别</a></li>
+<li><a href="http://www.apress.com/br/book/9781484201220">Pro Bash Programming, Second Edition</a></li>
+<li><a href="https://weibo.com/u/2674868673">linux命令行精选网</a></li>
+<li><a href="https://blog.csdn.net/Hello_Hwc/article/details/40918385">linux常用命令-帮助命令-授之以渔</a></li>
+<li><a href="https://github.com/jlevy/the-art-of-command-line">the-art-of-command-line</a></li>
+<li><a href="http://kishorelive.com/2011/12/05/printing-colors-in-the-terminal/">Printing colors in the terminal
+</a></li>
+</ul>
+<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><ul>
+<li><a href="https://cizixs.com/2017/02/10/network-virtualization-network-namespace/">linux 网络虚拟化： network namespace 简介</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2013/08/linux_boot_process.html">Linux 的启动流程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html">Systemd 入门教程：命令篇</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html">Systemd 入门教程：实战篇</a></li>
+<li><a href="https://cuiqingcai.com/6284.html">详解 Linux 下的用户管理、用户组管理和权限管理</a></li>
+</ul>
+<h2 id="图像"><a href="#图像" class="headerlink" title="图像"></a>图像</h2><ul>
+<li><a href="https://www.cnblogs.com/finlay/p/3665302.html">图像处理：图像灰度化</a></li>
+<li><a href="https://www.the5fire.com/980.html">Python 中使用 Pillow 处理图片增加水印</a></li>
+</ul>
+<h2 id="渗透"><a href="#渗透" class="headerlink" title="渗透"></a>渗透</h2><ul>
+<li><a href="https://www.jianshu.com/u/f5a5bfa4f659">Sqli-Labs</a></li>
+<li><a href="https://thief.one/2017/05/19/1/">【渗透神器系列】搜索引擎</a></li>
+<li><a href="https://www.jianshu.com/p/cf7f646b3448">使用sqlmap曲折渗透某服务器</a></li>
+</ul>
+<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
+<li><a href="http://es6.ruanyifeng.com/">ECMAScript 6 入门</a></li>
+<li><a href="http://www.jianshu.com/p/cd3fee40ef59">前端基础进阶系列</a></li>
+<li><a href="https://github.com/mqyqingfeng/Blog">JavaScript深入系列</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/06/javascript-this.html">JavaScript 的 this 原理</a></li>
+</ul>
+<h2 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h2><ul>
+<li><a href="https://www.jianshu.com/p/a4d0a1c7baae">iOS阅读列表</a></li>
+</ul>
+<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><ul>
+<li><a href="https://www.jianshu.com/p/505ea52bfe93">Python阅读列表</a></li>
+</ul>
+<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><ul>
+<li><a href="https://book.douban.com/subject/30288107/">Node.js实战 第2版</a></li>
+<li><a href="https://book.douban.com/subject/25985946/">Node Cookbook Second Edition</a></li>
+<li><a href="https://www.amazon.cn/%E5%9B%BE%E4%B9%A6/dp/B00GOM5IL4">深入浅出Node.js</a></li>
+<li><a href="https://github.com/alsotang/node-lessons">Node.js 包教不包会</a></li>
+</ul>
+<h2 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h2><ul>
+<li><a href="https://yanbin.blog/flask-vue-js-integration-dev-deploy/">Flask 和 Vue.js 开发及整合部署实例</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html">全文搜索引擎 Elasticsearch 入门教程</a></li>
+<li><a href="https://cuiqingcai.com/6214.html">Elasticsearch 基本介绍及其与 Python 的对接实现</a></li>
+<li><a href="https://book.douban.com/subject/30293851/">Flask Web开发：基于Python的Web应用开发实战</a></li>
+</ul>
+<h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html">Flex 布局教程：语法篇</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-examples.html">Flex 布局教程：实例篇</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html">CSS Grid 网格布局教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2019/11/css-position.html">CSS 定位详解</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2010/03/css_cookbook.html">CSS使用技巧</a></li>
+<li><a href="https://book.douban.com/subject/30395202/">Vue.js项目实战</a></li>
+<li><a href="https://book.douban.com/subject/25878992/">HTML5与CSS3基础教程 第8版</a></li>
+<li><a href="https://www.bignerdranch.com/books/front-end-web-development/">Front-End Web Development The Big Nerd Ranch Guide</a></li>
+<li><a href="http://www.imooc.com/learn/859">Handlebars模板引擎</a></li>
+<li><a href="https://mrleo.gitbooks.io/books/content/resource/spy-debugger.html">https://mrleo.gitbooks.io/books/content/resource/spy-debugger.html</a></li>
+</ul>
+<h2 id="图书"><a href="#图书" class="headerlink" title="图书"></a>图书</h2><ul>
+<li><p><a href="https://book.douban.com/subject/11577300/">Go语言编程</a></p>
+</li>
+<li><p><a href="https://www.ituring.com.cn/book/2688">Python数据分析实战</a></p>
+</li>
+<li><p><a href="https://book.douban.com/subject/30147778/">Python机器学习基础教程</a></p>
+</li>
+<li><p><a href="http://www.ituring.com.cn/book/2599">Python深度学习(英文名：Deep Learning With Python)</a></p>
+</li>
+<li><p><a href="https://book.douban.com/subject/24841239/">SQL基础教程（第2版）</a></p>
+</li>
+<li><p><a href="https://book.douban.com/subject/25908672/">两周自制脚本语言</a></p>
+</li>
+<li><p><a href="https://book.douban.com/subject/30283996/">利用Python进行数据分析 第2版</a></p>
+</li>
+<li><p><a href="https://item.jd.com/11942019.html">图解密码技术</a></p>
+</li>
+<li><p><a href="http://www.ituring.com.cn/book/1921">深度学习入门：基于Python的理论与实现(英文名：Deep Learning From Scratch)</a></p>
+</li>
+<li><p><a href="https://book.douban.com/subject/4010128/">漫画统计学</a></p>
+</li>
+<li><p><a href="https://book.douban.com/subject/7056708/">深入浅出统计学</a></p>
+</li>
+<li><p><a href="http://item.jd.com/12207223.html?dist=">精通Scrapy网络爬虫</a></p>
+</li>
+<li><p><a href="https://book.douban.com/subject/26762311/">编译系统透视</a></p>
+</li>
+</ul>
+<h2 id="网站"><a href="#网站" class="headerlink" title="网站"></a>网站</h2>]]></content>
   </entry>
   <entry>
     <title>mitmproxy的应用-代码生成</title>
@@ -445,179 +742,6 @@
       <tags>
         <tag>算法</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>我的阅读列表</title>
-    <url>/2019/09/27/%E6%88%91%E7%9A%84%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
-<li><a href="https://cloverkits.github.io/2018/08/12/%E5%A6%82%E4%BD%95%E7%94%A8%E5%A5%BD%E8%B0%B7%E6%AD%8C%E7%AD%89%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">如何用好谷歌等搜索引擎</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2018/01/assembly-language-primer.html">汇编语言入门教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html">理解字节序</a></li>
-<li><a href="http://jalan.space/2019/11/26/2019/binary-show/">深入浅出：举个例子解读原码、反码与补码</a></li>
-<li><a href="http://deerchao.net/tutorials/regex/regex.htm">正则表达式30分钟入门教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2016/07/yaml.html">YAML 语言教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html">理解OAuth 2.0</a></li>
-<li><a href="https://www.jianshu.com/p/65225f50fe76">基于python flask详述 OAuth 2.0 的运作流程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html">RESTful API 最佳实践</a></li>
-<li><a href="https://www.zhihu.com/question/19793879">基于python的scrapy爬虫，关于增量爬取是怎么处理的？</a></li>
-</ul>
-<h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><ul>
-<li><a href="https://www.kawabangga.com/vim%e7%b3%bb%e5%88%97">Vim系列教程</a></li>
-<li><a href="https://github.com/iggredible/Learn-Vim">Learn-Vim</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2018/09/vimrc.html">Vim 配置入门</a></li>
-<li><a href="https://www.jianshu.com/p/923aec861af3">Mac下配置Vim</a></li>
-<li><a href="https://blog.csdn.net/JasonDing1354/article/details/45372007">使用map自定义快捷键</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/37352209">VimScript 五分钟入门</a></li>
-</ul>
-<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><ul>
-<li><a href="https://book.douban.com/subject/30357170/">《我的第一本算法书》</a></li>
-<li><a href="https://time.geekbang.org/column/intro/126">极客时间-数据结构与算法之美</a></li>
-<li><a href="https://time.geekbang.org/course/intro/130">极客时间-算法面试通关40讲</a></li>
-<li><a href="http://aaaron7.github.io/blog/algorithm/kmp-explain">可能是最容易理解的 KMP 教程</a></li>
-<li><a href="https://github.com/halfrost/LeetCode-Go">LeetCode-Go</a></li>
-</ul>
-<h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><ul>
-<li><a href="https://time.geekbang.org/column/intro/85">极客时间-趣谈网络协议</a></li>
-<li><a href="https://www.amazon.cn/dp/B00VE6RYPS">《Wireshark网络分析就这么简单》</a></li>
-<li><a href="https://mp.weixin.qq.com/s/WvjQQRRdpMIeArblGV94Tg">《Wireshark网络抓包从入门到熟练》</a> </li>
-<li><a href="http://www.moserware.com/2009/06/first-few-milliseconds-of-https.html">The First Few Milliseconds of an HTTPS Connection</a> </li>
-<li><a href="https://blog.csdn.net/linuxnews/article/details/51900900">为什么Wireshark无法解密HTTPS数据</a></li>
-<li><a href="https://juejin.im/post/5cc313755188252d6f11b463">Android平台HTTPS抓包解决方案及问题分析</a></li>
-<li><a href="https://juejin.im/post/5c98482c5188252d9559247e">Android 网络优化，使用 HTTPDNS 优化 DNS，从原理到 OkHttp 集成</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2019/09/curl-reference.html">curl 的用法指南</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2011/09/curl.html">curl 网站开发指南</a></li>
-<li><a href="http://cizixs.com/2017/04/11/use-curl-to-analyze-request/">使用 curl 命令分析请求的耗时情况</a></li>
-<li><a href="https://mp.weixin.qq.com/s/nAY46Cs5TURFnINv_BLb7Q">在Linux中使用curl命令参数详解</a></li>
-<li><a href="https://www.open-open.com/lib/view/open1419826381531.html">Nginx 配置从零开始</a></li>
-<li><a href="https://www.open-open.com/news/view/19493be">https://www.open-open.com/news/view/19493be</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/34474787">室友不敢深夜打游戏篇一：ping/ICMP学以致用</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/34897282">室友不敢深夜打游戏篇二：如何用python-scapy进行arp欺骗</a></li>
-</ul>
-<h2 id="爬虫"><a href="#爬虫" class="headerlink" title="爬虫"></a>爬虫</h2><ul>
-<li><a href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739271&idx=1&sn=2ca3269df75d5f734f44d8ea0d26d7f7&chksm=ff448859c833014ff0c6e747f1786d4ba331dc07787007f25ff5250a4180a35d21fea2db3cc4&scene=21#wechat_redirect">总结一些网站加密和混淆技术</a></li>
-<li><a href="https://mp.weixin.qq.com/s/F7hOcwPBLk0we3kpAsZ6zg">JavaScript 逆向爬取实战</a></li>
-<li><a href="https://mp.weixin.qq.com/s/S9qtrcLx4tbspjFk61GaUg">JavaScript 逆向爬取实战（下）</a></li>
-<li><a href="https://mp.weixin.qq.com/s/WbyQt6CWYUWZviY4omKBWw">如何用 Hook 实时处理和保存 Ajax 数据</a></li>
-<li><a href="https://scrape.center/">scrape.center</a></li>
-<li><a href="https://mp.weixin.qq.com/s/0c13Uhqoxd8mNMmY-Mmpgg">JavaScript 混淆与逆向必读之 AST 节点类型名词基础</a></li>
-<li><a href="https://mp.weixin.qq.com/s/e7MqoNGvb04teFcFszlYYw">Scrapy 和 Pyppeteer 更优雅的对接方案</a></li>
-<li><a href="https://mp.weixin.qq.com/s/r3MUVEPos2Rm5uKno8HysQ">如何通过 Tampermonkey 快速查找 JavaScript 加密入口</a></li>
-<li><a href="https://germey.gitbooks.io/python3webspider/content/">Python 3网络爬虫开发实战</a></li>
-<li><a href="https://book.douban.com/subject/30175598/">Python 3网络爬虫开发实战</a></li>
-<li><a href="https://kaiwu.lagou.com/course/courseInfo.htm?courseId=46&sid=30-aggregation-0#/sale">52讲轻松搞定网络爬虫</a></li>
-<li><a href="https://github.com/scrapy/scrapy">github scrapy</a></li>
-<li><a href="https://github.com/rmax/scrapy-redis">github scrapy-redis</a></li>
-</ul>
-<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><ul>
-<li><a href="https://cjting.me/2020/10/31/tinytorrent-a-deno-bt-downloader">从头写一个 Deno 的 BitTorrent 下载器</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html">WebSocket 教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用（一）：远程登录</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html">SSH原理与运用（二）：远程登录</a></li>
-<li><a href="https://lotabout.me/2019/SSH-Port-Forwarding/">SSH 端口转发教程</a></li>
-<li><a href="https://www.jianshu.com/p/defcfdc49b89?utm_campaign=hugo&utm_medium=reader_share&utm_content=note">SSH 技巧</a></li>
-<li><a href="https://mp.weixin.qq.com/s/KvP55uhq8fGd8NPvXdw0Vg">ssh密钥对登录安全吗？原理篇</a></li>
-<li><a href="https://imququ.com/post/multiple-ssh-keys-with-different-hosts.html">针对不同主机使用不同 SSH Key</a></li>
-</ul>
-<h2 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h2><ul>
-<li><a href="https://www.kawabangga.com/posts/3084">一些命令行工具的增强版</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2019/12/mktemp.html">Bash 脚本如何创建临时文件：mktemp 命令和 trap 命令教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2018/11/awk.html">awk 入门教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2020/08/rsync.html">rsync 用法教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2019/08/xargs-tutorial.html">xargs 命令教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2017/11/bash-set.html">Bash 脚本 set 命令教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2018/09/bash-wildcards.html">命令行通配符教程</a></li>
-<li><a href="https://www.kawabangga.com/posts/2819">Shell单引号、双引号和反引号的区别</a></li>
-<li><a href="http://www.apress.com/br/book/9781484201220">Pro Bash Programming, Second Edition</a></li>
-<li><a href="https://weibo.com/u/2674868673">linux命令行精选网</a></li>
-<li><a href="https://blog.csdn.net/Hello_Hwc/article/details/40918385">linux常用命令-帮助命令-授之以渔</a></li>
-<li><a href="https://github.com/jlevy/the-art-of-command-line">the-art-of-command-line</a></li>
-<li><a href="http://kishorelive.com/2011/12/05/printing-colors-in-the-terminal/">Printing colors in the terminal
-</a></li>
-</ul>
-<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><ul>
-<li><a href="https://cizixs.com/2017/02/10/network-virtualization-network-namespace/">linux 网络虚拟化： network namespace 简介</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2013/08/linux_boot_process.html">Linux 的启动流程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html">Systemd 入门教程：命令篇</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html">Systemd 入门教程：实战篇</a></li>
-<li><a href="https://cuiqingcai.com/6284.html">详解 Linux 下的用户管理、用户组管理和权限管理</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html">Docker 入门教程</a></li>
-<li><a href="https://www.dongwm.com/post/docker-machine-and-swarm/">Python项目容器化实践(二) - Docker Machine和Docker Swarm</a></li>
-</ul>
-<h2 id="图像"><a href="#图像" class="headerlink" title="图像"></a>图像</h2><ul>
-<li><a href="https://www.cnblogs.com/finlay/p/3665302.html">图像处理：图像灰度化</a></li>
-<li><a href="https://www.the5fire.com/980.html">Python 中使用 Pillow 处理图片增加水印</a></li>
-</ul>
-<h2 id="渗透"><a href="#渗透" class="headerlink" title="渗透"></a>渗透</h2><ul>
-<li><a href="https://www.jianshu.com/u/f5a5bfa4f659">Sqli-Labs</a></li>
-<li><a href="https://thief.one/2017/05/19/1/">【渗透神器系列】搜索引擎</a></li>
-<li><a href="https://www.jianshu.com/p/cf7f646b3448">使用sqlmap曲折渗透某服务器</a></li>
-</ul>
-<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
-<li><a href="http://es6.ruanyifeng.com/">ECMAScript 6 入门</a></li>
-<li><a href="http://www.jianshu.com/p/cd3fee40ef59">前端基础进阶系列</a></li>
-<li><a href="https://github.com/mqyqingfeng/Blog">JavaScript深入系列</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2018/06/javascript-this.html">JavaScript 的 this 原理</a></li>
-</ul>
-<h2 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h2><ul>
-<li><a href="https://www.jianshu.com/p/a4d0a1c7baae">iOS阅读列表</a></li>
-</ul>
-<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><ul>
-<li><a href="https://www.jianshu.com/p/505ea52bfe93">Python阅读列表</a></li>
-</ul>
-<h2 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h2><ul>
-<li><a href="https://book.douban.com/subject/30288107/">Node.js实战 第2版</a></li>
-<li><a href="https://book.douban.com/subject/25985946/">Node Cookbook Second Edition</a></li>
-<li><a href="https://www.amazon.cn/%E5%9B%BE%E4%B9%A6/dp/B00GOM5IL4">深入浅出Node.js</a></li>
-<li><a href="https://github.com/alsotang/node-lessons">Node.js 包教不包会</a></li>
-</ul>
-<h2 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h2><ul>
-<li><a href="https://yanbin.blog/flask-vue-js-integration-dev-deploy/">Flask 和 Vue.js 开发及整合部署实例</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html">全文搜索引擎 Elasticsearch 入门教程</a></li>
-<li><a href="https://cuiqingcai.com/6214.html">Elasticsearch 基本介绍及其与 Python 的对接实现</a></li>
-<li><a href="https://book.douban.com/subject/30293851/">Flask Web开发：基于Python的Web应用开发实战</a></li>
-</ul>
-<h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><ul>
-<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html">Flex 布局教程：语法篇</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-examples.html">Flex 布局教程：实例篇</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html">CSS Grid 网格布局教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2019/11/css-position.html">CSS 定位详解</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2010/03/css_cookbook.html">CSS使用技巧</a></li>
-<li><a href="https://book.douban.com/subject/30395202/">Vue.js项目实战</a></li>
-<li><a href="https://book.douban.com/subject/25878992/">HTML5与CSS3基础教程 第8版</a></li>
-<li><a href="https://www.bignerdranch.com/books/front-end-web-development/">Front-End Web Development The Big Nerd Ranch Guide</a></li>
-<li><a href="http://www.imooc.com/learn/859">Handlebars模板引擎</a></li>
-<li><a href="https://mrleo.gitbooks.io/books/content/resource/spy-debugger.html">https://mrleo.gitbooks.io/books/content/resource/spy-debugger.html</a></li>
-</ul>
-<h2 id="图书"><a href="#图书" class="headerlink" title="图书"></a>图书</h2><ul>
-<li><p><a href="https://book.douban.com/subject/11577300/">Go语言编程</a></p>
-</li>
-<li><p><a href="https://www.ituring.com.cn/book/2688">Python数据分析实战</a></p>
-</li>
-<li><p><a href="https://book.douban.com/subject/30147778/">Python机器学习基础教程</a></p>
-</li>
-<li><p><a href="http://www.ituring.com.cn/book/2599">Python深度学习(英文名：Deep Learning With Python)</a></p>
-</li>
-<li><p><a href="https://book.douban.com/subject/24841239/">SQL基础教程（第2版）</a></p>
-</li>
-<li><p><a href="https://book.douban.com/subject/25908672/">两周自制脚本语言</a></p>
-</li>
-<li><p><a href="https://book.douban.com/subject/30283996/">利用Python进行数据分析 第2版</a></p>
-</li>
-<li><p><a href="https://item.jd.com/11942019.html">图解密码技术</a></p>
-</li>
-<li><p><a href="http://www.ituring.com.cn/book/1921">深度学习入门：基于Python的理论与实现(英文名：Deep Learning From Scratch)</a></p>
-</li>
-<li><p><a href="https://book.douban.com/subject/4010128/">漫画统计学</a></p>
-</li>
-<li><p><a href="https://book.douban.com/subject/7056708/">深入浅出统计学</a></p>
-</li>
-<li><p><a href="http://item.jd.com/12207223.html?dist=">精通Scrapy网络爬虫</a></p>
-</li>
-<li><p><a href="https://book.douban.com/subject/26762311/">编译系统透视</a></p>
-</li>
-</ul>
-<h2 id="网站"><a href="#网站" class="headerlink" title="网站"></a>网站</h2>]]></content>
   </entry>
   <entry>
     <title>mitmproxy的使用</title>
@@ -1239,8 +1363,8 @@
 <p><a href="https://github.com/KevCui/mitm-scripts">https://github.com/KevCui/mitm-scripts</a></p>
 ]]></content>
       <tags>
-        <tag>charles</tag>
         <tag>mitmproxy</tag>
+        <tag>charles</tag>
       </tags>
   </entry>
   <entry>
