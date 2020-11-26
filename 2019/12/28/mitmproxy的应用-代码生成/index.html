@@ -229,9 +229,7 @@
 <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>很多手机App都有做任务，得金币兑换现金的功能<br>手动做任务有很多限制；写代码自动化运行可以消除一些限制<br>但写代码时的敲键盘有点费时间，这篇文章就是要解决自动生成代码的问题</p>
 <h2 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h2><p>背景知识: python、mitmproxy、jinja2<br>python: 3.8.1<br>python第三方库: mitmproxy, requests, Jinja2<br>手机代理地址: mitmproxy的地址</p>
 <p>因为有多个文件，这里贴部分代码，完整代码地址：<br><a target="_blank" rel="noopener" href="https://github.com/zhoujie903/LearnPython/tree/master/mitmproxy_addons/gen_code">https://github.com/zhoujie903/LearnPython/tree/master/mitmproxy_addons/gen_code</a></p>
-<h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>设置:<br>设置1：设置<code>self.api_dir</code>: 存放<code>App目录</code>的父目录<br><code>代码目录</code>下的<code>gen_code_mitm.py</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class GenCode(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        ctx.log.info(&#39;__init__&#39;)</span><br><span class="line">        # 设置代码文件生成的目录\文件夹</span><br><span class="line">        self.api_dir &#x3D; &#39;&#x2F;Users&#x2F;zhoujie&#x2F;Desktop&#x2F;api&#x2F;&#39;</span><br></pre></td></tr></table></figure>
-<p>设置2: 后面说明…</p>
+<h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>设置:<br>设置1：设置<code>self.api_dir</code>: 存放<code>App目录</code>的父目录<br><code>代码目录</code>下的<code>gen_code_mitm.py</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class GenCode(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        ctx.log.info(&#39;__init__&#39;)</span><br><span class="line">        # 设置代码文件生成的目录\文件夹</span><br><span class="line">        self.api_dir &#x3D; &#39;&#x2F;Users&#x2F;zhoujie&#x2F;Desktop&#x2F;api&#x2F;&#39;</span><br></pre></td></tr></table></figure><br>设置2: 后面说明…</p>
 <p>步骤: </p>
 <ol>
 <li>电脑上运行起mitmproxy；手机设置代理地址为mitmproxy的地址</li>
@@ -239,12 +237,9 @@
 <li>正常结束mitmproxy，这时在done方法里会生成整体代码<code>code-&lt;app-name&gt;.py</code></li>
 <li>微修改<code>code-&lt;app-name&gt;.py</code>并运行</li>
 </ol>
-<p>步骤说明:<br>步骤1: 启动mitmproxy</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set session&#x3D;&#39;huawei&#39; -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure>
-<p><strong>session的值在后面说明…</strong></p>
+<p>步骤说明:<br>步骤1: 启动mitmproxy<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set session&#x3D;&#39;huawei&#39; -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure><br><strong>session的值在后面说明…</strong></p>
 <h3 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h3><p><code>gen_code_mitm.py</code>并不会自动生成全部网络请求的代码，只会生成已配置好的网络请求的代码</p>
-<p>配置如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">class Api(object):</span><br><span class="line">    ...</span><br><span class="line">class GenCode(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        ctx.log.info(&#39;__init__&#39;)</span><br><span class="line">        ...</span><br><span class="line">        </span><br><span class="line">        # 趣头条</span><br><span class="line">        # 步骤1: urls里增加用URL path代表的网络请求</span><br><span class="line">        urls &#x3D; [</span><br><span class="line">            r&#39;x&#x2F;tree-game&#x2F;&#39;,</span><br><span class="line">            Api(r&#39;&#x2F;app&#x2F;re&#x2F;taskCenter&#x2F;info&#x2F;v1&#x2F;get&#39;,params_as_all&#x3D;True),            ,</span><br><span class="line">        ]</span><br><span class="line">        </span><br><span class="line">        # 步骤2: 创建代表App的App对象</span><br><span class="line">        self.qu_tou_tiao &#x3D; App(urls, &#39;qu-tou-tiao&#39;)</span><br><span class="line">        </span><br><span class="line">        # 百度 - 好看视频</span><br><span class="line">        urls &#x3D; [...]      </span><br><span class="line">        self.hao_kan &#x3D; App(urls, &#39;hao-kan&#39;) </span><br><span class="line">        </span><br><span class="line">        # 步骤3: 把App添加进来</span><br><span class="line">        self.flowfilters &#x3D; [</span><br><span class="line">            self.qu_tou_tiao, </span><br><span class="line">            self.hao_kan,</span><br><span class="line">            ...</span><br><span class="line">        ] </span><br></pre></td></tr></table></figure>
+<p>配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">class Api(object):</span><br><span class="line">    ...</span><br><span class="line">class GenCode(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        ctx.log.info(&#39;__init__&#39;)</span><br><span class="line">        ...</span><br><span class="line">        </span><br><span class="line">        # 趣头条</span><br><span class="line">        # 步骤1: urls里增加用URL path代表的网络请求</span><br><span class="line">        urls &#x3D; [</span><br><span class="line">            r&#39;x&#x2F;tree-game&#x2F;&#39;,</span><br><span class="line">            Api(r&#39;&#x2F;app&#x2F;re&#x2F;taskCenter&#x2F;info&#x2F;v1&#x2F;get&#39;,params_as_all&#x3D;True),            ,</span><br><span class="line">        ]</span><br><span class="line">        </span><br><span class="line">        # 步骤2: 创建代表App的App对象</span><br><span class="line">        self.qu_tou_tiao &#x3D; App(urls, &#39;qu-tou-tiao&#39;)</span><br><span class="line">        </span><br><span class="line">        # 百度 - 好看视频</span><br><span class="line">        urls &#x3D; [...]      </span><br><span class="line">        self.hao_kan &#x3D; App(urls, &#39;hao-kan&#39;) </span><br><span class="line">        </span><br><span class="line">        # 步骤3: 把App添加进来</span><br><span class="line">        self.flowfilters &#x3D; [</span><br><span class="line">            self.qu_tou_tiao, </span><br><span class="line">            self.hao_kan,</span><br><span class="line">            ...</span><br><span class="line">        ] </span><br></pre></td></tr></table></figure></p>
 <ul>
 <li><ol>
 <li><code>urls</code>里增加用URL path代表的网络请求</li>
@@ -252,16 +247,15 @@
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">urls &#x3D; [</span><br><span class="line">    r&#39;x&#x2F;tree-game&#x2F;&#39;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
 <ul>
-<li><ol start="2">
+<li><ol>
 <li>创建代表App的App对象</li>
 </ol>
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># &#39;qu-tou-tiao&#39;中给App取的名字</span><br><span class="line">self.qu_tou_tiao &#x3D; App(urls, &#39;qu-tou-tiao&#39;)</span><br></pre></td></tr></table></figure>
 <ul>
-<li><ol start="3">
+<li><ol>
 <li>把App对象加入到self.flowfilters中，代表要生成这个App的代码</li>
 </ol>
 </li>
@@ -271,10 +265,8 @@
 <h3 id="目录-文件夹"><a href="#目录-文件夹" class="headerlink" title="目录/文件夹"></a>目录/文件夹</h3><p>先约定2个概念：<code>代码目录</code>、<code>App目录</code><br><code>代码目录</code>：生成<code>App目录</code>的代码、模板等文件的目录<br><code>App目录</code>：保存自动生成的App代码文件的目录</p>
 <p><code>代码目录</code>有2类文件：</p>
 <ul>
-<li><pre><code>*.py    - 代码文件 `gen_code_mitm.py`</code></pre>
-</li>
-<li><pre><code>*.j2.py - 模板文件</code></pre>
-</li>
+<li>*.py    - 代码文件 <code>gen_code_mitm.py</code></li>
+<li>*.j2.py - 模板文件</li>
 </ul>
 <p><code>App目录</code>有2类文件：</p>
 <ul>
@@ -300,24 +292,14 @@
 </ul>
 <p>先约定1个概念：<code>一次mitmproxy运行</code><br><code>一次mitmproxy运行</code>: 启动mitmproxy -&gt; 1或多部手机操作相同App -&gt;退出\停止mitmproxy[ctrl+c或Q]</p>
 <p><strong>方案一: 指定</strong></p>
-<p>在启动时指定<code>--set session=&#39;huawei&#39;</code>, 则所有数据写入session_huawei.py文件中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set session&#x3D;&#39;huawei&#39; -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure>
-<p><strong>问题:</strong> 多部手机[代表不同账号]操作相同App时，多个账号数据都写入到了同一个账号文件中[session_huawei.py]</p>
+<p>在启动时指定<code>--set session=&#39;huawei&#39;</code>, 则所有数据写入session_huawei.py文件中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set session&#x3D;&#39;huawei&#39; -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure><br><strong>问题:</strong> 多部手机[代表不同账号]操作相同App时，多个账号数据都写入到了同一个账号文件中[session_huawei.py]</p>
 <p><strong>最佳实践: <code>一次mitmproxy运行</code>只操作一个手机[一个账号]</strong></p>
-<p><strong>方案二: 推断</strong><br>在启动时不指定session, 代码自动推断</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure>
-
+<p><strong>方案二: 推断</strong><br>在启动时不指定session, 代码自动推断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure></p>
 <p>举例：<br><code>今日头条极速版</code>有一个api: <code>/search/suggest/homepage_suggest/</code><br>在parameters\query有<code>&quot;device_platform&quot;: &quot;iphone&quot;</code>字段值, 那就写入session_ios.py中。</p>
 <p><strong>问题：</strong><br>如果有一个api无法从headers、parameters、query、body等信息中判断出该写入哪个文件？</p>
 <p>这时会写入session_default.py文件中，这时一个账号的数据被写到2个文件中: session_default.py、session_xxx.py, 生成的代码会被认为是2个账号，无法”正常运行”</p>
-<p><strong>最佳实践: <code>一次mitmproxy运行</code>只操作一个手机[一个账号], 且启动时设置<code>guess_as_session</code></strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set guess_as_session&#x3D;&#39;huawei&#39; -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure>
-<p>guess_as_session不能像session那样设定任意值<br>guess_as_session的取值：ios, huawei, xiaomi [自己手头只有这些设备]<br>若要guess_as_session可以取其它值，需要设置：</p>
-<p><code>gen_code_mitm.py</code> - <code>class GenCode(object)</code> - <code>__init__</code>方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">self.guess_session &#x3D; collections.OrderedDict(</span><br><span class="line">    ios&#x3D;re.compile(r&#39;iphone|ios&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">    xiaomi&#x3D;re.compile(r&#39;xiaomi|mi\+5|miui&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">    huawei&#x3D;re.compile(r&#39;huawei&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">    # 在这里增加其它的自己想要的值</span><br><span class="line">    # meizhu&#x3D;re.compile(r&#39;meizhu&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-
-
+<p><strong>最佳实践: <code>一次mitmproxy运行</code>只操作一个手机[一个账号], 且启动时设置<code>guess_as_session</code></strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set guess_as_session&#x3D;&#39;huawei&#39; -s &quot;gen_code_mitm.py&quot;</span><br></pre></td></tr></table></figure><br>guess_as_session不能像session那样设定任意值<br>guess_as_session的取值：ios, huawei, xiaomi [自己手头只有这些设备]<br>若要guess_as_session可以取其它值，需要设置：</p>
+<p><code>gen_code_mitm.py</code> - <code>class GenCode(object)</code> - <code>__init__</code>方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">self.guess_session &#x3D; collections.OrderedDict(</span><br><span class="line">    ios&#x3D;re.compile(r&#39;iphone|ios&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">    xiaomi&#x3D;re.compile(r&#39;xiaomi|mi\+5|miui&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">    huawei&#x3D;re.compile(r&#39;huawei&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">    # 在这里增加其它的自己想要的值</span><br><span class="line">    # meizhu&#x3D;re.compile(r&#39;meizhu&#39;, flags&#x3D;re.IGNORECASE),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
 <h3 id="urls的配置-Api"><a href="#urls的配置-Api" class="headerlink" title="urls的配置 - Api"></a>urls的配置 - Api</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">urls &#x3D; [</span><br><span class="line">    r&#39;x&#x2F;tree-game&#x2F;&#39;,</span><br><span class="line">    Api(r&#39;&#x2F;app&#x2F;re&#x2F;taskCenter&#x2F;info&#x2F;v1&#x2F;get&#39;,params_as_all&#x3D;True),            ,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 <p>urls中可以添加2类对象: str, Api</p>
 <p><strong>Api类说明</strong></p>
@@ -335,7 +317,6 @@
 <li>url - 通配与匹配顺序</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">urls &#x3D; [</span><br><span class="line">    # 当触发&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;done_task&#x2F;&#39;时，</span><br><span class="line">    # 因为&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;&#39;先添加并且也匹配</span><br><span class="line">    # 不会再寻找最佳匹配&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;done_task&#x2F;&#39;</span><br><span class="line">    # 所以会生成默认的方法名：score_task_v1_sleep_done_task</span><br><span class="line">    # 而不是：sleep_done_task</span><br><span class="line">    &#39;score_task&#x2F;v1&#x2F;sleep&#x2F;&#39;,</span><br><span class="line">    Api(&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;done_task&#x2F;&#39;, f_name&#x3D;&#39;sleep_done_task&#39;)   </span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">最佳实践：先具体[长], 后模糊[前缀]</span><br><span class="line"></span><br><span class="line">urls &#x3D; [</span><br><span class="line">    Api(&#39;score_task&#x2F;v1&#x2F;sleep&#x2F;done_task&#x2F;&#39;, f_name&#x3D;&#39;sleep_done_task&#39;)</span><br><span class="line">    &#39;score_task&#x2F;v1&#x2F;sleep&#x2F;&#39;,       </span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>f_name - 指定方法名</li>
 </ul>
