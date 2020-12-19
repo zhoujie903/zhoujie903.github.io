@@ -223,10 +223,14 @@
           <p>[TOC]</p>
 <h2 id="Rewrite应用"><a href="#Rewrite应用" class="headerlink" title="Rewrite应用"></a>Rewrite应用</h2><h3 id="案例01"><a href="#案例01" class="headerlink" title="案例01"></a>案例01</h3><p>问题：<code>今日头条极速版</code>App每天的<code>阅读推送文章</code>任务因为每天收到的推送很少，因而不能得很高的积分，怎样把普通文章的阅读变为推送文章的阅读呢？</p>
 <p>思考：对比普通文章的阅读与推送文章的阅读发出的网络数据，找出差异</p>
-<p>普通文章的阅读与推送文章的阅读达到奖励标准时，都用相同的接口<code>https://is.snssdk.com/score_task/v1/task/get_read_bonus/</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 普通阅读文章&#x2F;视频</span><br><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;?fp&#x3D;xxx&amp;...&amp;group_id&#x3D;6689697061983486472</span><br><span class="line"></span><br><span class="line"># 推送文章的阅读</span><br><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;?fp&#x3D;xxx&amp;...&amp;&amp;impression_type&#x3D;push&amp;group_id&#x3D;6689697061983486472</span><br></pre></td></tr></table></figure><br>对比上面的接口数据发现：<br>推送阅读只比普通阅读<strong>多出了impression_type=push</strong>的Query String</p>
+<p>普通文章的阅读与推送文章的阅读达到奖励标准时，都用相同的接口<code>https://is.snssdk.com/score_task/v1/task/get_read_bonus/</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 普通阅读文章&#x2F;视频</span><br><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;?fp&#x3D;xxx&amp;...&amp;group_id&#x3D;6689697061983486472</span><br><span class="line"></span><br><span class="line"># 推送文章的阅读</span><br><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;?fp&#x3D;xxx&amp;...&amp;&amp;impression_type&#x3D;push&amp;group_id&#x3D;6689697061983486472</span><br></pre></td></tr></table></figure>
+<p>对比上面的接口数据发现：<br>推送阅读只比普通阅读<strong>多出了impression_type=push</strong>的Query String</p>
 <p>解决：用Charles的<code>Rewrite功能Add Query Param</code>来增加impression_type=push解决问题</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/281540-64acc9462bb437c4.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Rewrite功能-Type:Add Query Param"></p>
-<p>上面的get_read_bonus重写规则Export导出的get_read_bonus.xml文件内容如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&#39;1.0&#39; encoding&#x3D;&#39;UTF-8&#39; ?&gt;</span><br><span class="line">&lt;?charles serialisation-version&#x3D;&#39;2.0&#39; ?&gt;</span><br><span class="line">&lt;rewriteSet-array&gt;</span><br><span class="line">  &lt;rewriteSet&gt;</span><br><span class="line">    &lt;active&gt;true&lt;&#x2F;active&gt;</span><br><span class="line">    &lt;name&gt;get_read_bonus&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;hosts&gt;</span><br><span class="line">      &lt;locationPatterns&gt;</span><br><span class="line">        &lt;locationMatch&gt;</span><br><span class="line">          &lt;location&gt;</span><br><span class="line">            &lt;protocol&gt;https&lt;&#x2F;protocol&gt;</span><br><span class="line">            &lt;host&gt;is.snssdk.com&lt;&#x2F;host&gt;</span><br><span class="line">            &lt;path&gt;&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;&lt;&#x2F;path&gt;</span><br><span class="line">          &lt;&#x2F;location&gt;</span><br><span class="line">          &lt;enabled&gt;true&lt;&#x2F;enabled&gt;</span><br><span class="line">        &lt;&#x2F;locationMatch&gt;</span><br><span class="line">      &lt;&#x2F;locationPatterns&gt;</span><br><span class="line">    &lt;&#x2F;hosts&gt;</span><br><span class="line">    &lt;rules&gt;</span><br><span class="line">      &lt;rewriteRule&gt;</span><br><span class="line">        &lt;active&gt;true&lt;&#x2F;active&gt;</span><br><span class="line">        &lt;ruleType&gt;8&lt;&#x2F;ruleType&gt;</span><br><span class="line">        &lt;matchHeader&gt;&lt;&#x2F;matchHeader&gt;</span><br><span class="line">        &lt;matchValue&gt;&lt;&#x2F;matchValue&gt;</span><br><span class="line">        &lt;matchHeaderRegex&gt;false&lt;&#x2F;matchHeaderRegex&gt;</span><br><span class="line">        &lt;matchValueRegex&gt;false&lt;&#x2F;matchValueRegex&gt;</span><br><span class="line">        &lt;matchRequest&gt;false&lt;&#x2F;matchRequest&gt;</span><br><span class="line">        &lt;matchResponse&gt;false&lt;&#x2F;matchResponse&gt;</span><br><span class="line">        &lt;newHeader&gt;impression_type&lt;&#x2F;newHeader&gt;</span><br><span class="line">        &lt;newValue&gt;push&lt;&#x2F;newValue&gt;</span><br><span class="line">        &lt;newHeaderRegex&gt;false&lt;&#x2F;newHeaderRegex&gt;</span><br><span class="line">        &lt;newValueRegex&gt;false&lt;&#x2F;newValueRegex&gt;</span><br><span class="line">        &lt;matchWholeValue&gt;false&lt;&#x2F;matchWholeValue&gt;</span><br><span class="line">        &lt;caseSensitive&gt;false&lt;&#x2F;caseSensitive&gt;</span><br><span class="line">        &lt;replaceType&gt;2&lt;&#x2F;replaceType&gt;</span><br><span class="line">      &lt;&#x2F;rewriteRule&gt;</span><br><span class="line">    &lt;&#x2F;rules&gt;</span><br><span class="line">  &lt;&#x2F;rewriteSet&gt;</span><br><span class="line">&lt;&#x2F;rewriteSet-array&gt;</span><br></pre></td></tr></table></figure></p>
+<p>上面的get_read_bonus重写规则Export导出的get_read_bonus.xml文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&#39;1.0&#39; encoding&#x3D;&#39;UTF-8&#39; ?&gt;</span><br><span class="line">&lt;?charles serialisation-version&#x3D;&#39;2.0&#39; ?&gt;</span><br><span class="line">&lt;rewriteSet-array&gt;</span><br><span class="line">  &lt;rewriteSet&gt;</span><br><span class="line">    &lt;active&gt;true&lt;&#x2F;active&gt;</span><br><span class="line">    &lt;name&gt;get_read_bonus&lt;&#x2F;name&gt;</span><br><span class="line">    &lt;hosts&gt;</span><br><span class="line">      &lt;locationPatterns&gt;</span><br><span class="line">        &lt;locationMatch&gt;</span><br><span class="line">          &lt;location&gt;</span><br><span class="line">            &lt;protocol&gt;https&lt;&#x2F;protocol&gt;</span><br><span class="line">            &lt;host&gt;is.snssdk.com&lt;&#x2F;host&gt;</span><br><span class="line">            &lt;path&gt;&#x2F;score_task&#x2F;v1&#x2F;task&#x2F;get_read_bonus&#x2F;&lt;&#x2F;path&gt;</span><br><span class="line">          &lt;&#x2F;location&gt;</span><br><span class="line">          &lt;enabled&gt;true&lt;&#x2F;enabled&gt;</span><br><span class="line">        &lt;&#x2F;locationMatch&gt;</span><br><span class="line">      &lt;&#x2F;locationPatterns&gt;</span><br><span class="line">    &lt;&#x2F;hosts&gt;</span><br><span class="line">    &lt;rules&gt;</span><br><span class="line">      &lt;rewriteRule&gt;</span><br><span class="line">        &lt;active&gt;true&lt;&#x2F;active&gt;</span><br><span class="line">        &lt;ruleType&gt;8&lt;&#x2F;ruleType&gt;</span><br><span class="line">        &lt;matchHeader&gt;&lt;&#x2F;matchHeader&gt;</span><br><span class="line">        &lt;matchValue&gt;&lt;&#x2F;matchValue&gt;</span><br><span class="line">        &lt;matchHeaderRegex&gt;false&lt;&#x2F;matchHeaderRegex&gt;</span><br><span class="line">        &lt;matchValueRegex&gt;false&lt;&#x2F;matchValueRegex&gt;</span><br><span class="line">        &lt;matchRequest&gt;false&lt;&#x2F;matchRequest&gt;</span><br><span class="line">        &lt;matchResponse&gt;false&lt;&#x2F;matchResponse&gt;</span><br><span class="line">        &lt;newHeader&gt;impression_type&lt;&#x2F;newHeader&gt;</span><br><span class="line">        &lt;newValue&gt;push&lt;&#x2F;newValue&gt;</span><br><span class="line">        &lt;newHeaderRegex&gt;false&lt;&#x2F;newHeaderRegex&gt;</span><br><span class="line">        &lt;newValueRegex&gt;false&lt;&#x2F;newValueRegex&gt;</span><br><span class="line">        &lt;matchWholeValue&gt;false&lt;&#x2F;matchWholeValue&gt;</span><br><span class="line">        &lt;caseSensitive&gt;false&lt;&#x2F;caseSensitive&gt;</span><br><span class="line">        &lt;replaceType&gt;2&lt;&#x2F;replaceType&gt;</span><br><span class="line">      &lt;&#x2F;rewriteRule&gt;</span><br><span class="line">    &lt;&#x2F;rules&gt;</span><br><span class="line">  &lt;&#x2F;rewriteSet&gt;</span><br><span class="line">&lt;&#x2F;rewriteSet-array&gt;</span><br></pre></td></tr></table></figure>
+
 <p>重写规则设置正确与否验证：<br><img src="http://upload-images.jianshu.io/upload_images/281540-ea8dc4743ec32001.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="规则设置正确与否验证"></p>
 <p>在上面的<code>Notes</code>列上会显示<code>Rewrite Tool: query added &quot;impression_type: push&quot;</code></p>
 <p><strong>应用：</strong></p>
@@ -237,12 +241,20 @@
 <li>查找<code>我的收益</code>页面，验证成功与否</li>
 </ol>
 <h3 id="案例02"><a href="#案例02" class="headerlink" title="案例02"></a>案例02</h3><p>问题：<code>趣消除</code>、<code>趣键盘</code>、<code>东方头条</code>等App都看广告得金币，怎样减少广告的时间？</p>
-<p>思考：广告是哪里来的？广告时长是怎么来的？<br>当点击App上的按钮弹出广告时，3个App都调用了接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;api&#x2F;ad&#x2F;union&#x2F;sdk&#x2F;get_ads&#x2F;</span><br></pre></td></tr></table></figure><br>响应如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">......</span><br><span class="line">		&quot;video&quot;: &#123;</span><br><span class="line">			&quot;cover_height&quot;: 1280,</span><br><span class="line">			&quot;cover_url&quot;: &quot;http:&#x2F;&#x2F;sf1-ttcdn-tos.pstatp.com&#x2F;img&#x2F;mosaic-legacy&#x2F;1be91000a8c62c6ba6221~noop.jpg&quot;,</span><br><span class="line">			&quot;cover_width&quot;: 720,</span><br><span class="line">			&quot;endcard&quot;: &quot;https:&#x2F;&#x2F;www.toutiaopage.com&#x2F;union&#x2F;endcard&#x2F;1629848424707111&#x2F;?rit&#x3D;909946692\u0026req_id&#x3D;ED6EC127-C359-4C18-A41E-3A5F6F499250u3183\u0026ad_sdk_version&#x3D;1.9.9.0\u0026os&#x3D;ios\u0026lang&#x3D;cn\u0026style_id&#x3D;1104\u0026ad_id&#x3D;1629844369912839\u0026_toutiao_params&#x3D;%7B%22cid%22%3A1629848424707111%2C%22device_id%22%3A9724339963504202%2C%22log_extra%22%3A%22%7B%5C%22ad_price%5C%22%3A%5C%22XOub4AAGRWZc65vgAAZFZgz-hMMMgth42hwxAg%5C%22%2C%5C%22convert_id%5C%22%3A1629408290774020%2C%5C%22orit%5C%22%3A900000000%2C%5C%22req_id%5C%22%3A%5C%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%5C%22%2C%5C%22rit%5C%22%3A909946692%7D%22%2C%22orit%22%3A900000000%2C%22req_id%22%3A%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%22%2C%22rit%22%3A909946692%2C%22sign%22%3A%22D41D8CD98F00B204E9800998ECF8427E%22%2C%22uid%22%3A9724339963504202%2C%22ut%22%3A14%7D\u0026append&#x3D;%7B%22openurl%22%3A%22%22%2C%22postdata%22%3A%5B%7B%22__type__%22%3A%22req_id%22%2C%22cid%22%3A1629848424707111%2C%22req_id%22%3A%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%22%2C%22rit%22%3A909946692%7D%5D%7D&quot;,</span><br><span class="line">			&quot;resolution&quot;: &quot;720x1280&quot;,</span><br><span class="line">			&quot;size&quot;: 5628226,</span><br><span class="line">			&quot;video_duration&quot;: 29.04,</span><br><span class="line">			&quot;video_url&quot;: &quot;http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda-jesntzw6569xqudw.mp4&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;],</span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>广告就是从上面的接口获取而来的，广告时长由<code>video_url</code>字段对应的mp4的时长决定</p>
+<p>思考：广告是哪里来的？广告时长是怎么来的？<br>当点击App上的按钮弹出广告时，3个App都调用了接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;is.snssdk.com&#x2F;api&#x2F;ad&#x2F;union&#x2F;sdk&#x2F;get_ads&#x2F;</span><br></pre></td></tr></table></figure>
+<p>响应如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">......</span><br><span class="line">		&quot;video&quot;: &#123;</span><br><span class="line">			&quot;cover_height&quot;: 1280,</span><br><span class="line">			&quot;cover_url&quot;: &quot;http:&#x2F;&#x2F;sf1-ttcdn-tos.pstatp.com&#x2F;img&#x2F;mosaic-legacy&#x2F;1be91000a8c62c6ba6221~noop.jpg&quot;,</span><br><span class="line">			&quot;cover_width&quot;: 720,</span><br><span class="line">			&quot;endcard&quot;: &quot;https:&#x2F;&#x2F;www.toutiaopage.com&#x2F;union&#x2F;endcard&#x2F;1629848424707111&#x2F;?rit&#x3D;909946692\u0026req_id&#x3D;ED6EC127-C359-4C18-A41E-3A5F6F499250u3183\u0026ad_sdk_version&#x3D;1.9.9.0\u0026os&#x3D;ios\u0026lang&#x3D;cn\u0026style_id&#x3D;1104\u0026ad_id&#x3D;1629844369912839\u0026_toutiao_params&#x3D;%7B%22cid%22%3A1629848424707111%2C%22device_id%22%3A9724339963504202%2C%22log_extra%22%3A%22%7B%5C%22ad_price%5C%22%3A%5C%22XOub4AAGRWZc65vgAAZFZgz-hMMMgth42hwxAg%5C%22%2C%5C%22convert_id%5C%22%3A1629408290774020%2C%5C%22orit%5C%22%3A900000000%2C%5C%22req_id%5C%22%3A%5C%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%5C%22%2C%5C%22rit%5C%22%3A909946692%7D%22%2C%22orit%22%3A900000000%2C%22req_id%22%3A%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%22%2C%22rit%22%3A909946692%2C%22sign%22%3A%22D41D8CD98F00B204E9800998ECF8427E%22%2C%22uid%22%3A9724339963504202%2C%22ut%22%3A14%7D\u0026append&#x3D;%7B%22openurl%22%3A%22%22%2C%22postdata%22%3A%5B%7B%22__type__%22%3A%22req_id%22%2C%22cid%22%3A1629848424707111%2C%22req_id%22%3A%22ED6EC127-C359-4C18-A41E-3A5F6F499250u3183%22%2C%22rit%22%3A909946692%7D%5D%7D&quot;,</span><br><span class="line">			&quot;resolution&quot;: &quot;720x1280&quot;,</span><br><span class="line">			&quot;size&quot;: 5628226,</span><br><span class="line">			&quot;video_duration&quot;: 29.04,</span><br><span class="line">			&quot;video_url&quot;: &quot;http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda-jesntzw6569xqudw.mp4&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;],</span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>广告就是从上面的接口获取而来的，广告时长由<code>video_url</code>字段对应的mp4的时长决定</p>
 <p>解决：用Charles的<code>Rewrite功能Body</code>替换<code>video_url</code>字段的值<br><img src="https://upload-images.jianshu.io/upload_images/281540-e80209bd2b222ac6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Rewrite功能-Type:Body"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Match Value:</span><br><span class="line">&quot;video_url&quot;:&quot;(.+)&quot;&#125;</span><br><span class="line"></span><br><span class="line">Replace Value:</span><br><span class="line">&quot;video_url&quot;:&quot;http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda.mp4&quot;&#125;</span><br></pre></td></tr></table></figure>
-<p>提供一个只有3秒的素材：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda-jesntzw6569xqudw.mp4</span><br></pre></td></tr></table></figure></p>
+
+<p>提供一个只有3秒的素材：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;mda-jesntzw6569xqudw&#x2F;mda-jesntzw6569xqudw.mp4</span><br></pre></td></tr></table></figure>
 <h3 id="案例03"><a href="#案例03" class="headerlink" title="案例03"></a>案例03</h3><p>问题：<code>章鱼输入法</code>App有看广告得金币，没有像<code>案例02</code>那样找到相应的接口api返回广告视频的URL，怎样减少广告的时间？</p>
-<p>思考：尝试替换广告视频的请求<br>比如广告视频的请求如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Get https:&#x2F;&#x2F;v3-ad.ixigua.com&#x2F;...&#x2F;video&#x2F;m&#x2F;...&#x2F;toutiao.mp4</span><br><span class="line"></span><br><span class="line">替换为只有3秒的视频地址</span><br><span class="line">Get http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;...&#x2F;3seconds.mp4</span><br></pre></td></tr></table></figure></p>
+<p>思考：尝试替换广告视频的请求<br>比如广告视频的请求如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Get https:&#x2F;&#x2F;v3-ad.ixigua.com&#x2F;...&#x2F;video&#x2F;m&#x2F;...&#x2F;toutiao.mp4</span><br><span class="line"></span><br><span class="line">替换为只有3秒的视频地址</span><br><span class="line">Get http:&#x2F;&#x2F;vd2.bdstatic.com&#x2F;...&#x2F;3seconds.mp4</span><br></pre></td></tr></table></figure>
+
 <p>解决：用Charles的<code>Rewrite功能URL</code>替换请求<br><img src="https://upload-images.jianshu.io/upload_images/281540-aa27f7180fd280a7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Rewrite功能-Type:URL"></p>
 <h3 id="案例04"><a href="#案例04" class="headerlink" title="案例04"></a>案例04</h3><p>问题：<code>扶我起来学数学</code>App的<code>作战休息区</code>有一个游戏<code>伪装者</code>，在上报成绩时，接口有hash字段，修改成绩字段，hash会验证不通过，达到了防止伪造成绩的功能，怎样在hash前伪造成绩？<br><img src="https://upload-images.jianshu.io/upload_images/281540-88406cb857175e0b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="成绩上报接口"><br>思考：hash算法一般难破解，与其破解hash算法，不如转变思路：修改传入hash的值</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">value肯定与成绩相关</span><br><span class="line">hash(value)</span><br></pre></td></tr></table></figure>
@@ -272,15 +284,13 @@
 <p><img src="https://upload-images.jianshu.io/upload_images/281540-9a4d5b1810506685.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/281540-64531455206484fc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Mirror保存下来的文件"></p>
 <h2 id="No-Caching-和-Block-Cookies应用"><a href="#No-Caching-和-Block-Cookies应用" class="headerlink" title="No Caching 和 Block Cookies应用"></a>No Caching 和 Block Cookies应用</h2><p>在案例：<code>扶我起来学数学</code>App的<code>伪装者</code>游戏通过Rewrite功能修改了js文件中的内容；但有时js文件不是每次都会传输，而是使用了缓存，这时Rewrite功能就失效了，因为没有发生网络请求；通过<code>No Caching 和 Block Cookies</code>使网络请求每次都发生</p>
-<h2 id="Map-Local应用"><a href="#Map-Local应用" class="headerlink" title="Map Local应用"></a>Map Local应用</h2><div class="table-container">
-<table>
+<h2 id="Map-Local应用"><a href="#Map-Local应用" class="headerlink" title="Map Local应用"></a>Map Local应用</h2><table>
 <thead>
 <tr>
 <th>Map Local应用场景</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>修改js文件来改变App行为:</td>
 </tr>
 <tr>
@@ -292,9 +302,7 @@
 <tr>
 <td>3. 使用Map Local功能使App加载修改后的js文件</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 
       
     </div>
@@ -363,8 +371,9 @@
 <h1 id="mitmproxy的使用"><a href="#mitmproxy的使用" class="headerlink" title="mitmproxy的使用"></a>mitmproxy的使用</h1><p><strong>mitmproxy</strong> is a free and open source interactive HTTPS proxy.<br>官网：<a target="_blank" rel="noopener" href="https://mitmproxy.org/">https://mitmproxy.org/</a><br>安装：<code>pip3 install mitmproxy</code> 或 <code>brew install mitmproxy</code><br>安装后有3个命令行工具：mitmproxy, mitmdump, mitmweb</p>
 <p>这里不介绍<code>mitmweb</code>的使用，<code>mitmproxy</code>与<code>mitmdump</code>的功能重点：<br><code>mitmproxy</code>：交互式；查看流量数据(请求与响应)；执行自定义脚本<br><code>mitmdump</code>：执行自定义脚本，脚本在Mitmproxy中叫做<code>Addon</code></p>
 <p>使用<code>mitmproxy</code>：因为是命令行界面，所以需要记住一些快捷键<br>使用<code>mitmdump</code>：偏向编写python代码</p>
-<p>通过一个典型的调用，来认识下<code>Mitmproxy</code>下的核心概念：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy --set scripts&#x3D;ad_short_mitm.py &#39;~u baidu\.com&#39;</span><br></pre></td></tr></table></figure></p>
-<div class="table-container">
+<p>通过一个典型的调用，来认识下<code>Mitmproxy</code>下的核心概念：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy --set scripts&#x3D;ad_short_mitm.py &#39;~u baidu\.com&#39;</span><br></pre></td></tr></table></figure>
+
 <table>
 <thead>
 <tr>
@@ -372,8 +381,7 @@
 <th>在Mitmproxy的叫法</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>set</td>
 <td><code>Command</code></td>
 </tr>
@@ -389,54 +397,42 @@
 <td>‘~u baidu\.com’</td>
 <td><code>Filter expressions</code></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h2 id="mitmproxy"><a href="#mitmproxy" class="headerlink" title="mitmproxy"></a>mitmproxy</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy</span><br></pre></td></tr></table></figure>
 <p>输入上面命令，启动mitmproxy并显示<code>Flows界面</code>：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>Flows界面</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><img src="https://upload-images.jianshu.io/upload_images/281540-af5b56b103232a27.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Flows界面"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h3 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h3><ul>
 <li>第1个也是最重要的快捷键：<code>?</code>: 进入<code>Help界面</code>：</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>进入Help界面</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5a4bm8fymj30xg0oqdjl.jpg" alt="Help界面"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li>第2个重要的快捷键：<code>:</code>: Command prompt,进入命令输入模式</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>进入命令输入模式</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><img src="http://ww3.sinaimg.cn/large/006tNc79ly1g5aqk3tgiej31r40kuwhs.jpg" alt="命令输入模式"></td>
 </tr>
 <tr>
@@ -454,13 +450,10 @@
 <tr>
 <td>常用的命令可以用快捷键，不用进入命令输入模式，省去输入的时间</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li><strong>界面间跳转快捷键</strong></li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -469,8 +462,7 @@
 <th>截图</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><code>?</code></td>
 <td>Help界面</td>
 <td><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5a4bm8fymj30xg0oqdjl.jpg" alt="Help界面"></td>
@@ -500,14 +492,20 @@
 <td>Options界面</td>
 <td><img src="http://ww2.sinaimg.cn/large/006tNc79ly1g5a4pl36xyj30xg0oqadr.jpg" alt="Options界面"></td>
 </tr>
-</tbody>
-</table>
-</div>
-<p><strong>注意：上面的快捷键，都是大写字母，<code>mitmproxy</code>的快捷键是区分大小写的</strong><br><strong>Flows界面居然没有快捷键？</strong></p>
+<tr>
+<td><strong>注意：上面的快捷键，都是大写字母，<code>mitmproxy</code>的快捷键是区分大小写的</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Flows界面居然没有快捷键？</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
 <ul>
 <li><strong>导航快捷键</strong></li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -516,8 +514,7 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>q</td>
 <td>console.view.pop</td>
 <td>返回：界面间的返回</td>
@@ -570,52 +567,47 @@
 <tr>
 <td>tab</td>
 <td>console.nav.next</td>
+<td></td>
 </tr>
-</tbody>
-</table>
-</div>
-<p><strong>g\G\j\k等这样的导航键是通用的：在Flows、Events、Command、Options等界面都能用</strong></p>
+<tr>
+<td><strong>g\G\j\k等这样的导航键是通用的：在Flows、Events、Command、Options等界面都能用</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
 <p>刚开始学命令行界面时，有这么命令、快捷键要记，没记住怎么办？<br>这里介绍下mitmproxy的<code>--no-server, -n</code>应用</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy --help</span><br><span class="line">usage: mitmproxy [options]</span><br><span class="line">...</span><br><span class="line">Proxy Options:</span><br><span class="line">  --no-server, -n</span><br><span class="line">  --server              Start a proxy server. Enabled by default.</span><br></pre></td></tr></table></figure>
 <ul>
 <li>第1个Terminal窗口里正常启动mitmproxy：<code>➜  ~ mitmproxy</code></li>
 <li>开启第2个Terminal窗口带<code>--no-server</code>选项启动mitmproxy：<code>➜  ~ mitmproxy --no-server</code>；按<code>K</code>/<code>C</code>/<code>O</code>/<code>?</code>查看快捷键、Command、Options、帮助</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>第2个mitmproxy专门用于查看快捷键、Command、Options、帮助</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5d9drzuxfj31ic0ku0uz.jpg" alt=""></td>
+<tbody><tr>
+<td><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5d9drzuxfj31ic0ku0uz.jpg"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h3 id="案例实战"><a href="#案例实战" class="headerlink" title="案例实战"></a>案例实战</h3><p>以<code>东方头条App - 幸运大转盘</code>这个游戏为实战</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>东方头条App - 幸运大转盘</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><img src="http://ww1.sinaimg.cn/large/006tNc79gy1g5d0cz6rndj30n00kgabm.jpg" alt=""></td>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79gy1g5d0cz6rndj30n00kgabm.jpg"></td>
 </tr>
 <tr>
-<td>1.点击’领取金币’：会发出<a target="_blank" rel="noopener" href="https://.../zhuanpan/get_zhuanpan_new网络请求">https://.../zhuanpan/get_zhuanpan_new网络请求</a></td>
+<td>1.点击’领取金币’：会发出https://…/zhuanpan/get_zhuanpan_new网络请求</td>
 </tr>
 <tr>
-<td>2.点击’立即领取’：会发出<a target="_blank" rel="noopener" href="https://.../zhuanpan/get_gold网络请求">https://.../zhuanpan/get_gold网络请求</a></td>
+<td>2.点击’立即领取’：会发出https://…/zhuanpan/get_gold网络请求</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>应用目的：通过mitmproxy的replay功能来减少手动操作时间<br>知识点：<code>Filter expressions</code>, <code>Options</code>, <code>Command</code></p>
 <ul>
 <li>1.启动mitmproxy</li>
@@ -628,99 +620,80 @@
 <li>解答：应用mitmrpoxy的<code>Filter expressions</code></li>
 <li>4.按<code>f</code>快捷键：设置<code>view_filter</code>这个<code>Option</code></li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>按<code>f</code>快捷键, 设置<code>view_filter</code></th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5d1kj7qvvj316z0u0adk.jpg" alt=""></td>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5d1kj7qvvj316z0u0adk.jpg"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li>5.输入<code>~u zhuanpan</code>, 按回车执行命令</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>输入<code>~u zhuanpan</code></th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><img src="http://ww3.sinaimg.cn/large/006tNc79ly1g5d1zhmp90j316z0u0gr2.jpg" alt=""></td>
+<tbody><tr>
+<td><img src="http://ww3.sinaimg.cn/large/006tNc79ly1g5d1zhmp90j316z0u0gr2.jpg"></td>
 </tr>
-</tbody>
-</table>
-</div>
-<p><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5d1un59ssj316z0u0dl4.jpg" alt=""> |</p>
+<tr>
+<td><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5d1un59ssj316z0u0dl4.jpg"></td>
+</tr>
+</tbody></table>
 <ul>
 <li><p>知识点：<code>~u zhuanpan</code>是<code>Filter expressions</code>：<code>~u regex</code>，用来过滤URL符合regex正则表达式的网络请求；可以按<code>？</code>跳转到<code>Help界面</code>查看全部的<code>Filter expressions</code></p>
 </li>
 <li><p>6.用<code>j</code>导航快捷键定位到<code>zhuanpan/get_zhuanpan_new</code>网络请求；按下<code>m</code>快捷键将这条网络请求标记</p>
 </li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>按下<code>m</code>标记网络请求</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><img src="http://ww1.sinaimg.cn/large/006tNc79gy1g5d2sgnjiqj316z0u0n2j.jpg" alt=""></td>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79gy1g5d2sgnjiqj316z0u0n2j.jpg"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li>7.用同样的操作，标记<code>zhuanpan/get_gold</code>网络请求</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>按下<code>m</code>标记网络请求</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><img src="http://ww1.sinaimg.cn/large/006tNc79gy1g5d2va55pyj316z0u079q.jpg" alt=""></td>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79gy1g5d2va55pyj316z0u079q.jpg"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li>8.按<code>:</code>快捷键, 进入命令输入模式；输入<code>rep</code>, 按<code>tab</code>补全命令; 输入<code>@marked</code>; 按回车执行命令</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>按<code>tab</code>补全命令</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><img src="http://ww4.sinaimg.cn/large/006tNc79gy1g5d3gwr0noj316z0u07a6.jpg" alt=""> <img src="http://ww3.sinaimg.cn/large/006tNc79gy1g5d3q3ou9pj316z0u0q5x.jpg" alt=""></td>
+<tbody><tr>
+<td><img src="http://ww4.sinaimg.cn/large/006tNc79gy1g5d3gwr0noj316z0u07a6.jpg"> <img src="http://ww3.sinaimg.cn/large/006tNc79gy1g5d3q3ou9pj316z0u0q5x.jpg"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>出于演示使用mitmrpoxy的目的，才增加了许多不必要的步骤；简洁方法：</p>
 <ul>
 <li>去除步骤4、5、6、7</li>
 <li>步骤8改为<code>: replay.client &quot;(~u zhuanpan/get_zhuanpan_new) | (~u zhuanpan/get_gold)&quot;</code></li>
 </ul>
 <p>案例到此结束，小结下用到的快捷键、命令：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -729,8 +702,7 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><code>f</code></td>
 <td>: set view_fliter=</td>
 <td>只显示符合条件的网络请求</td>
@@ -745,11 +717,8 @@
 <td>: replay.client @marked</td>
 <td>重放多条标记的网络请求</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>相关快捷键：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -759,8 +728,7 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>M</td>
 <td>flowlist</td>
 <td>view.marked.toggle</td>
@@ -778,9 +746,7 @@
 <td>replay.client @focus</td>
 <td>Replay this flow</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>一些用到<code>Filter expressions</code>的<code>Options</code>:<br>view_filter、save_stream_filter、intercept</p>
 <p>相关文档：<br><a target="_blank" rel="noopener" href="https://docs.mitmproxy.org/stable/concepts-options/">https://docs.mitmproxy.org/stable/concepts-options/</a><br><a target="_blank" rel="noopener" href="https://docs.mitmproxy.org/stable/concepts-filters/">https://docs.mitmproxy.org/stable/concepts-filters/</a></p>
 <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>上面的实战有以下几个问题：</p>
@@ -789,7 +755,6 @@
 <li>游戏有20次机会，要手动输入多次<code>replay.client @marked</code>才能把20次机会用完；怎样才能减少手动操作？</li>
 </ul>
 <p>这些问题我们通过编写脚本来解决。这里使用<code>mitmproxy</code>的其它功能为编写脚本提供方便<br>把实战的已被标记的2个网络请求保存为文件，方便查看：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -799,29 +764,24 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>w</td>
 <td>flowlist</td>
 <td>console.command save.file @shown</td>
 <td>Save listed flows to file</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li>1.按<code>w</code>快捷键, 把<code>@shown</code>修改为<code>@marked</code>; 指定保存路径；按回车执行命令</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>按<code>w</code>保存为文件</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5ggp27f86j31c80u0dll.jpg" alt=""> <img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5ggphx21nj31c80u0ag4.jpg" alt=""></td>
+<tbody><tr>
+<td><img src="http://ww1.sinaimg.cn/large/006tNc79ly1g5ggp27f86j31c80u0dll.jpg"> <img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5ggphx21nj31c80u0ag4.jpg"></td>
 </tr>
 <tr>
 <td>输入路径时，可以按<code>tab</code>来补全路径</td>
@@ -832,14 +792,12 @@
 <tr>
 <td>输入的文件的后缀名是可以随意指定的；保存的文件为二进制格式</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
-<li>2.开启第2个Terminal窗口带—no-server选项启动mitmproxy</li>
+<li>2.开启第2个Terminal窗口带–no-server选项启动mitmproxy</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmproxy --no-server</span><br></pre></td></tr></table></figure>
-<div class="table-container">
+
 <table>
 <thead>
 <tr>
@@ -849,35 +807,27 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>L</td>
 <td>flowlist</td>
 <td>console.command view.load</td>
 <td>Load flows from file</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li>3.按<code>L</code>快捷键, 把步骤1保存的文件加载进来</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>按<code>L</code>加载文件</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><img src="http://ww3.sinaimg.cn/large/006tNc79ly1g5ghc549tnj31c80u0q7b.jpg" alt=""> <img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5ghcff17bj31c80u0q7e.jpg" alt=""></td>
+<tbody><tr>
+<td><img src="http://ww3.sinaimg.cn/large/006tNc79ly1g5ghc549tnj31c80u0q7b.jpg"> <img src="http://ww4.sinaimg.cn/large/006tNc79ly1g5ghcff17bj31c80u0q7e.jpg"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>好了，编写脚本的准备工作结束！<br>小结下用到的快捷键、命令：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -887,8 +837,7 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>w</td>
 <td>flowlist</td>
 <td>console.command save.file @shown</td>
@@ -900,11 +849,8 @@
 <td>console.command view.load</td>
 <td>Load flows from file</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>相关快捷键：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -914,18 +860,14 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>e</td>
 <td>flowlist</td>
 <td>console.command export.file {choice} @focus</td>
 <td>Export this flow to file</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>快捷键<code>w</code>与<code>e</code>的区别</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -933,8 +875,7 @@
 <th>e</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>文件为二进制文件</td>
 <td>文件为文本文件</td>
 </tr>
@@ -946,9 +887,7 @@
 <td>能一次保存多条网络请求信息</td>
 <td>一次只能保存一条网络请求信息</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h2 id="mitmdump"><a href="#mitmdump" class="headerlink" title="mitmdump"></a>mitmdump</h2><p><code>Mitmproxy</code>是用python实现的，编写相应的<code>Addon</code>脚本也是用python</p>
 <h3 id="shell脚本"><a href="#shell脚本" class="headerlink" title="shell脚本"></a>shell脚本</h3><p>先用在<code>mitmproxy</code>的<code>e</code>快捷键来辅助编写shell脚本，来解决下上面的实战问题</p>
 <ul>
@@ -957,19 +896,23 @@
 </ol>
 </li>
 </ul>
-<p>get_zhuanpan_new.sh文件内容：[get_gold.sh内容类似，不再列出]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -H &#39;Host:zhuanpan.dftoutiao.com&#39; -H &#39;Content-Type:application&#x2F;x-www-form-urlencoded&#39; -H &#39;Connection:keep-alive&#39; -H &#39;Accept:*&#x2F;*&#39; -H &#39;User-Agent:DFTT&#x2F;2.4.8 (iPhone; iOS 12.3.1; Scale&#x2F;3.00)&#39; -H &#39;Accept-Language:zh-Hans-CN;q&#x3D;1, en-CN;q&#x3D;0.9, zh-Hant-CN;q&#x3D;0.8&#39; -H &#39;Content-Length:484&#39; -H &#39;Accept-Encoding:br, gzip, deflate&#39; -X POST &#39;https:&#x2F;&#x2F;zhuanpan.dftoutiao.com&#x2F;zhuanpan&#x2F;get_zhuanpan_new&#39; --data-binary &#39;accid&#x3D;834536089&amp;appqid&#x3D;AppStore190602&amp;apptypeid&#x3D;DFTT&amp;appver&#x3D;2.4.8&amp;device&#x3D;iPhone%206s%20Plus%20%28A1634&#x2F;A1687%29&amp;deviceid&#x3D;AE9418A1-561A-4F5C-AF05-1EC222A50CF3&amp;fr&#x3D;rwzx&amp;ime&#x3D;F2B14555-E2EB-4556-B757-2C55799C92C2&amp;lt&#x3D;d2RlWExGb015UjRqSkxMZk0rRkYwcTAzd0I3RmErMWRLbzZsYTc4dkFtakxLMmgvdW9xWFhYUEFNdU9XTHZMV3F6cWNhVXRPalBSMkJNUHlvTktRbnc9PQ%3D%3D&amp;network&#x3D;wifi&amp;num&#x3D;57&amp;os&#x3D;iOS%2012.3.1&amp;position&#x3D;%E6%B5%99%E6%B1%9F&amp;sign&#x3D;5aac4e159e8d205c084c9f9e6cf4e41f&amp;softname&#x3D;DFTTIOS&amp;softtype&#x3D;TouTiao&amp;ts&#x3D;1564368354&#39;</span><br></pre></td></tr></table></figure></p>
+<p>get_zhuanpan_new.sh文件内容：[get_gold.sh内容类似，不再列出]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -H &#39;Host:zhuanpan.dftoutiao.com&#39; -H &#39;Content-Type:application&#x2F;x-www-form-urlencoded&#39; -H &#39;Connection:keep-alive&#39; -H &#39;Accept:*&#x2F;*&#39; -H &#39;User-Agent:DFTT&#x2F;2.4.8 (iPhone; iOS 12.3.1; Scale&#x2F;3.00)&#39; -H &#39;Accept-Language:zh-Hans-CN;q&#x3D;1, en-CN;q&#x3D;0.9, zh-Hant-CN;q&#x3D;0.8&#39; -H &#39;Content-Length:484&#39; -H &#39;Accept-Encoding:br, gzip, deflate&#39; -X POST &#39;https:&#x2F;&#x2F;zhuanpan.dftoutiao.com&#x2F;zhuanpan&#x2F;get_zhuanpan_new&#39; --data-binary &#39;accid&#x3D;834536089&amp;appqid&#x3D;AppStore190602&amp;apptypeid&#x3D;DFTT&amp;appver&#x3D;2.4.8&amp;device&#x3D;iPhone%206s%20Plus%20%28A1634&#x2F;A1687%29&amp;deviceid&#x3D;AE9418A1-561A-4F5C-AF05-1EC222A50CF3&amp;fr&#x3D;rwzx&amp;ime&#x3D;F2B14555-E2EB-4556-B757-2C55799C92C2&amp;lt&#x3D;d2RlWExGb015UjRqSkxMZk0rRkYwcTAzd0I3RmErMWRLbzZsYTc4dkFtakxLMmgvdW9xWFhYUEFNdU9XTHZMV3F6cWNhVXRPalBSMkJNUHlvTktRbnc9PQ%3D%3D&amp;network&#x3D;wifi&amp;num&#x3D;57&amp;os&#x3D;iOS%2012.3.1&amp;position&#x3D;%E6%B5%99%E6%B1%9F&amp;sign&#x3D;5aac4e159e8d205c084c9f9e6cf4e41f&amp;softname&#x3D;DFTTIOS&amp;softtype&#x3D;TouTiao&amp;ts&#x3D;1564368354&#39;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><ol>
+<li><ol start="2">
 <li>把<code>get_zhuanpan_new.sh</code>、<code>get_gold.sh</code>的内容合并到最终的文件中<code>zhuanpan.sh</code></li>
 </ol>
 </li>
 </ul>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/usr/bin/env bash</span></span><br><span class="line"></span><br><span class="line">function zhuanpan</span><br><span class="line">&#123;</span><br><span class="line">    # mitmproxy用快捷键e导出的get_zhuanpan_new.sh文件内容原样写到这</span><br><span class="line">    curl -H &#x27;Host:zhuanpan.dftoutiao.com&#x27; -H &#x27;Content-Type:application/x-www-form-urlencoded&#x27; -H &#x27;Connection:keep-alive&#x27; -H &#x27;Accept:*/*&#x27; -H &#x27;User-Agent:DFTT/2.4.8 (iPhone; iOS 12.3.1; Scale/3.00)&#x27; -H &#x27;Accept-Language:zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8&#x27; -H &#x27;Content-Length:484&#x27; -H &#x27;Accept-Encoding:br, gzip, deflate&#x27; -X POST &#x27;https://zhuanpan.dftoutiao.com/zhuanpan/get_zhuanpan_new&#x27; --data-binary &#x27;accid=834536089&amp;appqid=AppStore190602&amp;apptypeid=DFTT&amp;appver=2.4.8&amp;device=iPhone%206s%20Plus%20%28A1634/A1687%29&amp;deviceid=AE9418A1-561A-4F5C-AF05-1EC222A50CF3&amp;fr=rwzx&amp;ime=F2B14555-E2EB-4556-B757-2C55799C92C2&amp;lt=d2RlWExGb015UjRqSkxMZk0rRkYwcTAzd0I3RmErMWRLbzZsYTc4dkFtakxLMmgvdW9xWFhYUEFNdU9XTHZMV3F6cWNhVXRPalBSMkJNUHlvTktRbnc9PQ%3D%3D&amp;network=wifi&amp;num=57&amp;os=iOS%2012.3.1&amp;position=%E6%B5%99%E6%B1%9F&amp;sign=5aac4e159e8d205c084c9f9e6cf4e41f&amp;softname=DFTTIOS&amp;softtype=TouTiao&amp;ts=1564368354&#x27;</span><br><span class="line"></span><br><span class="line">    # mitmproxy用快捷键e导出的get_gold.sh文件内容原样写到这</span><br><span class="line">    curl -H &#x27;Host:zhuanpan.dftoutiao.com&#x27; -H &#x27;Content-Type:application/x-www-form-urlencoded&#x27; -H &#x27;Connection:keep-alive&#x27; -H &#x27;Accept:*/*&#x27; -H &#x27;User-Agent:DFTT/2.4.8 (iPhone; iOS 12.3.1; Scale/3.00)&#x27; -H &#x27;Accept-Language:zh-Hans-CN;q=1, en-CN;q=0.9, zh-Hant-CN;q=0.8&#x27; -H &#x27;Content-Length:487&#x27; -H &#x27;Accept-Encoding:br, gzip, deflate&#x27; -X POST &#x27;https://zhuanpan.dftoutiao.com/zhuanpan/get_gold&#x27; --data-binary &#x27;accid=834536089&amp;appqid=AppStore190602&amp;apptypeid=DFTT&amp;appver=2.4.8&amp;device=iPhone%206s%20Plus%20%28A1634/A1687%29&amp;deviceid=AE9418A1-561A-4F5C-AF05-1EC222A50CF3&amp;fr=rwzx&amp;ime=F2B14555-E2EB-4556-B757-2C55799C92C2&amp;isfirst=0&amp;lt=d2RlWExGb015UjRqSkxMZk0rRkYwcTAzd0I3RmErMWRLbzZsYTc4dkFtakxLMmgvdW9xWFhYUEFNdU9XTHZMV3F6cWNhVXRPalBSMkJNUHlvTktRbnc9PQ%3D%3D&amp;network=wifi&amp;os=iOS%2012.3.1&amp;position=%E6%B5%99%E6%B1%9F&amp;sign=c6f61f80d1c001ac5382ef73632e0e9e&amp;softname=DFTTIOS&amp;softtype=TouTiao&amp;ts=1564368376&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for ((i=0; i&lt;20; i++));</span><br><span class="line">do</span><br><span class="line">    zhuanpan</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
 <p>ok，shell脚本以编写完成</p>
 <h3 id="python脚本"><a href="#python脚本" class="headerlink" title="python脚本"></a>python脚本</h3><p>关于<code>Addon</code>的概念可以查看：<br><a target="_blank" rel="noopener" href="https://docs.mitmproxy.org/stable/addons-overview/">https://docs.mitmproxy.org/stable/addons-overview/</a></p>
-<p>编写<code>Addon</code>脚本写些什么呢？先上一下模板：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">from mitmproxy import ctx</span><br><span class="line">from mitmproxy import flowfilter</span><br><span class="line">from mitmproxy import http</span><br><span class="line">from mitmproxy import addonmanager</span><br><span class="line"></span><br><span class="line">class Myaddon(object):</span><br><span class="line"></span><br><span class="line">    def __init__(self):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def load(self, entry: addonmanager.Loader):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def request(self, flow: http.HTTPFlow):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def response(self, flow: http.HTTPFlow):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">addons &#x3D; [</span><br><span class="line">    Myaddon()</span><br><span class="line">]</span><br></pre></td></tr></table></figure><br><strong>编写<code>Addon</code>脚本:就是选择性的实现上面的方法</strong></p>
+<p>编写<code>Addon</code>脚本写些什么呢？先上一下模板：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">from mitmproxy import ctx</span><br><span class="line">from mitmproxy import flowfilter</span><br><span class="line">from mitmproxy import http</span><br><span class="line">from mitmproxy import addonmanager</span><br><span class="line"></span><br><span class="line">class Myaddon(object):</span><br><span class="line"></span><br><span class="line">    def __init__(self):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def load(self, entry: addonmanager.Loader):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def request(self, flow: http.HTTPFlow):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">    def response(self, flow: http.HTTPFlow):</span><br><span class="line">        pass</span><br><span class="line"></span><br><span class="line">addons &#x3D; [</span><br><span class="line">    Myaddon()</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p><strong>编写<code>Addon</code>脚本:就是选择性的实现上面的方法</strong></p>
 <p><strong>具体都有哪些方法可以选择性实现，可以查看如下文档：</strong></p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -977,8 +920,7 @@
 <th></th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>文档</td>
 <td><a target="_blank" rel="noopener" href="https://docs.mitmproxy.org/stable/addons-events/">https://docs.mitmproxy.org/stable/addons-events/</a></td>
 </tr>
@@ -990,9 +932,7 @@
 <td>源代码</td>
 <td>mitmproxy/eventsequence.py</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>开始实现<code>Addon</code>脚本：</p>
 <ul>
 <li><ol>
@@ -1001,33 +941,44 @@
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">import re</span><br><span class="line"></span><br><span class="line">from mitmproxy import ctx</span><br><span class="line">from mitmproxy import flowfilter</span><br><span class="line">from mitmproxy import http</span><br><span class="line"></span><br><span class="line">class Zhuangpan(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.filter &#x3D; flowfilter.parse(r&#39;(~u zhuanpan&#x2F;get_zhuanpan_new) | (~u zhuanpan&#x2F;get_gold)&#39;)</span><br><span class="line">        self.new_fliter &#x3D; flowfilter.parse(r&#39;~u zhuanpan&#x2F;get_zhuanpan_new&#39;) </span><br><span class="line">        self.get_fliter &#x3D; flowfilter.parse(r&#39;~u zhuanpan&#x2F;get_gold&#39;)</span><br><span class="line">        self.flows &#x3D; []</span><br><span class="line">        self.urls &#x3D; set()</span><br><span class="line">        self.remain &#x3D; 0</span><br><span class="line"></span><br><span class="line">addons &#x3D; [</span><br><span class="line">    Zhuangpan()</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
 <p>这里用到了Mitmproxy的api:<code>flowfilter.parse</code>：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># mitmproxy&#x2F;flowfilter.py文件</span><br><span class="line">def parse(s: str) -&gt; TFilter:</span><br><span class="line"></span><br><span class="line"># 还定义了：</span><br><span class="line">def match(flt, flow):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">        Matches a flow against a compiled filter expression.</span><br><span class="line">        Returns True if matched, False if not.</span><br><span class="line">        ....</span><br><span class="line">    &quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><ol>
+<li><ol start="2">
 <li>实现<code>request</code>方法：</li>
 </ol>
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class Zhuangpan(object):</span><br><span class="line">    ...</span><br><span class="line">    def request(self, flow: http.HTTPFlow):               </span><br><span class="line">        if flowfilter.match(self.filter, flow):</span><br><span class="line">            url &#x3D; flow.request.url</span><br><span class="line">            if not url in self.urls: </span><br><span class="line">                ctx.log.alert(url)</span><br><span class="line">                self.flows.append(flow)</span><br><span class="line">                self.urls.add(url)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <ul>
-<li><ol>
+<li><ol start="3">
 <li>实现<code>response</code>方法：</li>
 </ol>
 </li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">class Zhuangpan(object):                       </span><br><span class="line">    ...</span><br><span class="line">    def response(self, flow: http.HTTPFlow):</span><br><span class="line">        if flowfilter.match(self.new_fliter, flow):</span><br><span class="line">            flow.response.replace(r&#39;&quot;gold&quot;:0&#39;, &#39;&quot;gold&quot;:999&#39;)</span><br><span class="line"></span><br><span class="line">            text &#x3D; flow.response.text</span><br><span class="line">            data &#x3D; json.loads(text)</span><br><span class="line">            self.remain &#x3D; data.get(&#39;data&#39;).get(&#39;cur_num&#39;)</span><br><span class="line">            ctx.log.alert(&#39;remain count:&#123;&#125;&#39;.format(self.remain))</span><br><span class="line"></span><br><span class="line">        if flowfilter.match(self.get_fliter, flow):</span><br><span class="line">            if self.remain &gt; 0 and len(self.urls) &gt;&#x3D; 2:                </span><br><span class="line">                flows &#x3D; [f.copy() for f in self.flows]</span><br><span class="line">                ctx.master.commands.call(&quot;replay.client&quot;, flows)</span><br></pre></td></tr></table></figure>
+
 <p>使用<code>ctx.log.xxx</code>等方法来代替使用<code>print</code>或<code>logging.warning</code>等方法：  </p>
 <ul>
 <li>在mitmproxy中，<code>ctx.log.xxx</code>记录的信息会出现在<code>Event</code>界面,         而其它方法不会出现在<code>Event</code>界面</li>
 <li>在mitmdump中，<code>ctx.log.xxx</code>记录的信息事件显示的顺序正确,         而其它方法显示的顺序不正确</li>
 </ul>
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mitmdump --scripts zhuangpan_mitm.py</span><br><span class="line">Loading script zhuangpan_mitm.py</span><br><span class="line">Proxy server listening at http:&#x2F;&#x2F;*:8080</span><br><span class="line"></span><br><span class="line">  # --scripts SCRIPT, -s SCRIPT</span><br><span class="line">                        Execute a script. May be passed multiple times.</span><br></pre></td></tr></table></figure>
+
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mitmdump --set userid&#x3D;zhj -s &quot;mitm_user_xxx.py&quot;  -s math_mitm.py &#39;~u mapi.hddgood.com&#39;</span><br><span class="line"></span><br><span class="line">mitmdump --set replacements&#x3D;&#39;&#x2F;~s&#x2F;&quot;video_url&quot;:&quot;(.+)&quot;&#125;&#x2F;&quot;video_url&quot;:&quot;https:&#x2F;&#x2F;vd3.bdstatic.com&#x2F;abc.mp4&quot;&#125;&#39;</span><br><span class="line"></span><br><span class="line"># 代码里可以调用</span><br><span class="line">ctx.master.commands.call(&quot;replay.client&quot;, [flow])</span><br><span class="line"></span><br><span class="line">ctx.master.commands.execute(&quot;view.focus.go 0&quot;)</span><br></pre></td></tr></table></figure>
 <h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>问题：只关注某个域名下的流量，怎么设置？<br>解决：ignore_hosts<br><a target="_blank" rel="noopener" href="https://docs.mitmproxy.org/stable/howto-ignoredomains/">https://docs.mitmproxy.org/stable/howto-ignoredomains/</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Ignore everything but example.com and mitmproxy.org:</span><br><span class="line">--ignore-hosts &#39;^(?!example\.com)(?!mitmproxy\.org)&#39;</span><br><span class="line"></span><br><span class="line">正则表达式：反前瞻</span><br><span class="line">反前瞻：要匹配某个模式时，需要在它 后面找不到含有给定前瞻模式的内容</span><br><span class="line">foo(?!bar)  Negative lookahead assertion. The pattern foo will only match if not followed by a match of pattern bar.</span><br></pre></td></tr></table></figure>
 <h2 id="代码阅读"><a href="#代码阅读" class="headerlink" title="代码阅读"></a>代码阅读</h2><p>源码地址：<a target="_blank" rel="noopener" href="https://github.com/mitmproxy/mitmproxy">https://github.com/mitmproxy/mitmproxy</a></p>
-<p>mitmproxy/tools/_main.py<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">入口方法：</span><br><span class="line">def mitmproxy(args&#x3D;None) -&gt; typing.Optional[int]:</span><br><span class="line">    run(console.master.ConsoleMaster)</span><br><span class="line"></span><br><span class="line">def mitmdump(args&#x3D;None) -&gt; typing.Optional[int]:</span><br><span class="line">    run(dump.DumpMaster)</span><br><span class="line">    </span><br><span class="line">主要代码</span><br><span class="line">def run(master_cls):</span><br><span class="line"></span><br><span class="line">    opts   &#x3D; options.Options()</span><br><span class="line">    master &#x3D; master_cls(opts)</span><br><span class="line">    </span><br><span class="line">    pconf  &#x3D; proxy.config.ProxyConfig(opts)</span><br><span class="line">    server &#x3D; proxy.server.ProxyServer(pconf)</span><br><span class="line">    </span><br><span class="line">    master.server &#x3D; server</span><br><span class="line">    master.run()</span><br><span class="line">    return master</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">master.Master</span><br><span class="line">    console.master.ConsoleMaster</span><br><span class="line">    dump.DumpMaster</span><br><span class="line">    web.master.WebMaster</span><br><span class="line"></span><br><span class="line">Server</span><br><span class="line">    proxy.server.ProxyServer</span><br><span class="line">    proxy.server.DummyServer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Master与Server关系：</span><br><span class="line">    master.server &#x3D; server</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Master和Server对象生成：</span><br><span class="line">    Master(opts: options.Options)</span><br><span class="line">    Server(config: config.ProxyConfig)</span><br><span class="line"></span><br><span class="line">ProxyConfig与Options关系：</span><br><span class="line">    ProxyConfig(options: options.Options)</span><br></pre></td></tr></table></figure><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">开始运行：</span><br><span class="line">    master.run()</span><br><span class="line">        master.start()</span><br><span class="line"></span><br><span class="line">    def start(self):</span><br><span class="line">        if self.server:</span><br><span class="line">            ServerThread(self.server).start()</span><br><span class="line"></span><br><span class="line">class ServerThread(basethread.BaseThread):</span><br><span class="line">    def __init__(self, server):</span><br><span class="line">        self.server &#x3D; server</span><br><span class="line">        address &#x3D; getattr(self.server, &quot;address&quot;, None)</span><br><span class="line">        super().__init__(</span><br><span class="line">            &quot;ServerThread (&#123;&#125;)&quot;.format(repr(address))</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    def run(self):</span><br><span class="line">        self.server.serve_forever()</span><br></pre></td></tr></table></figure><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">线程：</span><br><span class="line">    ServerThread</span><br><span class="line">    connection_thread</span><br><span class="line"></span><br><span class="line">    def connection_thread(self, connection, client_address):</span><br><span class="line">        with self.handler_counter:</span><br><span class="line">            try:</span><br><span class="line">                self.handle_client_connection(connection, client_address)</span><br><span class="line">            finally:</span><br><span class="line">                close_socket(connection)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def handle_client_connection(self, conn, client_address):</span><br><span class="line">        h &#x3D; ConnectionHandler(</span><br><span class="line">            conn,</span><br><span class="line">            client_address,</span><br><span class="line">            self.config,</span><br><span class="line">            self.channel</span><br><span class="line">        )</span><br><span class="line">        h.handle()</span><br><span class="line"></span><br><span class="line">    def handle(self):</span><br><span class="line">        self.log(&quot;clientconnect&quot;, &quot;info&quot;)</span><br><span class="line"></span><br><span class="line">        root_layer &#x3D; None</span><br><span class="line">        root_layer &#x3D; self._create_root_layer()</span><br><span class="line">        root_layer &#x3D; self.channel.ask(&quot;clientconnect&quot;, root_layer)</span><br><span class="line">        root_layer()</span><br><span class="line"></span><br><span class="line">        self.log(&quot;clientdisconnect&quot;, &quot;info&quot;)</span><br><span class="line"></span><br><span class="line">    def _create_root_layer(self):</span><br><span class="line">        root_ctx &#x3D; ...</span><br><span class="line">        mode &#x3D; self.config.options.mode</span><br><span class="line">        if mode.startswith(&quot;upstream:&quot;):</span><br><span class="line">            return modes.HttpUpstreamProxy</span><br><span class="line">        elif mode &#x3D;&#x3D; &quot;transparent&quot;:</span><br><span class="line">            return modes.TransparentProxy(root_ctx)</span><br><span class="line">        elif mode &#x3D;&#x3D; &quot;regular&quot;:</span><br><span class="line">            return modes.HttpProxy(root_ctx)</span><br><span class="line">        </span><br></pre></td></tr></table></figure><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">addons的运行过程[生命周期]</span><br><span class="line">[1]. &quot;load&quot;</span><br><span class="line">[2]. &quot;running&quot;</span><br><span class="line">[3]. &quot;configure&quot;</span><br><span class="line"></span><br><span class="line">[1]. &quot;load&quot;</span><br><span class="line">DumpMaster.__init__(self,options):</span><br><span class="line">    super().__init__(options)</span><br><span class="line">    self.addons.add(*addons.default_addons())</span><br><span class="line"></span><br><span class="line">AddonManager.add(self, *addons):</span><br><span class="line">    for i in addons:</span><br><span class="line">        self.chain.append(self.register(i))</span><br><span class="line">        </span><br><span class="line">AddonManager.register(self, addon):</span><br><span class="line">    l &#x3D; Loader(self.master)</span><br><span class="line">    self.invoke_addon(addon, &quot;load&quot;, l)</span><br><span class="line">    </span><br><span class="line">[2]. &quot;running&quot;</span><br><span class="line">master.run():</span><br><span class="line">    loop &#x3D; asyncio.get_event_loop()</span><br><span class="line">    self.run_loop(loop.run_forever)</span><br><span class="line">        </span><br><span class="line">    master.run_loop(self, loop):</span><br><span class="line">        asyncio.ensure_future(self.running())</span><br><span class="line">        </span><br><span class="line">    master.running(self):</span><br><span class="line">        self.addons.trigger(&quot;running&quot;)</span><br><span class="line">        </span><br><span class="line">[3]. &quot;configure&quot;</span><br><span class="line">class AddonManager:</span><br><span class="line">    def __init__(self, master):</span><br><span class="line">        self.lookup &#x3D; &#123;&#125;</span><br><span class="line">        self.chain &#x3D; []</span><br><span class="line">        self.master &#x3D; master</span><br><span class="line">        master.options.changed.connect(self._configure_all)</span><br><span class="line"></span><br><span class="line">    def _configure_all(self, options, updated):</span><br><span class="line">        self.trigger(&quot;configure&quot;, updated)</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>mitmproxy/tools/_main.py</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">入口方法：</span><br><span class="line">def mitmproxy(args&#x3D;None) -&gt; typing.Optional[int]:</span><br><span class="line">    run(console.master.ConsoleMaster)</span><br><span class="line"></span><br><span class="line">def mitmdump(args&#x3D;None) -&gt; typing.Optional[int]:</span><br><span class="line">    run(dump.DumpMaster)</span><br><span class="line">    </span><br><span class="line">主要代码</span><br><span class="line">def run(master_cls):</span><br><span class="line"></span><br><span class="line">    opts   &#x3D; options.Options()</span><br><span class="line">    master &#x3D; master_cls(opts)</span><br><span class="line">    </span><br><span class="line">    pconf  &#x3D; proxy.config.ProxyConfig(opts)</span><br><span class="line">    server &#x3D; proxy.server.ProxyServer(pconf)</span><br><span class="line">    </span><br><span class="line">    master.server &#x3D; server</span><br><span class="line">    master.run()</span><br><span class="line">    return master</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">master.Master</span><br><span class="line">    console.master.ConsoleMaster</span><br><span class="line">    dump.DumpMaster</span><br><span class="line">    web.master.WebMaster</span><br><span class="line"></span><br><span class="line">Server</span><br><span class="line">    proxy.server.ProxyServer</span><br><span class="line">    proxy.server.DummyServer</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Master与Server关系：</span><br><span class="line">    master.server &#x3D; server</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Master和Server对象生成：</span><br><span class="line">    Master(opts: options.Options)</span><br><span class="line">    Server(config: config.ProxyConfig)</span><br><span class="line"></span><br><span class="line">ProxyConfig与Options关系：</span><br><span class="line">    ProxyConfig(options: options.Options)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">开始运行：</span><br><span class="line">    master.run()</span><br><span class="line">        master.start()</span><br><span class="line"></span><br><span class="line">    def start(self):</span><br><span class="line">        if self.server:</span><br><span class="line">            ServerThread(self.server).start()</span><br><span class="line"></span><br><span class="line">class ServerThread(basethread.BaseThread):</span><br><span class="line">    def __init__(self, server):</span><br><span class="line">        self.server &#x3D; server</span><br><span class="line">        address &#x3D; getattr(self.server, &quot;address&quot;, None)</span><br><span class="line">        super().__init__(</span><br><span class="line">            &quot;ServerThread (&#123;&#125;)&quot;.format(repr(address))</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    def run(self):</span><br><span class="line">        self.server.serve_forever()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">线程：</span><br><span class="line">    ServerThread</span><br><span class="line">    connection_thread</span><br><span class="line"></span><br><span class="line">    def connection_thread(self, connection, client_address):</span><br><span class="line">        with self.handler_counter:</span><br><span class="line">            try:</span><br><span class="line">                self.handle_client_connection(connection, client_address)</span><br><span class="line">            finally:</span><br><span class="line">                close_socket(connection)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def handle_client_connection(self, conn, client_address):</span><br><span class="line">        h &#x3D; ConnectionHandler(</span><br><span class="line">            conn,</span><br><span class="line">            client_address,</span><br><span class="line">            self.config,</span><br><span class="line">            self.channel</span><br><span class="line">        )</span><br><span class="line">        h.handle()</span><br><span class="line"></span><br><span class="line">    def handle(self):</span><br><span class="line">        self.log(&quot;clientconnect&quot;, &quot;info&quot;)</span><br><span class="line"></span><br><span class="line">        root_layer &#x3D; None</span><br><span class="line">        root_layer &#x3D; self._create_root_layer()</span><br><span class="line">        root_layer &#x3D; self.channel.ask(&quot;clientconnect&quot;, root_layer)</span><br><span class="line">        root_layer()</span><br><span class="line"></span><br><span class="line">        self.log(&quot;clientdisconnect&quot;, &quot;info&quot;)</span><br><span class="line"></span><br><span class="line">    def _create_root_layer(self):</span><br><span class="line">        root_ctx &#x3D; ...</span><br><span class="line">        mode &#x3D; self.config.options.mode</span><br><span class="line">        if mode.startswith(&quot;upstream:&quot;):</span><br><span class="line">            return modes.HttpUpstreamProxy</span><br><span class="line">        elif mode &#x3D;&#x3D; &quot;transparent&quot;:</span><br><span class="line">            return modes.TransparentProxy(root_ctx)</span><br><span class="line">        elif mode &#x3D;&#x3D; &quot;regular&quot;:</span><br><span class="line">            return modes.HttpProxy(root_ctx)</span><br><span class="line">        </span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">addons的运行过程[生命周期]</span><br><span class="line">[1]. &quot;load&quot;</span><br><span class="line">[2]. &quot;running&quot;</span><br><span class="line">[3]. &quot;configure&quot;</span><br><span class="line"></span><br><span class="line">[1]. &quot;load&quot;</span><br><span class="line">DumpMaster.__init__(self,options):</span><br><span class="line">    super().__init__(options)</span><br><span class="line">    self.addons.add(*addons.default_addons())</span><br><span class="line"></span><br><span class="line">AddonManager.add(self, *addons):</span><br><span class="line">    for i in addons:</span><br><span class="line">        self.chain.append(self.register(i))</span><br><span class="line">        </span><br><span class="line">AddonManager.register(self, addon):</span><br><span class="line">    l &#x3D; Loader(self.master)</span><br><span class="line">    self.invoke_addon(addon, &quot;load&quot;, l)</span><br><span class="line">    </span><br><span class="line">[2]. &quot;running&quot;</span><br><span class="line">master.run():</span><br><span class="line">    loop &#x3D; asyncio.get_event_loop()</span><br><span class="line">    self.run_loop(loop.run_forever)</span><br><span class="line">        </span><br><span class="line">    master.run_loop(self, loop):</span><br><span class="line">        asyncio.ensure_future(self.running())</span><br><span class="line">        </span><br><span class="line">    master.running(self):</span><br><span class="line">        self.addons.trigger(&quot;running&quot;)</span><br><span class="line">        </span><br><span class="line">[3]. &quot;configure&quot;</span><br><span class="line">class AddonManager:</span><br><span class="line">    def __init__(self, master):</span><br><span class="line">        self.lookup &#x3D; &#123;&#125;</span><br><span class="line">        self.chain &#x3D; []</span><br><span class="line">        self.master &#x3D; master</span><br><span class="line">        master.options.changed.connect(self._configure_all)</span><br><span class="line"></span><br><span class="line">    def _configure_all(self, options, updated):</span><br><span class="line">        self.trigger(&quot;configure&quot;, updated)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/51893788/using-mitmproxy-inside-python-script">https://stackoverflow.com/questions/51893788/using-mitmproxy-inside-python-script</a></p>
 <p><a target="_blank" rel="noopener" href="https://dev.to/kevcui/3-mitmproxy-tips-you-might-not-know-about-5dbg">https://dev.to/kevcui/3-mitmproxy-tips-you-might-not-know-about-5dbg</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/KevCui/mitm-scripts">https://github.com/KevCui/mitm-scripts</a></p>
@@ -1347,7 +1298,7 @@
 <li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用（一）：远程登录</a></li>
 <li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html">SSH原理与运用（二）：远程登录</a></li>
 <li><a target="_blank" rel="noopener" href="https://lotabout.me/2019/SSH-Port-Forwarding/">SSH 端口转发教程</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/defcfdc49b89?utm_campaign=hugo&amp;utm_medium=reader_share&amp;utm_content=note">SSH 技巧</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/defcfdc49b89?utm_campaign=hugo&utm_medium=reader_share&utm_content=note">SSH 技巧</a></li>
 <li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/KvP55uhq8fGd8NPvXdw0Vg">ssh密钥对登录安全吗？原理篇</a></li>
 <li><a target="_blank" rel="noopener" href="https://imququ.com/post/multiple-ssh-keys-with-different-hosts.html">针对不同主机使用不同 SSH Key</a></li>
 </ul>
@@ -1432,15 +1383,24 @@
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://www.ituring.com.cn/book/2688">Python数据分析实战</a></p>
 </li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/30147778/">Python机器学习基础教程</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/24841239/">SQL基础教程（第2版）</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/25908672/">两周自制脚本语言</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/30283996/">利用Python进行数据分析 第2版</a></li>
-<li><a target="_blank" rel="noopener" href="https://item.jd.com/11942019.html">图解密码技术</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/4010128/">漫画统计学</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/7056708/">深入浅出统计学</a></li>
-<li><a target="_blank" rel="noopener" href="http://item.jd.com/12207223.html?dist=">精通Scrapy网络爬虫</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/26762311/">编译系统透视</a></li>
+<li><p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/30147778/">Python机器学习基础教程</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/24841239/">SQL基础教程（第2版）</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/25908672/">两周自制脚本语言</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/30283996/">利用Python进行数据分析 第2版</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://item.jd.com/11942019.html">图解密码技术</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/4010128/">漫画统计学</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/7056708/">深入浅出统计学</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://item.jd.com/12207223.html?dist=">精通Scrapy网络爬虫</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://book.douban.com/subject/26762311/">编译系统透视</a></p>
+</li>
 </ul>
 <h2 id="网站"><a href="#网站" class="headerlink" title="网站"></a>网站</h2>
       
