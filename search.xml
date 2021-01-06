@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>App逆向阅读列表</title>
-    <url>/2020/12/19/App%E9%80%86%E5%90%91%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
-<li><a href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739465&idx=1&sn=39368d75b1cc8a42dff7884024b79a11">介绍下那个可以让你为所欲为的神器 Xposed</a></li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
     <title>GO阅读列表</title>
     <url>/2020/11/25/GO%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
     <content><![CDATA[<ul>
@@ -17,6 +8,28 @@
 <li><a href="https://cizixs.com/2016/08/17/golang-http-server-side/">go http 服务器编程</a></li>
 </ul>
 ]]></content>
+  </entry>
+  <entry>
+    <title>App逆向阅读列表</title>
+    <url>/2020/12/19/App%E9%80%86%E5%90%91%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
+<li><a href="https://www.anquanke.com/post/id/197657">实用FRIDA进阶：内存漫游、hook anywhere、抓包</a></li>
+<li><a href="https://github.com/r0ysue/AndroidSecurityStudy">Frida系列文章</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739465&idx=1&sn=39368d75b1cc8a42dff7884024b79a11">介绍下那个可以让你为所欲为的神器 Xposed</a></li>
+<li><a href="https://eternalsakura13.com/2020/07/04/frida/">Frida Android hook</a></li>
+</ul>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/YyDP_Lfk7kxOZf7F5SViLw">安卓 App 逆向课程一之环境配置</a></li>
+<li><a href="https://mp.weixin.qq.com/s/5LpaRY1O9br1ZnRNA-gH6Q">精品连载丨安卓 App 逆向课程之二逆向神器 frida 的介绍</a></li>
+<li><a href="https://mp.weixin.qq.com/s/F_UGRoAsfDW4SAa7cXMKrg">精品连载丨安卓 App 逆向课程之三 frida 注入 Okhttp 抓包上篇</a></li>
+<li><a href="https://mp.weixin.qq.com/s/PICqN6K_LFGHkjyiXkPzUw">精品连载丨安卓 App 逆向课程之四 frida 注入 Okhttp 抓包中篇</a></li>
+<li><a href="https://mp.weixin.qq.com/s/SBEKXSO6LrFYsO5pOtfxJA">精品连载丨安卓 App 逆向课程之五 frida 注入 Okhttp 抓包下篇</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>逆向</tag>
+      </tags>
   </entry>
   <entry>
     <title>Charles的应用</title>
@@ -660,6 +673,7 @@
 <li><a href="http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html">RESTful API 最佳实践</a></li>
 <li><a href="https://www.zhihu.com/question/19793879">基于python的scrapy爬虫，关于增量爬取是怎么处理的？</a></li>
 <li><a href="https://juejin.cn/post/6898093501376905230">用js写一个js解释器</a></li>
+<li><a href="https://www.iosdevlog.com/2019-01-03-nlp/">自然语言处理简明教程</a></li>
 </ul>
 <h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><ul>
 <li><a href="https://www.kawabangga.com/vim%e7%b3%bb%e5%88%97">Vim系列教程</a></li>
@@ -737,6 +751,7 @@
 </ul>
 <h2 id="图像"><a href="#图像" class="headerlink" title="图像"></a>图像</h2><ul>
 <li><a href="https://www.cnblogs.com/finlay/p/3665302.html">图像处理：图像灰度化</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/43092916">用Python识别验证码</a></li>
 <li><a href="https://www.the5fire.com/980.html">Python 中使用 Pillow 处理图片增加水印</a></li>
 <li><a href="https://saucer-man.com/python/60.html">python3 pillow模块</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/115317146">滑块验证码缺口识别技术分享02</a></li>
@@ -818,30 +833,6 @@
 <h2 id="网站"><a href="#网站" class="headerlink" title="网站"></a>网站</h2>]]></content>
   </entry>
   <entry>
-    <title>越战越勇-喜剧版</title>
-    <url>/2020/10/12/%E8%B6%8A%E6%88%98%E8%B6%8A%E5%8B%87-%E5%96%9C%E5%89%A7%E7%89%88/</url>
-    <content><![CDATA[<ul>
-<li><a href="https://tv.cctv.com/2020/06/17/VIDEIyx6FYevKWWyl4uKdJos200617.shtml">《越战越勇》 20200617 喜剧版</a></li>
-<li><a href="https://tv.cctv.com/2020/05/06/VIDEr7mqE4CkbCgOttbD8Dpo200506.shtml">《越战越勇》 20200506 喜剧经典版</a></li>
-<li><a href="http://tv.cctv.com/2018/08/12/VIDE5SDsVjWc6Da6qJMPnDla180812.shtml">《越战越勇》 20180812 喜剧版 第二季总决赛</a></li>
-<li><a href="http://tv.cctv.com/2018/08/05/VIDEYdoUDllnlJwBCUS7E0nJ180805.shtml">《越战越勇》 20180805 喜剧版</a></li>
-<li><a href="http://tv.cctv.com/2018/07/29/VIDELxITNkec5ZHv6FllpaC2180729.shtml">《越战越勇》 20180729 喜剧版</a></li>
-<li><a href="http://tv.cctv.com/2018/07/22/VIDE9gaf9uibq9UwlEjAIPaQ180722.shtml">《越战越勇》 20180722 喜剧版</a></li>
-<li><a href="http://tv.cctv.com/2018/06/25/VIDEkgl6lnlWTwUJqYHv5EfW180625.shtml">《越战越勇》 20180624 喜剧版</a></li>
-<li><a href="http://tv.cctv.com/2018/06/17/VIDEek0n9ZaDDUu6sprpN00g180617.shtml">《越战越勇》 20180617 喜剧版</a></li>
-<li><a href="http://tv.cctv.com/2017/01/13/VIDEefvf5xJHQalPzSxcm2Wd170113.shtml">《越战越勇》 20170113 喜剧版 第一季总决赛</a></li>
-<li><a href="http://tv.cctv.com/2017/01/06/VIDEiTz2j9la5TMQ9cEmdwP5170106.shtml">《越战越勇》 20170106 喜剧版</a></li>
-<li><a href="http://tv.cctv.com/2016/12/30/VIDEknsJKzt0ugIPtwTsKSuI161230.shtml">《越战越勇》 20161230 喜剧版</a></li>
-<li><a href="http://tv.cctv.com/2016/12/23/VIDEj3mSlQis0XmO2cOe7mZm161223.shtml">《越战越勇》 20161223 喜剧版</a></li>
-<li><a href="http://tv.cctv.com/2016/12/16/VIDEzPSOHCFHFgeKT45uoEFP161216.shtml">《越战越勇》 20161216 喜剧版</a></li>
-<li><a href="http://tv.cctv.com/2016/12/09/VIDEYTw2Pmuqn6NBCzA7NZqR161209.shtml">《越战越勇》 20161209 喜剧版</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>爬虫逆向阅读列表</title>
     <url>/2020/12/19/%E7%88%AC%E8%99%AB%E9%80%86%E5%90%91%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -889,6 +880,34 @@
 <li><a href="http://match.yuanrenxue.com/list">猿人学Web端爬虫攻防刷题平台</a></li>
 </ul>
 ]]></content>
+      <tags>
+        <tag>逆向</tag>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>越战越勇-喜剧版</title>
+    <url>/2020/10/12/%E8%B6%8A%E6%88%98%E8%B6%8A%E5%8B%87-%E5%96%9C%E5%89%A7%E7%89%88/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://tv.cctv.com/2020/06/17/VIDEIyx6FYevKWWyl4uKdJos200617.shtml">《越战越勇》 20200617 喜剧版</a></li>
+<li><a href="https://tv.cctv.com/2020/05/06/VIDEr7mqE4CkbCgOttbD8Dpo200506.shtml">《越战越勇》 20200506 喜剧经典版</a></li>
+<li><a href="http://tv.cctv.com/2018/08/12/VIDE5SDsVjWc6Da6qJMPnDla180812.shtml">《越战越勇》 20180812 喜剧版 第二季总决赛</a></li>
+<li><a href="http://tv.cctv.com/2018/08/05/VIDEYdoUDllnlJwBCUS7E0nJ180805.shtml">《越战越勇》 20180805 喜剧版</a></li>
+<li><a href="http://tv.cctv.com/2018/07/29/VIDELxITNkec5ZHv6FllpaC2180729.shtml">《越战越勇》 20180729 喜剧版</a></li>
+<li><a href="http://tv.cctv.com/2018/07/22/VIDE9gaf9uibq9UwlEjAIPaQ180722.shtml">《越战越勇》 20180722 喜剧版</a></li>
+<li><a href="http://tv.cctv.com/2018/06/25/VIDEkgl6lnlWTwUJqYHv5EfW180625.shtml">《越战越勇》 20180624 喜剧版</a></li>
+<li><a href="http://tv.cctv.com/2018/06/17/VIDEek0n9ZaDDUu6sprpN00g180617.shtml">《越战越勇》 20180617 喜剧版</a></li>
+<li><a href="http://tv.cctv.com/2017/01/13/VIDEefvf5xJHQalPzSxcm2Wd170113.shtml">《越战越勇》 20170113 喜剧版 第一季总决赛</a></li>
+<li><a href="http://tv.cctv.com/2017/01/06/VIDEiTz2j9la5TMQ9cEmdwP5170106.shtml">《越战越勇》 20170106 喜剧版</a></li>
+<li><a href="http://tv.cctv.com/2016/12/30/VIDEknsJKzt0ugIPtwTsKSuI161230.shtml">《越战越勇》 20161230 喜剧版</a></li>
+<li><a href="http://tv.cctv.com/2016/12/23/VIDEj3mSlQis0XmO2cOe7mZm161223.shtml">《越战越勇》 20161223 喜剧版</a></li>
+<li><a href="http://tv.cctv.com/2016/12/16/VIDEzPSOHCFHFgeKT45uoEFP161216.shtml">《越战越勇》 20161216 喜剧版</a></li>
+<li><a href="http://tv.cctv.com/2016/12/09/VIDEYTw2Pmuqn6NBCzA7NZqR161209.shtml">《越战越勇》 20161209 喜剧版</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>算法</tag>
+      </tags>
   </entry>
   <entry>
     <title>yanbin的博客文章</title>
