@@ -29,15 +29,15 @@ enable_page_level_ads: true
     var CONFIG = {"hostname":"zhoujie903.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="[TOC] 文章 实用FRIDA进阶：内存漫游、hook anywhere、抓包 Frida系列文章 介绍下那个可以让你为所欲为的神器 Xposed Frida Android hook   安卓 App 逆向课程一之环境配置 精品连载丨安卓 App 逆向课程之二逆向神器 frida 的介绍 精品连载丨安卓 App 逆向课程之三 frida 注入 Okhttp 抓包上篇 精品连载丨安卓 App 逆">
+  <meta name="description" content="[TOC] 文章 记一次frida实战——对某视频APP的脱壳、hook破解、模拟抓包、协议分析一条龙服务 Frida Android hook Frida 使用经验交流分享 Frida 系列文章 介绍下那个可以让你为所欲为的神器 Xposed 实用Frida进阶：内存漫游、hook anywhere、抓包   安卓 App 逆向课程一之环境配置 精品连载丨安卓 App 逆向课程之二逆向神器 fr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="App逆向阅读列表">
 <meta property="og:url" content="https://zhoujie903.github.io/2020/12/19/App%E9%80%86%E5%90%91%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/index.html">
 <meta property="og:site_name" content="一吻江山">
-<meta property="og:description" content="[TOC] 文章 实用FRIDA进阶：内存漫游、hook anywhere、抓包 Frida系列文章 介绍下那个可以让你为所欲为的神器 Xposed Frida Android hook   安卓 App 逆向课程一之环境配置 精品连载丨安卓 App 逆向课程之二逆向神器 frida 的介绍 精品连载丨安卓 App 逆向课程之三 frida 注入 Okhttp 抓包上篇 精品连载丨安卓 App 逆">
+<meta property="og:description" content="[TOC] 文章 记一次frida实战——对某视频APP的脱壳、hook破解、模拟抓包、协议分析一条龙服务 Frida Android hook Frida 使用经验交流分享 Frida 系列文章 介绍下那个可以让你为所欲为的神器 Xposed 实用Frida进阶：内存漫游、hook anywhere、抓包   安卓 App 逆向课程一之环境配置 精品连载丨安卓 App 逆向课程之二逆向神器 fr">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-12-19T10:31:44.000Z">
-<meta property="article:modified_time" content="2021-01-06T07:36:56.874Z">
+<meta property="article:modified_time" content="2021-01-12T13:39:54.302Z">
 <meta property="article:author" content="jason zhou">
 <meta property="article:tag" content="逆向">
 <meta name="twitter:card" content="summary">
@@ -220,7 +220,7 @@ enable_page_level_ads: true
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-06 15:36:56" itemprop="dateModified" datetime="2021-01-06T15:36:56+08:00">2021-01-06</time>
+                <time title="修改时间：2021-01-12 21:39:54" itemprop="dateModified" datetime="2021-01-12T21:39:54+08:00">2021-01-12</time>
               </span>
 
           
@@ -236,10 +236,12 @@ enable_page_level_ads: true
       
         <p>[TOC]</p>
 <h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/197657">实用FRIDA进阶：内存漫游、hook anywhere、抓包</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/r0ysue/AndroidSecurityStudy">Frida系列文章</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739465&idx=1&sn=39368d75b1cc8a42dff7884024b79a11">介绍下那个可以让你为所欲为的神器 Xposed</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-258776.htm">记一次frida实战——对某视频APP的脱壳、hook破解、模拟抓包、协议分析一条龙服务</a></li>
 <li><a target="_blank" rel="noopener" href="https://eternalsakura13.com/2020/07/04/frida/">Frida Android hook</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-265160.htm">Frida 使用经验交流分享</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/r0ysue/AndroidSecurityStudy">Frida 系列文章</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739465&idx=1&sn=39368d75b1cc8a42dff7884024b79a11">介绍下那个可以让你为所欲为的神器 Xposed</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/197657">实用Frida进阶：内存漫游、hook anywhere、抓包</a></li>
 </ul>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/YyDP_Lfk7kxOZf7F5SViLw">安卓 App 逆向课程一之环境配置</a></li>
@@ -248,6 +250,15 @@ enable_page_level_ads: true
 <li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/PICqN6K_LFGHkjyiXkPzUw">精品连载丨安卓 App 逆向课程之四 frida 注入 Okhttp 抓包中篇</a></li>
 <li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/SBEKXSO6LrFYsO5pOtfxJA">精品连载丨安卓 App 逆向课程之五 frida 注入 Okhttp 抓包下篇</a></li>
 </ul>
+<h2 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/linuxnews/article/details/51900900">为什么Wireshark无法解密HTTPS数据</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/75b3ad732183">Drony配合Charles实现App定向抓包</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5cc313755188252d6f11b463">Android平台HTTPS抓包解决方案及问题分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1213657-1-1.html">android系统https抓包问题分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/c-x-a/p/9174663.html">Android 开发之避免被第三方使用代理抓包</a></li>
+</ul>
+<h2 id="仓库-脚本"><a href="#仓库-脚本" class="headerlink" title="仓库/脚本"></a>仓库/脚本</h2><p><a target="_blank" rel="noopener" href="https://github.com/deathmemory/FridaContainer">https://github.com/deathmemory/FridaContainer</a></p>
+<p>安卓应用层抓包通杀脚本<br><a target="_blank" rel="noopener" href="https://github.com/r0ysue/r0capture">https://github.com/r0ysue/r0capture</a></p>
 
     </div>
 
@@ -329,7 +340,7 @@ enable_page_level_ads: true
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E7%AB%A0"><span class="nav-number">1.</span> <span class="nav-text">文章</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E7%AB%A0"><span class="nav-number">1.</span> <span class="nav-text">文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%93%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">抓包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%93%E5%BA%93-%E8%84%9A%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">仓库&#x2F;脚本</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
