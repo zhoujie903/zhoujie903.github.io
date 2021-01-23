@@ -6,7 +6,7 @@
   <link href="https://zhoujie903.github.io/atom.xml" rel="self"/>
   
   <link href="https://zhoujie903.github.io/"/>
-  <updated>2021-01-23T05:12:47.934Z</updated>
+  <updated>2021-01-23T14:08:35.455Z</updated>
   <id>https://zhoujie903.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>App逆向阅读列表</title>
+    <title>阅读列表 - App逆向</title>
     <link href="https://zhoujie903.github.io/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-App%E9%80%86%E5%90%91/"/>
     <id>https://zhoujie903.github.io/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-App%E9%80%86%E5%90%91/</id>
     <published>2020-12-19T10:31:44.000Z</published>
-    <updated>2021-01-23T05:12:47.934Z</updated>
+    <updated>2021-01-23T14:08:35.455Z</updated>
     
     <content type="html"><![CDATA[<p>[TOC]</p><h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul><li><a href="https://bbs.pediy.com/thread-258776.htm">记一次frida实战——对某视频APP的脱壳、hook破解、模拟抓包、协议分析一条龙服务</a></li><li><a href="https://eternalsakura13.com/2020/07/04/frida/">Frida Android hook</a></li><li><a href="https://bbs.pediy.com/thread-265160.htm">Frida 使用经验交流分享</a></li><li><a href="https://github.com/r0ysue/AndroidSecurityStudy">Frida 系列文章</a></li><li><a href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739465&idx=1&sn=39368d75b1cc8a42dff7884024b79a11">介绍下那个可以让你为所欲为的神器 Xposed</a></li><li><a href="https://www.anquanke.com/post/id/197657">实用Frida进阶：内存漫游、hook anywhere、抓包</a></li></ul><ul><li><a href="https://mp.weixin.qq.com/s/YyDP_Lfk7kxOZf7F5SViLw">安卓 App 逆向课程一之环境配置</a></li><li><a href="https://mp.weixin.qq.com/s/5LpaRY1O9br1ZnRNA-gH6Q">精品连载丨安卓 App 逆向课程之二逆向神器 frida 的介绍</a></li><li><a href="https://mp.weixin.qq.com/s/F_UGRoAsfDW4SAa7cXMKrg">精品连载丨安卓 App 逆向课程之三 frida 注入 Okhttp 抓包上篇</a></li><li><a href="https://mp.weixin.qq.com/s/PICqN6K_LFGHkjyiXkPzUw">精品连载丨安卓 App 逆向课程之四 frida 注入 Okhttp 抓包中篇</a></li><li><a href="https://mp.weixin.qq.com/s/SBEKXSO6LrFYsO5pOtfxJA">精品连载丨安卓 App 逆向课程之五 frida 注入 Okhttp 抓包下篇</a></li></ul><h2 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h2><ul><li><a href="https://blog.csdn.net/linuxnews/article/details/51900900">为什么Wireshark无法解密HTTPS数据</a></li><li><a href="https://www.jianshu.com/p/75b3ad732183">Drony配合Charles实现App定向抓包</a></li><li><a href="https://juejin.im/post/5cc313755188252d6f11b463">Android平台HTTPS抓包解决方案及问题分析</a></li><li><a href="https://www.52pojie.cn/thread-1213657-1-1.html">android系统https抓包问题分析</a></li><li><a href="https://www.cnblogs.com/c-x-a/p/9174663.html">Android 开发之避免被第三方使用代理抓包</a></li></ul><h2 id="仓库-脚本"><a href="#仓库-脚本" class="headerlink" title="仓库/脚本"></a>仓库/脚本</h2><p><a href="https://github.com/frida/frida">https://github.com/frida/frida</a></p><p>objection - runtime mobile exploration<br><a href="https://github.com/sensepost/objection">https://github.com/sensepost/objection</a></p><p>Dex to Java decompiler<br><a href="https://github.com/skylot/jadx">https://github.com/skylot/jadx</a></p><p><a href="https://github.com/deathmemory/FridaContainer">https://github.com/deathmemory/FridaContainer</a></p><p>安卓应用层抓包通杀脚本<br><a href="https://github.com/r0ysue/r0capture">https://github.com/r0ysue/r0capture</a></p>]]></content>
     
@@ -41,11 +41,11 @@
   </entry>
   
   <entry>
-    <title>爬虫逆向阅读列表</title>
+    <title>阅读列表 - 爬虫逆向</title>
     <link href="https://zhoujie903.github.io/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E7%88%AC%E8%99%AB%E9%80%86%E5%90%91/"/>
     <id>https://zhoujie903.github.io/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E7%88%AC%E8%99%AB%E9%80%86%E5%90%91/</id>
     <published>2020-12-19T02:01:13.000Z</published>
-    <updated>2021-01-04T02:25:51.708Z</updated>
+    <updated>2021-01-23T14:09:42.745Z</updated>
     
     <content type="html"><![CDATA[<p>[TOC]</p><h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><h3 id="AST"><a href="#AST" class="headerlink" title="AST"></a>AST</h3><ul><li><a href="https://www.jianshu.com/p/02e21938e0d4">AST转化网易易盾的部分代码</a></li><li><a href="https://mp.weixin.qq.com/s/KaolFbqyGEjSmQf3_15RMQ">JS逆向：AST还原极验混淆JS实战</a></li><li><a href="https://github.com/yacan8/blog/blob/master/posts/JavaScript%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91AST.md">JavaScript抽象语法树AST</a></li><li><a href="https://mp.weixin.qq.com/s/0c13Uhqoxd8mNMmY-Mmpgg">JavaScript 混淆与逆向必读之 AST 节点类型名词基础</a></li></ul><h3 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h3><ul><li><a href="https://www.jianshu.com/p/4073f4fa9f09">JS逆向：网易某版本滑块验证分析（上）——生成浏览器指纹</a></li><li><a href="https://www.jianshu.com/p/35d81c7428f9">JS逆向：网易某版本滑块验证分析（下）——寻找滑动轨迹</a></li><li><a href="https://zhuanlan.zhihu.com/p/115317146">滑块验证码缺口识别技术分享02</a></li><li><a href="https://zhuanlan.zhihu.com/p/90916336">利用深度学习识别滑动验证码缺口位置</a></li></ul><h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul><li><a href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739271&idx=1&sn=2ca3269df75d5f734f44d8ea0d26d7f7&chksm=ff448859c833014ff0c6e747f1786d4ba331dc07787007f25ff5250a4180a35d21fea2db3cc4&scene=21#wechat_redirect">总结一些网站加密和混淆技术</a></li><li><a href="https://mp.weixin.qq.com/s/F7hOcwPBLk0we3kpAsZ6zg">JavaScript 逆向爬取实战</a></li><li><a href="https://mp.weixin.qq.com/s/S9qtrcLx4tbspjFk61GaUg">JavaScript 逆向爬取实战（下）</a></li><li><a href="https://mp.weixin.qq.com/s/WbyQt6CWYUWZviY4omKBWw">如何用 Hook 实时处理和保存 Ajax 数据</a></li></ul><ul><li><a href="https://mp.weixin.qq.com/s/e7MqoNGvb04teFcFszlYYw">Scrapy 和 Pyppeteer 更优雅的对接方案</a></li><li><a href="https://mp.weixin.qq.com/s/r3MUVEPos2Rm5uKno8HysQ">如何通过 Tampermonkey 快速查找 JavaScript 加密入口</a></li><li><a href="https://www.jianshu.com/p/41773c3e4e56">http的缓存机制在flask的实现</a></li><li><a href="https://germey.gitbooks.io/python3webspider/content/">Python 3网络爬虫开发实战</a></li><li><a href="https://book.douban.com/subject/30175598/">Python 3网络爬虫开发实战</a></li></ul><h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul><li><a href="https://www.jianshu.com/u/3c33ff3bc61e">太阳花田向日葵</a></li><li><a href="https://www.jianshu.com/u/d928b890a441">后山小鲨鱼</a></li><li><a href="https://space.bilibili.com/9532462?spm_id_from=333.788.b_765f7570696e666f.2">暗螟蛉</a></li></ul><h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><ul><li><a href="https://kaiwu.lagou.com/course/courseInfo.htm?courseId=46&sid=30-aggregation-0#/sale">52讲轻松搞定网络爬虫</a></li><li><a href="https://www.bilibili.com/video/BV1yz4y1o7Ex">猿人学-JS逆向-爬虫攻防大赛题目详解合集</a></li></ul><h2 id="框架和库"><a href="#框架和库" class="headerlink" title="框架和库"></a>框架和库</h2><ul><li><a href="https://github.com/scrapy/scrapy">scrapy</a></li><li><a href="https://github.com/rmax/scrapy-redis">scrapy-redis</a></li><li><a href="https://github.com/striver-ing/wechat-spider">wechat-spider</a></li></ul><h2 id="练习平台"><a href="#练习平台" class="headerlink" title="练习平台"></a>练习平台</h2><ul><li><a href="https://scrape.center/">scrape.center</a></li><li><a href="http://match.yuanrenxue.com/list">猿人学Web端爬虫攻防刷题平台</a></li></ul>]]></content>
     
@@ -88,11 +88,11 @@
   </entry>
   
   <entry>
-    <title>GO阅读列表</title>
+    <title>阅读列表 - GO</title>
     <link href="https://zhoujie903.github.io/2020/11/25/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-GO/"/>
     <id>https://zhoujie903.github.io/2020/11/25/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-GO/</id>
     <published>2020-11-25T12:01:21.000Z</published>
-    <updated>2020-11-25T12:02:31.865Z</updated>
+    <updated>2021-01-23T14:08:58.366Z</updated>
     
     <content type="html"><![CDATA[<ul><li><a href="https://cizixs.com/2016/12/19/golang-json-guide/">Go 语言 JSON 简介</a></li><li><a href="https://cizixs.com/2016/08/17/golang-http-server-side/">go http 服务器编程</a></li></ul>]]></content>
     
@@ -352,11 +352,11 @@
   </entry>
   
   <entry>
-    <title>Python阅读列表</title>
+    <title>阅读列表 - Python</title>
     <link href="https://zhoujie903.github.io/2019/09/27/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-Python/"/>
     <id>https://zhoujie903.github.io/2019/09/27/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-Python/</id>
     <published>2019-09-27T11:35:38.000Z</published>
-    <updated>2020-11-25T23:08:38.363Z</updated>
+    <updated>2021-01-23T14:09:23.837Z</updated>
     
     <content type="html"><![CDATA[<p>[TOC]</p><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul><li><a href="https://www.kawabangga.com/posts/2340">理解Python的import</a></li><li><a href="https://www.kawabangga.com/posts/2772">理解Python的Iterable和Iterator</a></li><li><a href="https://www.dongwm.com/post/124/">详解Python元类</a></li></ul><h2 id="魔法方法"><a href="#魔法方法" class="headerlink" title="魔法方法"></a>魔法方法</h2><ul><li><a href="https://www.dongwm.com/post/46/">python几个特别的__开头的方法</a></li><li><a href="https://www.dongwm.com/post/43/">python的魔法(一)</a></li><li><a href="https://www.dongwm.com/post/44/">python的魔法二</a></li></ul><h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><ul><li><a href="https://cizixs.com/2015/12/31/python-descriptor-introduction/">python 描述器简介</a></li><li><a href="https://cizixs.com/2015/08/30/metaclass-in-python/">python metaclass 入门简介</a></li><li><a href="https://cizixs.com/2015/05/28/python-mock-usage/">python mock 库的使用</a></li><li><a href="https://cizixs.com/2016/05/20/python-httpserver/">Python BaseHTTPServer 介绍</a></li><li><a href="https://cizixs.com/2013/08/10/python-configparser-module/">Python ConfigParser Module</a></li><li><a href="https://www.jianshu.com/p/a8cb5375171a">Python Traceback详解</a></li><li><a href="http://wklken.me/posts/2013/08/20/python-extra-itertools.html">Python-进阶-itertools模块小结</a></li><li><a href="https://yanbin.blog/python-execute-system-command/">Python 执行系统命令 - subprocess 模块的使用</a></li><li><a href="https://juejin.im/post/5c13960bf265da6134384ae5">time date datetme timestamp 傻傻分不清楚</a></li><li><a href="https://cuiqingcai.com/6921.html">一看就懂，Python 日志 logging 模块详解及应用</a></li><li><a href="https://cuiqingcai.com/6598.html">Python3 中使用 Pathlib 模块进行文件操作</a></li><li><a href="https://mp.weixin.qq.com/s/NQEKTuSf3rPCloJJw1bPYA">你还在用 os.path？快来感受一下 pathlib 给你带来的便捷吧</a></li><li><a href="https://cuiqingcai.com/7071.html">Python 中 typing 模块和类型注解的使用</a></li></ul><h2 id="并发-amp-异步"><a href="#并发-amp-异步" class="headerlink" title="并发 &amp; 异步"></a>并发 &amp; 异步</h2><ul><li><a href="https://zhuanlan.zhihu.com/p/25228075">从0到1，Python异步编程的演进之路</a></li><li><a href="https://zhuanlan.zhihu.com/p/27258289">Python Async/Await入门指南</a></li><li><a href="https://lotabout.me/2017/Python-Generator/">Python Generator</a></li><li><a href="https://lotabout.me/2017/understand-python-asyncio/">理解 Python asyncio</a></li><li><a href="https://www.dongwm.com/post/understand-asyncio-1/">深入理解asyncio(一)</a></li><li><a href="https://www.dongwm.com/post/understand-asyncio-2/">深入理解asyncio(二)</a></li><li><a href="https://www.dongwm.com/post/understand-asyncio-3/">深入理解asyncio(三)</a></li><li><a href="https://www.dongwm.com/post/asyncio-shield/">深入asyncio.shield</a></li><li><a href="https://zhuanlan.zhihu.com/p/25228075">Python中异步协程的使用方法介绍</a></li></ul><h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul><li><a href="https://github.com/piglei/one-python-craftsman">Python 工匠</a></li><li><a href="https://coding.imooc.com/class/213.html">Python3实用编程技巧进阶</a></li><li><a href="https://mp.weixin.qq.com/s/ztMEpv4-MJ0y7ad6gb7dyQ">python3中的unicode和bytes，让编码更流畅</a></li><li><a href="http://cizixs.com/2014/11/08/understand-wsgi/">python wsgi 简介</a></li><li><a href="https://manjusaka.itscoder.com/posts/2018/02/23/something-about-decorator/">怎么样去理解 Python 中的装饰器 </a></li></ul>]]></content>
     
