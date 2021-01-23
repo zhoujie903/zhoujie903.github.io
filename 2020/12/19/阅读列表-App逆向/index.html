@@ -29,21 +29,20 @@ enable_page_level_ads: true
     var CONFIG = {"hostname":"zhoujie903.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="[TOC] 文章AST AST转化网易易盾的部分代码 JS逆向：AST还原极验混淆JS实战 JavaScript抽象语法树AST JavaScript 混淆与逆向必读之 AST 节点类型名词基础  验证码 JS逆向：网易某版本滑块验证分析（上）——生成浏览器指纹 JS逆向：网易某版本滑块验证分析（下）——寻找滑动轨迹 滑块验证码缺口识别技术分享02 利用深度学习识别滑动验证码缺口位置  其他 总结">
+  <meta name="description" content="[TOC] 文章 记一次frida实战——对某视频APP的脱壳、hook破解、模拟抓包、协议分析一条龙服务 Frida Android hook Frida 使用经验交流分享 Frida 系列文章 介绍下那个可以让你为所欲为的神器 Xposed 实用Frida进阶：内存漫游、hook anywhere、抓包   安卓 App 逆向课程一之环境配置 精品连载丨安卓 App 逆向课程之二逆向神器 fr">
 <meta property="og:type" content="article">
-<meta property="og:title" content="爬虫逆向阅读列表">
-<meta property="og:url" content="https://zhoujie903.github.io/2020/12/19/%E7%88%AC%E8%99%AB%E9%80%86%E5%90%91%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/index.html">
+<meta property="og:title" content="App逆向阅读列表">
+<meta property="og:url" content="https://zhoujie903.github.io/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-App%E9%80%86%E5%90%91/index.html">
 <meta property="og:site_name" content="一吻江山">
-<meta property="og:description" content="[TOC] 文章AST AST转化网易易盾的部分代码 JS逆向：AST还原极验混淆JS实战 JavaScript抽象语法树AST JavaScript 混淆与逆向必读之 AST 节点类型名词基础  验证码 JS逆向：网易某版本滑块验证分析（上）——生成浏览器指纹 JS逆向：网易某版本滑块验证分析（下）——寻找滑动轨迹 滑块验证码缺口识别技术分享02 利用深度学习识别滑动验证码缺口位置  其他 总结">
+<meta property="og:description" content="[TOC] 文章 记一次frida实战——对某视频APP的脱壳、hook破解、模拟抓包、协议分析一条龙服务 Frida Android hook Frida 使用经验交流分享 Frida 系列文章 介绍下那个可以让你为所欲为的神器 Xposed 实用Frida进阶：内存漫游、hook anywhere、抓包   安卓 App 逆向课程一之环境配置 精品连载丨安卓 App 逆向课程之二逆向神器 fr">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-12-19T02:01:13.000Z">
-<meta property="article:modified_time" content="2021-01-04T02:25:51.708Z">
+<meta property="article:published_time" content="2020-12-19T10:31:44.000Z">
+<meta property="article:modified_time" content="2021-01-23T05:12:47.934Z">
 <meta property="article:author" content="jason zhou">
 <meta property="article:tag" content="逆向">
-<meta property="article:tag" content="爬虫">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://zhoujie903.github.io/2020/12/19/%E7%88%AC%E8%99%AB%E9%80%86%E5%90%91%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/">
+<link rel="canonical" href="https://zhoujie903.github.io/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-App%E9%80%86%E5%90%91/">
 
 
 <script id="page-configurations">
@@ -56,7 +55,7 @@ enable_page_level_ads: true
   };
 </script>
 
-  <title>爬虫逆向阅读列表 | 一吻江山</title>
+  <title>App逆向阅读列表 | 一吻江山</title>
   
 
 
@@ -191,7 +190,7 @@ enable_page_level_ads: true
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zhoujie903.github.io/2020/12/19/%E7%88%AC%E8%99%AB%E9%80%86%E5%90%91%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/">
+    <link itemprop="mainEntityOfPage" href="https://zhoujie903.github.io/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-App%E9%80%86%E5%90%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -204,7 +203,7 @@ enable_page_level_ads: true
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          爬虫逆向阅读列表
+          App逆向阅读列表
         </h1>
 
         <div class="post-meta">
@@ -214,14 +213,14 @@ enable_page_level_ads: true
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-12-19 10:01:13" itemprop="dateCreated datePublished" datetime="2020-12-19T10:01:13+08:00">2020-12-19</time>
+              <time title="创建时间：2020-12-19 18:31:44" itemprop="dateCreated datePublished" datetime="2020-12-19T18:31:44+08:00">2020-12-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-04 10:25:51" itemprop="dateModified" datetime="2021-01-04T10:25:51+08:00">2021-01-04</time>
+                <time title="修改时间：2021-01-23 13:12:47" itemprop="dateModified" datetime="2021-01-23T13:12:47+08:00">2021-01-23</time>
               </span>
 
           
@@ -236,49 +235,33 @@ enable_page_level_ads: true
 
       
         <p>[TOC]</p>
-<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><h3 id="AST"><a href="#AST" class="headerlink" title="AST"></a>AST</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/02e21938e0d4">AST转化网易易盾的部分代码</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/KaolFbqyGEjSmQf3_15RMQ">JS逆向：AST还原极验混淆JS实战</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/yacan8/blog/blob/master/posts/JavaScript%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91AST.md">JavaScript抽象语法树AST</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/0c13Uhqoxd8mNMmY-Mmpgg">JavaScript 混淆与逆向必读之 AST 节点类型名词基础</a></li>
-</ul>
-<h3 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/4073f4fa9f09">JS逆向：网易某版本滑块验证分析（上）——生成浏览器指纹</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/35d81c7428f9">JS逆向：网易某版本滑块验证分析（下）——寻找滑动轨迹</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/115317146">滑块验证码缺口识别技术分享02</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/90916336">利用深度学习识别滑动验证码缺口位置</a></li>
-</ul>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739271&idx=1&sn=2ca3269df75d5f734f44d8ea0d26d7f7&chksm=ff448859c833014ff0c6e747f1786d4ba331dc07787007f25ff5250a4180a35d21fea2db3cc4&scene=21#wechat_redirect">总结一些网站加密和混淆技术</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/F7hOcwPBLk0we3kpAsZ6zg">JavaScript 逆向爬取实战</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/S9qtrcLx4tbspjFk61GaUg">JavaScript 逆向爬取实战（下）</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/WbyQt6CWYUWZviY4omKBWw">如何用 Hook 实时处理和保存 Ajax 数据</a></li>
+<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-258776.htm">记一次frida实战——对某视频APP的脱壳、hook破解、模拟抓包、协议分析一条龙服务</a></li>
+<li><a target="_blank" rel="noopener" href="https://eternalsakura13.com/2020/07/04/frida/">Frida Android hook</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.pediy.com/thread-265160.htm">Frida 使用经验交流分享</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/r0ysue/AndroidSecurityStudy">Frida 系列文章</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&amp;mid=2457739465&amp;idx=1&amp;sn=39368d75b1cc8a42dff7884024b79a11">介绍下那个可以让你为所欲为的神器 Xposed</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/197657">实用Frida进阶：内存漫游、hook anywhere、抓包</a></li>
 </ul>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/e7MqoNGvb04teFcFszlYYw">Scrapy 和 Pyppeteer 更优雅的对接方案</a></li>
-<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/r3MUVEPos2Rm5uKno8HysQ">如何通过 Tampermonkey 快速查找 JavaScript 加密入口</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/41773c3e4e56">http的缓存机制在flask的实现</a></li>
-<li><a target="_blank" rel="noopener" href="https://germey.gitbooks.io/python3webspider/content/">Python 3网络爬虫开发实战</a></li>
-<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/30175598/">Python 3网络爬虫开发实战</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/YyDP_Lfk7kxOZf7F5SViLw">安卓 App 逆向课程一之环境配置</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/5LpaRY1O9br1ZnRNA-gH6Q">精品连载丨安卓 App 逆向课程之二逆向神器 frida 的介绍</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/F_UGRoAsfDW4SAa7cXMKrg">精品连载丨安卓 App 逆向课程之三 frida 注入 Okhttp 抓包上篇</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/PICqN6K_LFGHkjyiXkPzUw">精品连载丨安卓 App 逆向课程之四 frida 注入 Okhttp 抓包中篇</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/SBEKXSO6LrFYsO5pOtfxJA">精品连载丨安卓 App 逆向课程之五 frida 注入 Okhttp 抓包下篇</a></li>
 </ul>
-<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/3c33ff3bc61e">太阳花田向日葵</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/u/d928b890a441">后山小鲨鱼</a></li>
-<li><a target="_blank" rel="noopener" href="https://space.bilibili.com/9532462?spm_id_from=333.788.b_765f7570696e666f.2">暗螟蛉</a></li>
+<h2 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/linuxnews/article/details/51900900">为什么Wireshark无法解密HTTPS数据</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/75b3ad732183">Drony配合Charles实现App定向抓包</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/post/5cc313755188252d6f11b463">Android平台HTTPS抓包解决方案及问题分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-1213657-1-1.html">android系统https抓包问题分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/c-x-a/p/9174663.html">Android 开发之避免被第三方使用代理抓包</a></li>
 </ul>
-<h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://kaiwu.lagou.com/course/courseInfo.htm?courseId=46&sid=30-aggregation-0#/sale">52讲轻松搞定网络爬虫</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1yz4y1o7Ex">猿人学-JS逆向-爬虫攻防大赛题目详解合集</a></li>
-</ul>
-<h2 id="框架和库"><a href="#框架和库" class="headerlink" title="框架和库"></a>框架和库</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/scrapy/scrapy">scrapy</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/rmax/scrapy-redis">scrapy-redis</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/striver-ing/wechat-spider">wechat-spider</a></li>
-</ul>
-<h2 id="练习平台"><a href="#练习平台" class="headerlink" title="练习平台"></a>练习平台</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://scrape.center/">scrape.center</a></li>
-<li><a target="_blank" rel="noopener" href="http://match.yuanrenxue.com/list">猿人学Web端爬虫攻防刷题平台</a></li>
-</ul>
+<h2 id="仓库-脚本"><a href="#仓库-脚本" class="headerlink" title="仓库/脚本"></a>仓库/脚本</h2><p><a target="_blank" rel="noopener" href="https://github.com/frida/frida">https://github.com/frida/frida</a></p>
+<p>objection - runtime mobile exploration<br><a target="_blank" rel="noopener" href="https://github.com/sensepost/objection">https://github.com/sensepost/objection</a></p>
+<p>Dex to Java decompiler<br><a target="_blank" rel="noopener" href="https://github.com/skylot/jadx">https://github.com/skylot/jadx</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/deathmemory/FridaContainer">https://github.com/deathmemory/FridaContainer</a></p>
+<p>安卓应用层抓包通杀脚本<br><a target="_blank" rel="noopener" href="https://github.com/r0ysue/r0capture">https://github.com/r0ysue/r0capture</a></p>
 
     </div>
 
@@ -289,7 +272,6 @@ enable_page_level_ads: true
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
-              <a href="/tags/%E7%88%AC%E8%99%AB/" rel="tag"># 爬虫</a>
           </div>
 
         
@@ -298,13 +280,10 @@ enable_page_level_ads: true
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/11/26/yanbin%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0/" rel="prev" title="yanbin的博客文章">
-      <i class="fa fa-chevron-left"></i> yanbin的博客文章
+    <a href="/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E7%88%AC%E8%99%AB%E9%80%86%E5%90%91/" rel="prev" title="爬虫逆向阅读列表">
+      <i class="fa fa-chevron-left"></i> 爬虫逆向阅读列表
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/12/19/App%E9%80%86%E5%90%91%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8/" rel="next" title="App逆向阅读列表">
-      App逆向阅读列表 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -364,7 +343,7 @@ enable_page_level_ads: true
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E7%AB%A0"><span class="nav-number">1.</span> <span class="nav-text">文章</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AST"><span class="nav-number">1.1.</span> <span class="nav-text">AST</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="nav-number">1.2.</span> <span class="nav-text">验证码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%9A%E5%AE%A2"><span class="nav-number">2.</span> <span class="nav-text">博客</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%86%E9%A2%91"><span class="nav-number">3.</span> <span class="nav-text">视频</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%86%E6%9E%B6%E5%92%8C%E5%BA%93"><span class="nav-number">4.</span> <span class="nav-text">框架和库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E5%B9%B3%E5%8F%B0"><span class="nav-number">5.</span> <span class="nav-text">练习平台</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E7%AB%A0"><span class="nav-number">1.</span> <span class="nav-text">文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%93%E5%8C%85"><span class="nav-number">2.</span> <span class="nav-text">抓包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%93%E5%BA%93-%E8%84%9A%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">仓库&#x2F;脚本</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -551,7 +530,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'zhoujie903.github.io',
       owner       : 'zhoujie903',
       admin       : [''],
-      id          : 'b768e4c1ff76bdcc460ff331aa28b605',
+      id          : '954c75163f4abb8c83270b9a0fe64e24',
         language: '',
       distractionFreeMode: true
     });
