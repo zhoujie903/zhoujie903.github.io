@@ -1,9 +1,11 @@
 ---
-title: iOS快速设置代理
+title: iOS、Android快速设置代理
 date: 2019-09-27 22:30:52
 tags:
 - 代理
 - iOS
+- Shadowrocket
+- Kitsunebi
 ---
 
 ## 问题
@@ -17,7 +19,7 @@ tags:
 7. 定位端口输入框，输入port
 8. 点击“存储”
 
-## 解决
+## iOS解决
 用iOS上的Shadowrocket和Mac上的Charles来快速设置代理
 iOS和Mac在同一wifi
 
@@ -32,3 +34,16 @@ iOS和Mac在同一wifi
 
 **结果:**
 ![结果](http://upload-images.jianshu.io/upload_images/281540-c94d3b52048e63e7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+## Android解决
+用Android上的Kitsunebi和Mac上的Charles来快速设置代理
+Android和Mac在同一wifi
+
+1. 开启Charles的Http Proxy和SOCKS Proxy
+2. Kitsunebi添加`socks`类型的节点
+3. Kitsunebi打开连接
+
+
+![开启Charles的Http Proxy和SOCKS Proxy](https://gitee.com/zhoujie903/image-repo/raw/master/img/charles-socks-proxy.png)
+![Kitsunebi-socks-proxy](https://gitee.com/zhoujie903/image-repo/raw/master/img/Kitsunebi-socks-proxy.jpg)
+

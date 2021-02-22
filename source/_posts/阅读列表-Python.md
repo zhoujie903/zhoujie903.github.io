@@ -1,5 +1,5 @@
 ---
-title: Python阅读列表
+title: 阅读列表 - Python
 date: 2019-09-27 19:35:38
 tags: python
 ---
@@ -8,10 +8,21 @@ tags: python
 ## 概念
 * [理解Python的import](https://www.kawabangga.com/posts/2340)
 * [理解Python的Iterable和Iterator](https://www.kawabangga.com/posts/2772)
+* [详解Python元类](https://www.dongwm.com/post/124/)
+
+## 魔法方法
+* [python几个特别的__开头的方法](https://www.dongwm.com/post/46/)
+* [python的魔法(一)](https://www.dongwm.com/post/43/)
+* [python的魔法二](https://www.dongwm.com/post/44/)
 
 ## 模块
-* [Python-进阶-itertools模块小结](http://wklken.me/posts/2013/08/20/python-extra-itertools.html)
+* [python 描述器简介](https://cizixs.com/2015/12/31/python-descriptor-introduction/)
+* [python metaclass 入门简介](https://cizixs.com/2015/08/30/metaclass-in-python/)
+* [python mock 库的使用](https://cizixs.com/2015/05/28/python-mock-usage/)
+* [Python BaseHTTPServer 介绍](https://cizixs.com/2016/05/20/python-httpserver/)
+* [Python ConfigParser Module](https://cizixs.com/2013/08/10/python-configparser-module/)
 * [Python Traceback详解](https://www.jianshu.com/p/a8cb5375171a)
+* [Python-进阶-itertools模块小结](http://wklken.me/posts/2013/08/20/python-extra-itertools.html)
 * [Python 执行系统命令 - subprocess 模块的使用](https://yanbin.blog/python-execute-system-command/)
 * [time date datetme timestamp 傻傻分不清楚](https://juejin.im/post/5c13960bf265da6134384ae5)
 * [一看就懂，Python 日志 logging 模块详解及应用](https://cuiqingcai.com/6921.html)
@@ -26,6 +37,8 @@ tags: python
 * [理解 Python asyncio](https://lotabout.me/2017/understand-python-asyncio/)
 * [深入理解asyncio(一)](https://www.dongwm.com/post/understand-asyncio-1/)
 * [深入理解asyncio(二)](https://www.dongwm.com/post/understand-asyncio-2/)
+* [深入理解asyncio(三)](https://www.dongwm.com/post/understand-asyncio-3/)
+* [深入asyncio.shield](https://www.dongwm.com/post/asyncio-shield/)
 * [Python中异步协程的使用方法介绍](https://zhuanlan.zhihu.com/p/25228075)
 
 ## 其它
