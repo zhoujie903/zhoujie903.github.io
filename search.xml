@@ -261,6 +261,39 @@
       </tags>
   </entry>
   <entry>
+    <title>jni动态注册</title>
+    <url>/2021/07/04/jni%E5%8A%A8%E6%80%81%E6%B3%A8%E5%86%8C/</url>
+    <content><![CDATA[<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>java代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 文件：MainActivity.java</span><br><span class="line">package com.jason.testys;</span><br><span class="line"></span><br><span class="line">public class MainActivity extends AppCompatActivity &#123;</span><br><span class="line">    static &#123;</span><br><span class="line">        System.loadLibrary(&quot;native-lib&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;</span><br><span class="line">    </span><br><span class="line">    public native void reginso();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>cpp代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 文件：native-lib.cpp</span><br><span class="line"></span><br><span class="line">#include &lt;jni.h&gt;</span><br><span class="line">#include &lt;android&#x2F;log.h&gt;</span><br><span class="line">void native_test2() &#123;</span><br><span class="line">    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME,  &quot;native_test2&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册Java端的方法  以及本地相对应的方法</span><br><span class="line">JNINativeMethod method[] &#x3D; &#123;</span><br><span class="line">        &#123;&quot;reginso&quot;,&quot;()V&quot;,(void*)native_test2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册相应的类以及方法</span><br><span class="line">jint registerNativeMeth(JNIEnv *env)&#123;</span><br><span class="line">    jclass cl&#x3D;env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line">    if((env-&gt;RegisterNatives(cl,method,sizeof(method)&#x2F;sizeof(method[0])))&lt;0)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;实现jni_onload 动态注册方法</span><br><span class="line">jint JNI_OnLoad(JavaVM* vm, void* reserved) &#123;</span><br><span class="line">    JNIEnv* env &#x3D; NULL;</span><br><span class="line">    if (vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4) !&#x3D; JNI_OK) &#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    if(registerNativeMeth(env)!&#x3D;JNI_OK)&#123;&#x2F;&#x2F;注册方法</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return JNI_VERSION_1_4;&#x2F;&#x2F;必须返回这个值</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>IDA分析出的伪代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; jint registerNativeMeth(JNIEnv *env)</span><br><span class="line"> </span><br><span class="line">__int64 __fastcall registerNativeMeth(__int64 a1)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v1; &#x2F;&#x2F; x19</span><br><span class="line">  __int64 v2; &#x2F;&#x2F; x0</span><br><span class="line"></span><br><span class="line">  v1 &#x3D; a1;</span><br><span class="line">  v2 &#x3D; (*(__int64 (**)(void))(*(_QWORD *)a1 + 48LL))();</span><br><span class="line">  return (unsigned int)((*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v1 + 1720LL))(</span><br><span class="line">                          v1,</span><br><span class="line">                          v2,</span><br><span class="line">                          method,</span><br><span class="line">                          1LL) &gt;&gt; 31);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; jint JNI_OnLoad(JavaVM* vm, void* reserved)</span><br><span class="line"></span><br><span class="line">signed __int64 __fastcall JNI_OnLoad(__int64 a1)</span><br><span class="line">&#123;</span><br><span class="line">  unsigned __int64 v1; &#x2F;&#x2F; x20</span><br><span class="line">  signed __int64 result; &#x2F;&#x2F; x0</span><br><span class="line">  __int64 v3; &#x2F;&#x2F; x19</span><br><span class="line">  __int64 v4; &#x2F;&#x2F; x0</span><br><span class="line">  __int64 v5; &#x2F;&#x2F; [xsp+0h] [xbp-10h]</span><br><span class="line">  __int64 v6; &#x2F;&#x2F; [xsp+8h] [xbp-8h]</span><br><span class="line"></span><br><span class="line">  v1 &#x3D; _ReadStatusReg(ARM64_SYSREG(3, 3, 13, 0, 2));</span><br><span class="line">  v6 &#x3D; *(_QWORD *)(v1 + 40);</span><br><span class="line">  v5 &#x3D; 0LL;</span><br><span class="line">  if ( (*(unsigned int (**)(void))(*(_QWORD *)a1 + 48LL))() )</span><br><span class="line">  &#123;</span><br><span class="line">    result &#x3D; 0xFFFFFFFFLL;</span><br><span class="line">  &#125;</span><br><span class="line">  else</span><br><span class="line">  &#123;</span><br><span class="line">    v3 &#x3D; v5;</span><br><span class="line">    v4 &#x3D; (*(__int64 (__fastcall **)(__int64, const char *))(*(_QWORD *)v5 + 48LL))(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line">    if ( (*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v3 + 1720LL))(</span><br><span class="line">           v3,</span><br><span class="line">           v4,</span><br><span class="line">           method,</span><br><span class="line">           1LL) &lt; 0 )</span><br><span class="line">      result &#x3D; 1LL;</span><br><span class="line">    else</span><br><span class="line">      result &#x3D; 65540LL;</span><br><span class="line">  &#125;</span><br><span class="line">  *(_QWORD *)(v1 + 40);</span><br><span class="line">  return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">JNINativeMethod method[] &#x3D; &#123;</span><br><span class="line">        &#123;&quot;reginso&quot;,&quot;()V&quot;,(void*)native_test2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">.data:0000000000002B08 ; Segment type: Pure data</span><br><span class="line">.data:0000000000002B08                 AREA .data, DATA, ALIGN&#x3D;3</span><br><span class="line">.data:0000000000002B08                 ; ORG 0x2B08</span><br><span class="line">.data:0000000000002B08                 EXPORT method</span><br><span class="line">.data:0000000000002B08 method          DCQ aReginso            ; DATA XREF: LOAD:00000000000000F8↑o</span><br><span class="line">.data:0000000000002B08                                         ; LOAD:00000000000003B8↑o ...</span><br><span class="line">.data:0000000000002B08                                         ; &quot;reginso&quot;</span><br><span class="line">.data:0000000000002B10                 DCQ aV                  ; &quot;()V&quot;</span><br><span class="line">.data:0000000000002B18                 DCQ _Z12native_test2v   ; native_test2(void)</span><br><span class="line">.data:0000000000002B18 ; .data         ends</span><br><span class="line">.data:0000000000002B18</span><br><span class="line">extern:0000000000002B20 ; &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">extern:0000000000002B20</span><br><span class="line">extern:0000000000002B20 ; Segment type: Externs</span><br><span class="line">extern:0000000000002B20                 IMPORT __cxa_finalize   ; CODE XREF: .__cxa_finalize+C↑j</span><br><span class="line">extern:0000000000002B20                                         ; DATA XREF: .got.plt:off_1AE8↑o</span><br><span class="line">extern:0000000000002B28                 IMPORT __cxa_atexit     ; CODE XREF: .__cxa_atexit+C↑j</span><br><span class="line">extern:0000000000002B28                                         ; DATA XREF: .got.plt:off_1AF0↑o</span><br><span class="line">extern:0000000000002B30                 IMPORT __android_log_print</span><br><span class="line">extern:0000000000002B30                                         ; CODE XREF: .__android_log_print+C↑j</span><br><span class="line">extern:0000000000002B30                                         ; DATA XREF: .got.plt:off_1AF8↑o</span><br><span class="line">extern:0000000000002B38                 IMPORT __stack_chk_fail ; CODE XREF: .__stack_chk_fail+C↑j</span><br><span class="line">extern:0000000000002B38                                         ; DATA XREF: .got.plt:off_1B00↑o</span><br><span class="line">extern:0000000000002B38</span><br><span class="line">extern:0000000000002B38                 END start</span><br></pre></td></tr></table></figure>
+
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">JNIEnv* env &#x3D; NULL;</span><br><span class="line">if (vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4) !&#x3D; JNI_OK) &#123;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">v5 &#x3D; 0LL;</span><br><span class="line">if ( (*(unsigned int (**)(void))(*(_QWORD *)a1 + 48LL))() )</span><br><span class="line">&#123;</span><br><span class="line">    result &#x3D; 0xFFFFFFFFLL;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">    v3 &#x3D; v5;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">1. a1 &#x3D; vm</span><br><span class="line">2. v5 &#x3D; env</span><br><span class="line">3. (*(_QWORD *)a1 + 48LL) &#x3D; vm-&gt;GetEnv</span><br><span class="line">4. v5被赋值了</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">jclass cl&#x3D;env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">v3 &#x3D; v5;</span><br><span class="line">v4 &#x3D; (*(__int64 (__fastcall **)(__int64, const char *))(*(_QWORD *)v5 + 48LL))(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">1. v5 &#x3D; env</span><br><span class="line">2. (*(_QWORD *)v5 + 48LL) &#x3D; env-&gt;FindClass</span><br><span class="line">3. (v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;) &#x3D; (&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line">4. v4 &#x3D; jclass cl </span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">if((env-&gt;RegisterNatives(cl,method,sizeof(method)&#x2F;sizeof(method[0])))&lt;0)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;伪代码  </span><br><span class="line">if ( (*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v3 + 1720LL))(</span><br><span class="line">           v3,</span><br><span class="line">           v4,</span><br><span class="line">           method,</span><br><span class="line">           1LL) &lt; 0 )</span><br><span class="line">      result &#x3D; 1LL;</span><br><span class="line">    else</span><br><span class="line">      result &#x3D; 65540LL;</span><br><span class="line">      </span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">0. v4 &#x3D; cl</span><br><span class="line">1. v3 &#x3D; env</span><br><span class="line">2. (*(_QWORD *)v3 + 1720LL) &#x3D; env-&gt;RegisterNatives</span><br><span class="line">3. (v3, v4, method, 1LL) &#x3D; (cl, method, sizeof(method)&#x2F;sizeof(method[0])))&lt;0) </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结果</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 参数数量变化</span><br><span class="line"></span><br><span class="line">GetEnv: 2 -&gt; 0</span><br><span class="line">vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4)</span><br><span class="line">(*(_QWORD *)a1 + 48LL)()</span><br><span class="line"></span><br><span class="line">FindClass: 1 -&gt; 2</span><br><span class="line">env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line">(*(_QWORD *)v5 + 48LL)(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line"></span><br><span class="line">RegisterNatives: 3 -&gt; 4</span><br><span class="line">env-&gt;RegisterNatives(cl,method,1)</span><br><span class="line">(*(_QWORD *)v3 + 1720LL)(v3,v4,method,1LL)           </span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
     <title>iOS、Android快速设置代理</title>
     <url>/2019/09/27/ios-switch-proxy/</url>
     <content><![CDATA[<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>手动设置wifi的步骤非常长：</p>
@@ -705,221 +738,6 @@
       </tags>
   </entry>
   <entry>
-    <title>趣消除App自动化-成语消消乐-半自动化</title>
-    <url>/2019/09/29/%E6%88%90%E8%AF%AD%E6%B6%88%E6%B6%88%E4%B9%90-%E5%8D%8A%E8%87%AA%E5%8A%A8%E5%8C%96/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>做为一个程序员，已成<code>中年油腻大叔</code>了？那怎么行，来<code>趣消除App</code>、<code>扶我起来学数学App</code>的<code>成语消消乐</code>游戏battle下</p>
-<p>做为已毕业十几年的理科生，在这个游戏中的优势肯定不是成语容量，而是工作专业技能 – 上代码</p>
-<h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>App: <code>趣消除App</code>iOS版本、<code>扶我起来学数学App</code>版本<br>工具: mitmproxy、python、Charles<br>背景知识：mitmproxy、python、抓包</p>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>游戏界面上呈现的：<br><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gaa8f83tbgj30xc0tn0vl.jpg" alt="App游戏界面"></p>
-<p>网络呈现：<br>游戏是通过websocket协议来传输json格式的字符串，举<code>asking</code>消息如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;ask_string&quot;: &quot;步不之来疏笔口平去重学青字斟浅之论暗明尊易伐道不云句来刊酌诛才师&quot;,</span><br><span class="line">  &quot;type&quot;: &quot;asking&quot;,</span><br><span class="line">  &quot;scores&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;nick&quot;: &quot;吕耀辉&quot;,</span><br><span class="line">      ....</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;nick&quot;: &quot;xxxx&quot;,</span><br><span class="line">      ......</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>成语答案：<code>answer</code>消息</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;answer&quot;: &quot;口诛笔伐&quot;,</span><br><span class="line">  &quot;answer_index&quot;: [</span><br><span class="line">    &quot;6&quot;,</span><br><span class="line">    &quot;29&quot;,</span><br><span class="line">    &quot;5&quot;,</span><br><span class="line">    &quot;21&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;type&quot;: &quot;answer&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>目的是把上面的<code>&quot;ask_string&quot;: &quot;步不之来疏笔口平去重学青字斟浅之论暗明尊易伐道不云句来刊酌诛才师&quot;</code>解析为一个个成语</p>
-<h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><p>写2个文件：<code>chengyu_mitm.py</code>[代码文件]、<code>chengyu.text</code>[数据文件]</p>
-<ul>
-<li><code>chengyu_mitm.py</code>从<code>asking</code>消息里解析出<code>ask_string</code>到<code>chengyu.text</code>文件里查找是否包含相应的成语</li>
-<li>如果包含成语，图形化、格式化显示结果</li>
-<li><code>chengyu.text</code>文件刚开始是空的；在每局游戏结束时，游戏都会发送<code>game_result</code>消息给我们，里面有这局游戏的答案成语，把这些成语写到文件中</li>
-<li>玩的局数越多，<code>chengyu.text</code>文件包含的成语越多，查找到答案的可能性越大</li>
-</ul>
-<p>所以我们只要关注：<code>asking</code>消息、<code>game_result</code>消息<br>如果要程序回复答案，可以关注下<code>answer</code>消息[客户端发给服务器的]</p>
-<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p><code>chengyu_mitm.py</code>：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import json</span><br><span class="line">import time</span><br><span class="line">import collections</span><br><span class="line"></span><br><span class="line">from mitmproxy import ctx</span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">&gt; mitmdump -s chengyu_mitm.py &#39;~u websock_m&#x2F;websock_message&#39;</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line"></span><br><span class="line">Red &#x3D; &#39;\033[0;31m&#39;</span><br><span class="line">Green &#x3D; &#39;\033[0;32m&#39;</span><br><span class="line">Yellow &#x3D; &#39;\033[0;33m&#39;</span><br><span class="line">Blue &#x3D; &#39;\033[0;34m&#39;</span><br><span class="line">Purple &#x3D; &#39;\033[0;35m&#39;</span><br><span class="line">Cyan &#x3D; &#39;\033[0;36m&#39;</span><br><span class="line">White &#x3D; &#39;\033[0;37m&#39;</span><br><span class="line"></span><br><span class="line">colors &#x3D; &#123;</span><br><span class="line">    0:Red,</span><br><span class="line">    1:Purple,</span><br><span class="line">    2:Yellow,</span><br><span class="line">    3:Blue,</span><br><span class="line">    4:White,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Chengyu(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.dictpath &#x3D; &#39;&#x2F;Users&#x2F;zhoujie&#x2F;chengyu.text&#39;</span><br><span class="line">        self.chengyu &#x3D; set()</span><br><span class="line">        with open(self.dictpath, &#39;rt&#39;) as f:</span><br><span class="line">            for line in f.readlines():</span><br><span class="line">                self.chengyu.add(line.strip())</span><br><span class="line"></span><br><span class="line">        self.answers &#x3D; list()</span><br><span class="line">        self.ask_string &#x3D; &#39;&#39;</span><br><span class="line"></span><br><span class="line">        # &#123;&#39;和&#39;:[1,8], &#39;我&#39;:[11]&#125;</span><br><span class="line">        self.char_indexs_dict &#x3D; dict()</span><br><span class="line"></span><br><span class="line">        # &#123;1:&#39;和&#39;, 8:&#39;和&#39;, 11:&#39;我&#39;&#125;</span><br><span class="line">        self.index_char_dict &#x3D; dict()</span><br><span class="line"></span><br><span class="line">        self.count &#x3D; 0</span><br><span class="line"></span><br><span class="line">        # 自动提交答案的网络发送次数</span><br><span class="line">        self.auto_send_count &#x3D; 0</span><br><span class="line"></span><br><span class="line">        # 自动发送的成语</span><br><span class="line">        self.auto_send_list &#x3D; list()</span><br><span class="line"></span><br><span class="line">        # 服务器确定正确的成语</span><br><span class="line">        self.ack_true_list &#x3D; list()</span><br><span class="line"></span><br><span class="line">        # &#123;&#39;中流砥柱&#39;:[1,9,21,25]&#125;</span><br><span class="line">        self.answer_indexs_dict &#x3D; dict()</span><br><span class="line"></span><br><span class="line">        # 查找到的错误答案</span><br><span class="line">        self.error_answers &#x3D; []</span><br><span class="line"></span><br><span class="line">        # 玩了多少局</span><br><span class="line">        self.play_times &#x3D; 0</span><br><span class="line"></span><br><span class="line">        self.firt_auto_answer &#x3D; True</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # General lifecycle</span><br><span class="line">    def load(self, loader):</span><br><span class="line">        ctx.log.info(&#39;\033[1;31mevent: load\033[0m&#39;)</span><br><span class="line"></span><br><span class="line">    def configure(self, updated):</span><br><span class="line">        ctx.log.info(&#39;\033[1;31mevent: configure\033[0m&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # Websocket lifecycle</span><br><span class="line">    def websocket_message(self, flow):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">            Called when a WebSocket message is received from the client or</span><br><span class="line">            server. The most recent message will be flow.messages[-1]. The</span><br><span class="line">            message is user-modifiable. Currently there are two types of</span><br><span class="line">            messages, corresponding to the BINARY and TEXT frame types.</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">        ctx.log.info(&#39;\033[1;31m websocket_message \033[0m&#39;)</span><br><span class="line"></span><br><span class="line">        # get the latest message</span><br><span class="line">        message &#x3D; flow.messages[-1]</span><br><span class="line"></span><br><span class="line">        # simply print the content of the message</span><br><span class="line">        ctx.log.info(&#39;&#39;)</span><br><span class="line">        ctx.log.info(message.content)</span><br><span class="line">        ctx.log.info(&#39;&#39;)</span><br><span class="line"></span><br><span class="line">        m &#x3D; json.loads(message.content)</span><br><span class="line">        message_type &#x3D; m[&#39;type&#39;]</span><br><span class="line">        if m.get(&#39;ask_string&#39;):</span><br><span class="line">            self.ask_string &#x3D; m[&#39;ask_string&#39;]</span><br><span class="line">            # 计算答案</span><br><span class="line">            self.find_answers_v2(self.ask_string)</span><br><span class="line">            self.play_times +&#x3D; 1</span><br><span class="line"></span><br><span class="line">        # &#123;&quot;answer&quot;: &quot;\u957f\u9a71\u76f4\u5165&quot;, &quot;answer_index&quot;: [&quot;0&quot;, &quot;20&quot;, &quot;43&quot;, &quot;41&quot;], &quot;type&quot;: &quot;answer&quot;&#125;</span><br><span class="line">        if message_type &#x3D;&#x3D; &#39;answer&#39;:</span><br><span class="line">            self.answer_indexs_dict[m[&#39;answer&#39;]] &#x3D; m[&#39;answer_index&#39;]</span><br><span class="line"></span><br><span class="line">        # 删除已回答正确的答案</span><br><span class="line">        ack &#x3D; False</span><br><span class="line"></span><br><span class="line">        # &#123;&quot;answer&quot;:&quot;长驱直入&quot;,&quot;type&quot;:&quot;answer_ack&quot;,&quot;seq&quot;:0,&quot;ack&quot;:1&#125;</span><br><span class="line">        if m.get(&#39;ack&#39;) &#x3D;&#x3D; 1:</span><br><span class="line"></span><br><span class="line">            answer &#x3D; m[&#39;answer&#39;]</span><br><span class="line">            self.ack_true_list.append(answer)</span><br><span class="line">            answer_index &#x3D; self.answer_indexs_dict.get(answer,[])</span><br><span class="line">            for i in answer_index:</span><br><span class="line">                self.index_char_dict[int(i)] &#x3D; &#39;  &#39;</span><br><span class="line"></span><br><span class="line">            for c,i in zip(answer,answer_index):                </span><br><span class="line">                indexs &#x3D; self.char_indexs_dict[c]</span><br><span class="line">                indexs.remove(int(i))</span><br><span class="line"></span><br><span class="line">            try:</span><br><span class="line">                ack &#x3D; True</span><br><span class="line">                self.answers.remove(m[&#39;answer&#39;])</span><br><span class="line">            except:</span><br><span class="line">                pass</span><br><span class="line"></span><br><span class="line">        if message_type &#x3D;&#x3D; &#39;answer_ack&#39; and m.get(&#39;ack&#39;) &#x3D;&#x3D; 0:</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        # 自动答题</span><br><span class="line">        if message_type &#x3D;&#x3D; &#39;answer_ack&#39; or self.firt_auto_answer:</span><br><span class="line">            </span><br><span class="line">            self.auto_answer(flow)</span><br><span class="line"></span><br><span class="line">        # 显示答案</span><br><span class="line">        if len(self.ask_string):</span><br><span class="line">            self.print_answers()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        if message_type &#x3D;&#x3D; &#39;game_result&#39;:</span><br><span class="line">            # 把答案增加到内存字典中</span><br><span class="line">            self.__add_new_worlds_to_memory(m)</span><br><span class="line"></span><br><span class="line">            self.reset_data_to_init()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def websocket_end(self, flow):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">            A websocket connection has ended.</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        ctx.log.info(&#39;\033[1;31m websocket_end \033[0m&#39;)</span><br><span class="line"></span><br><span class="line">        self.reset_data_to_init()</span><br><span class="line"></span><br><span class="line">        if self.play_times % 5 &#x3D;&#x3D; 0:</span><br><span class="line">            with open(self.dictpath, &#39;wt&#39;) as f:</span><br><span class="line">                l &#x3D; list(self.chengyu)</span><br><span class="line">                l.sort()</span><br><span class="line">                for item in l:</span><br><span class="line">                    f.write(item)</span><br><span class="line">                    f.write(&#39;\n&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # ---------------------------------------------</span><br><span class="line">    def find_answers_v2(self, ask_string):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">            在内存成语字典查找答案</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        ask_set &#x3D; set(ask_string)</span><br><span class="line">        for i, c in enumerate(ask_string):</span><br><span class="line">            self.char_indexs_dict.setdefault(c, []).append(i)</span><br><span class="line">        self.index_char_dict &#x3D; dict( zip(range(len(ask_string)), ask_string))</span><br><span class="line"></span><br><span class="line">        used_chars &#x3D; set()</span><br><span class="line">        # 找到的的成语中各异字符为2个的答案数量：如 [真真假假]</span><br><span class="line">        answer_2chars_count &#x3D; 0</span><br><span class="line">        max_count &#x3D; len(ask_string) &#x2F; 4</span><br><span class="line">        for item in self.chengyu:</span><br><span class="line">            item_set &#x3D; set(item)</span><br><span class="line">            if not (item_set - ask_set):</span><br><span class="line">                self.answers.append(item)</span><br><span class="line">                used_chars.update(item_set)</span><br><span class="line">                if len(item_set)&lt;4:</span><br><span class="line">                    answer_2chars_count +&#x3D; 1</span><br><span class="line">                if len(self.answers) - answer_2chars_count &gt;&#x3D; max_count and used_chars &gt;&#x3D; ask_set:</span><br><span class="line">                    self.count &#x3D; len(self.answers)</span><br><span class="line">                    return</span><br><span class="line">        self.count &#x3D; len(self.answers)</span><br><span class="line"></span><br><span class="line">    def auto_answer(self, flow):</span><br><span class="line">        while len(self.answers) &gt; 0:</span><br><span class="line">            item &#x3D; self.answers[0]</span><br><span class="line">            answer_index &#x3D; []</span><br><span class="line">            counter &#x3D; collections.Counter(item)</span><br><span class="line"></span><br><span class="line">            b_continue &#x3D; False</span><br><span class="line">            for char, count in counter.items():</span><br><span class="line">                if len(self.char_indexs_dict[char]) &lt; count:</span><br><span class="line">                    self.error_answers.append(item)</span><br><span class="line">                    self.answers.remove(item)</span><br><span class="line">                    b_continue &#x3D; True</span><br><span class="line">                    break # break for</span><br><span class="line"></span><br><span class="line">            if b_continue:</span><br><span class="line">                continue</span><br><span class="line"></span><br><span class="line">            char_index &#x3D; &#123;&#125;</span><br><span class="line">            for c in item:                </span><br><span class="line">                x &#x3D; char_index.get(c, 0)</span><br><span class="line">                index &#x3D; self.char_indexs_dict[c][x]</span><br><span class="line">                answer_index.append( str(index) )</span><br><span class="line">                char_index[c] &#x3D; x+1</span><br><span class="line"></span><br><span class="line">            if len(set(answer_index)) &lt; 4:</span><br><span class="line">                ctx.log.error(f&#39;?算法有错误：&#123;answer_index&#125; 小于4&#39;)</span><br><span class="line">                continue</span><br><span class="line"></span><br><span class="line">            send_message &#x3D; &#123;</span><br><span class="line">                &#39;answer&#39;: item,</span><br><span class="line">                &#39;answer_index&#39;: answer_index,</span><br><span class="line">                &#39;type&#39;: &#39;answer&#39;</span><br><span class="line">            &#125;</span><br><span class="line">            mm &#x3D; json.dumps(send_message)</span><br><span class="line">            # -----------------------</span><br><span class="line">            print(mm)</span><br><span class="line">            # -----------------------</span><br><span class="line">            self.answer_indexs_dict[item] &#x3D; answer_index</span><br><span class="line">            # 向服务器发送消息</span><br><span class="line">            if not flow.ended and not flow.error:</span><br><span class="line">                self.firt_auto_answer &#x3D; False</span><br><span class="line">                self.auto_send_count +&#x3D; 1</span><br><span class="line">                self.auto_send_list.append(item)</span><br><span class="line">                self.answers.remove(item)</span><br><span class="line">                time.sleep(1.5)</span><br><span class="line">                flow.inject_message(flow.server_conn, mm)</span><br><span class="line">                break</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def __add_new_worlds_to_memory(self, m):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">            把答案增加到内存字典中</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        for answer in m[&#39;all_answer&#39;]:</span><br><span class="line">            self.chengyu.add(answer[&#39;phrase&#39;])</span><br><span class="line"></span><br><span class="line">        ctx.log.info(&#39;\033[1;31m 共收录&#123;&#125;个成语 \033[0m&#39;.format(len(self.chengyu)))</span><br><span class="line">        ctx.log.info(f&#39;\033[1;31m 共玩了 &#123;self.play_times&#125; 局\033[0m&#39;)</span><br><span class="line"></span><br><span class="line">    def print_answers(self):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">            图形化、色彩化显示答案</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        self.print_color(self.ask_string)</span><br><span class="line">        self.print_color(&#39;共找到 &#123;&#125;&#x2F;&#123;&#125; 个成语&#39;.format(self.count, len(self.ask_string)&#x2F;&#x2F;4))</span><br><span class="line">        self.print_color(&#39;错误成语 &#123;&#125;&#39;.format(self.error_answers))</span><br><span class="line">        self.print_color(&#39;共自动 &#123;&#125; 次提交&#39;.format(self.auto_send_count))</span><br><span class="line">        self.print_color(&#39;自动&#123;:2&#125;个：&#123;&#125;&#39;.format(len(self.auto_send_list),self.auto_send_list))</span><br><span class="line">        self.print_color(&#39;确认&#123;:2&#125;个：&#123;&#125;&#39;.format(len(self.ack_true_list),self.ack_true_list))</span><br><span class="line">        for item in self.answers:</span><br><span class="line">            self.print_color(item)</span><br><span class="line">            self.print_matrix(item)</span><br><span class="line"></span><br><span class="line">        if (not self.answers) and self.index_char_dict:</span><br><span class="line">            self.print_matrix()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def print_matrix(self, item &#x3D; []):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        item: &#39;腊尽春回&#39; or []</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        chars_in_line &#x3D; 6</span><br><span class="line">        length &#x3D; len(self.ask_string)</span><br><span class="line"></span><br><span class="line">        lines &#x3D; (length + chars_in_line - 1) &#x2F;&#x2F; chars_in_line</span><br><span class="line">        PADDING &#x3D; &#39; &#39;*(lines * chars_in_line - length)</span><br><span class="line">        is_need_padding &#x3D; len(PADDING) !&#x3D; 0</span><br><span class="line"></span><br><span class="line">        global colors, White</span><br><span class="line">        </span><br><span class="line">        self.print_color(&#39;--&#39;*chars_in_line)</span><br><span class="line"></span><br><span class="line">        for i, c in self.index_char_dict.items():</span><br><span class="line">            end &#x3D; &#39;&#39;</span><br><span class="line">            if (i+1) % chars_in_line &#x3D;&#x3D; 0 or (i+1) &#x3D;&#x3D; length:</span><br><span class="line">                end &#x3D; &#39;\n&#39;</span><br><span class="line"></span><br><span class="line">            color &#x3D; White</span><br><span class="line">            if c in item:</span><br><span class="line">                color &#x3D; colors[item.index(c)]</span><br><span class="line"></span><br><span class="line">            line, first &#x3D; divmod(i, chars_in_line)</span><br><span class="line">            if is_need_padding and first &#x3D;&#x3D; 0 and (line + 1 &#x3D;&#x3D; lines):</span><br><span class="line">                c &#x3D; PADDING + c</span><br><span class="line"></span><br><span class="line">            self.print_color(c, end&#x3D;end, front_color&#x3D;color)</span><br><span class="line"></span><br><span class="line">        self.print_color(&#39;--&#39;*chars_in_line)</span><br><span class="line"></span><br><span class="line">    def print_color(self, message, end&#x3D;&#39;\n&#39;, front_color&#x3D;Red):</span><br><span class="line">        print(f&#39;&#123;front_color&#125;&#123;message&#125;\033[0m&#39;, end&#x3D;end)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def reset_data_to_init(self):</span><br><span class="line">        self.ask_string &#x3D; &#39;&#39;</span><br><span class="line">        self.answers.clear()</span><br><span class="line">        self.index_char_dict.clear()</span><br><span class="line"></span><br><span class="line">        self.count &#x3D; 0</span><br><span class="line">        self.auto_send_count &#x3D; 0</span><br><span class="line"></span><br><span class="line">        self.answer_indexs_dict.clear()</span><br><span class="line">        self.char_indexs_dict.clear()</span><br><span class="line">        self.error_answers.clear()</span><br><span class="line">        self.ack_true_list.clear()</span><br><span class="line">        self.auto_send_list.clear()</span><br><span class="line">        self.firt_auto_answer &#x3D; True</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">addons &#x3D; [</span><br><span class="line">    Chengyu()</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    c &#x3D; Chengyu()</span><br><span class="line"></span><br><span class="line">    ask_string &#x3D; &#39;腊见家义降德若功赎仁判悲生升道肘两身乐极尽立罪春命明回人捉襟性暗&#39;</span><br><span class="line">    ask_string &#x3D; &#39;来戴恶自唇而怙到生二不马亡竹锲寒擒梅香听寒星圆其十贼其鸟舍悛口一自不月披青擒王说曝手然擒一齿齿石&#39;</span><br><span class="line">    ask_string &#x3D; &#39;侧拨扮相大拔挈然纲打富提敲如涌门见助济行踽全弄轩责刀危踽击贫独波可云岌日班思求斧乔备泉领旁岌劫装&#39;</span><br><span class="line">    c.ask_string &#x3D; ask_string</span><br><span class="line">    c.find_answers_v2(ask_string)</span><br><span class="line">    print(c.answers)</span><br><span class="line">    c.print_answers()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><code>chengyu.text</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一劳永逸</span><br><span class="line">一掷千金</span><br><span class="line">一曝十寒</span><br><span class="line">一石二鸟</span><br><span class="line">一筹莫展</span><br><span class="line">一落千丈</span><br><span class="line">一衣带水</span><br><span class="line">一语破的</span><br></pre></td></tr></table></figure>
-
-<p><strong>注意：<code>self.dictpath = &#39;/Users/xxx/chengyu.text&#39;</code> 一定要修改成你自己的chengyu.text所在路径</strong></p>
-<h4 id="运行效果"><a href="#运行效果" class="headerlink" title="运行效果"></a>运行效果</h4><p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gaa8ni4a5fj30yg0liacl.jpg" alt="运行效果"></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html">WebSocket 教程</a></li>
-<li><a href="https://kaazing.com/demos/">https://kaazing.com/demos/</a></li>
-<li><a href="https://github.com/mitmproxy/mitmproxy/blob/master/examples/simple/websocket_messages.py">https://github.com/mitmproxy/mitmproxy/blob/master/examples/simple/websocket_messages.py</a></li>
-<li><a href="https://github.com/mitmproxy/mitmproxy/blob/master/examples/complex/websocket_inject_message.py">https://github.com/mitmproxy/mitmproxy/blob/master/examples/complex/websocket_inject_message.py</a></li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
-    <title>阅读列表 - App逆向</title>
-    <url>/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-App%E9%80%86%E5%90%91/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><p><a href="https://blog.csdn.net/qq_44906504">皇帝大大</a><br><a href="https://blog.csdn.net/qq_38851536">白龙~</a></p>
-<h2 id="图书"><a href="#图书" class="headerlink" title="图书"></a>图书</h2><p><a href="https://book.douban.com/subject/27617785/">Android应用安全防护和逆向分析</a><br><a href="https://book.douban.com/subject/26348151/">Android安全攻防权威指南</a><br><a href="https://book.douban.com/subject/34996842/">第一行代码(第3版)</a><br><a href="https://book.douban.com/subject/35367125/">Android编程权威指南</a></p>
-<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
-<li><a href="https://zhuanlan.zhihu.com/p/82490125">ARM汇编语言 - 简介 [一]</a></li>
-<li><a href="https://bbs.pediy.com/thread-267043.htm">逆向学习笔记之汇编</a></li>
-<li><a href="https://mp.weixin.qq.com/s/Os3G90V2vapJqZMKHQyBcA">浅析ARM汇编语言子例程设计方法</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="https://bbs.pediy.com/thread-224330.htm">Unicorn引擎教程</a></li>
-<li><a href="https://app.yinxiang.com/fx/a6cc6633-a93f-4111-a06a-cccd5fa39e0f">Unicorn与Android</a></li>
-<li><a href="https://bbs.pediy.com/thread-253868.htm">Unicorn 在 Android 的应用</a></li>
-<li><a href="https://bbs.pediy.com/thread-225018.htm">使用Unicorn Engine绕过混淆完成算法的调用</a></li>
-<li><a href="https://bbs.pediy.com/thread-266377.htm">记一次unicorn半自动化逆向——还原某东sign算法</a></li>
-<li><a href="https://bbs.pediy.com/thread-252321.htm">ARM64 OLLVM反混淆</a></li>
-<li><a href="http://91fans.com.cn/post/unidbgzyone/">Unidbg模拟执行某段子so实操教程(一) 先把框架搭起来</a></li>
-<li><a href="https://blog.csdn.net/qq_38851536/category_11102404.html?spm=1001.2014.3001.5482">SO逆向实战十三篇</a></li>
-<li><a href="https://www.qinless.com/470">unidbg console debugger 使用</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="https://blog.gtf35.top/how_to_check_sign/">为何你的应用老是被破解，该如何有效的做签名校验？</a></li>
-<li><a href="https://blog.gtf35.top/app_process-shell-use/">免Root实现静默安装和点击任意位置</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="https://mp.weixin.qq.com/s/l936I_vGAn0EpUiKrWA-8Q">工具使用-IDA从入门到理解</a></li>
-<li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3MjU3NzU1OA==&mid=2247496391&idx=1&sn=55ea9594712efc82c1cfdf4df3c1c193&source=41#wechat_redirect">介绍下那个可以让你为所欲为的神器 Xposed</a></li>
-<li><a href="https://bbs.pediy.com/thread-266378.htm">深入理解Android逆向调试原理</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/302856081">JEB动态调试</a></li>
-<li><a href="https://mp.weixin.qq.com/s/KSzyWlw9t6CRaxDKBoypog">对安卓反调试和校验检测的一些实践与结论</a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=1408504&extra=page=1&filter=author&orderby=dateline">DEX壳简单实现过程分析</a></li>
-<li><a href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=778654&extra=page=1&filter=author&orderby=dateline&typeid=343">IDA动态调试脱壳步骤</a></li>
-<li><a href="https://bbs.pediy.com/thread-266972.htm">分析一下乐固</a></li>
-<li><a href=""></a></li>
-</ul>
-<hr>
-<ul>
-<li><a href="https://bbs.pediy.com/thread-229657.htm">进阶Frida–Android逆向之动态加载dex Hook（三）（下篇）</a></li>
-<li><a href="https://bbs.pediy.com/thread-258776.htm">记一次frida实战——对某视频APP的脱壳、hook破解、模拟抓包、协议分析一条龙服务</a></li>
-<li><a href="https://eternalsakura13.com/2020/07/04/frida/">Frida Android hook</a></li>
-<li><a href="https://bbs.pediy.com/thread-265160.htm">Frida 使用经验交流分享</a></li>
-<li><a href="https://github.com/r0ysue/AndroidSecurityStudy">Frida 系列文章</a></li>
-<li><a href="https://www.anquanke.com/post/id/197657">实用Frida进阶：内存漫游、hook anywhere、抓包</a></li>
-</ul>
-<ul>
-<li><a href="https://saucer-man.com/else/692.html">小米手机刷机root教程</a></li>
-<li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3MjU3NzU1OA==&mid=2247496397&idx=2&sn=52455f90262683278013f4cc09ced831&source=41#wechat_redirect">安卓 App 逆向课程一之环境配置</a></li>
-<li><a href="https://mp.weixin.qq.com/s/5LpaRY1O9br1ZnRNA-gH6Q">精品连载丨安卓 App 逆向课程之二逆向神器 frida 的介绍</a></li>
-<li><a href="https://mp.weixin.qq.com/s/F_UGRoAsfDW4SAa7cXMKrg">精品连载丨安卓 App 逆向课程之三 frida 注入 Okhttp 抓包上篇</a></li>
-<li><a href="https://mp.weixin.qq.com/s/PICqN6K_LFGHkjyiXkPzUw">精品连载丨安卓 App 逆向课程之四 frida 注入 Okhttp 抓包中篇</a></li>
-<li><a href="https://mp.weixin.qq.com/s/SBEKXSO6LrFYsO5pOtfxJA">精品连载丨安卓 App 逆向课程之五 frida 注入 Okhttp 抓包下篇</a></li>
-</ul>
-<h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><p><a href="https://www.bilibili.com/video/BV13W411w7jx">零基础入门Android(安卓)逆向</a></p>
-<h2 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h2><ul>
-<li><a href="https://blog.csdn.net/linuxnews/article/details/51900900">为什么Wireshark无法解密HTTPS数据</a></li>
-<li><a href="https://www.jianshu.com/p/75b3ad732183">Drony配合Charles实现App定向抓包</a></li>
-<li><a href="https://juejin.im/post/5cc313755188252d6f11b463">Android平台HTTPS抓包解决方案及问题分析</a></li>
-<li><a href="https://www.52pojie.cn/thread-1213657-1-1.html">android系统https抓包问题分析</a></li>
-<li><a href="https://www.cnblogs.com/c-x-a/p/9174663.html">Android 开发之避免被第三方使用代理抓包</a></li>
-</ul>
-<h2 id="仓库-脚本"><a href="#仓库-脚本" class="headerlink" title="仓库/脚本"></a>仓库/脚本</h2><p><a href="https://codeshare.frida.re/">https://codeshare.frida.re/</a></p>
-<p>frida<br><a href="https://github.com/frida/frida">https://github.com/frida/frida</a></p>
-<p>objection - runtime mobile exploration<br><a href="https://github.com/sensepost/objection">https://github.com/sensepost/objection</a></p>
-<p>jadx - Dex to Java decompiler<br><a href="https://github.com/skylot/jadx">https://github.com/skylot/jadx</a></p>
-<p><a href="https://github.com/deathmemory/FridaContainer">https://github.com/deathmemory/FridaContainer</a></p>
-<p>安卓应用层抓包通杀脚本<br><a href="https://github.com/r0ysue/r0capture">https://github.com/r0ysue/r0capture</a></p>
-<p>脱壳</p>
-<ul>
-<li><a href="https://github.com/hluwa/FRIDA-DEXDump">https://github.com/hluwa/FRIDA-DEXDump</a></li>
-<li><a href="https://github.com/CodingGay/BlackDex">https://github.com/CodingGay/BlackDex</a></li>
-<li><a href="https://github.com/dstmath/frida-unpack">https://github.com/dstmath/frida-unpack</a></li>
-</ul>
-<h2 id="靶场"><a href="#靶场" class="headerlink" title="靶场"></a>靶场</h2><p><a href="https://scrape.center/">https://scrape.center/</a></p>
-<h2 id="Python库"><a href="#Python库" class="headerlink" title="Python库"></a>Python库</h2><ul>
-<li><a href="https://pypi.org/project/JPype1/">JPype1</a> - 运行java代码</li>
-<li><a href="https://pypi.org/project/PyExecJS/">PyExecJS</a> - 运行javascript代码</li>
-<li><a href="https://pypi.org/project/pycrypto/">pycrypto</a> - 加解密</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>逆向</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>阅读列表 - GO</title>
-    <url>/2020/11/25/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-GO/</url>
-    <content><![CDATA[<ul>
-<li><a href="https://cizixs.com/2016/12/19/golang-json-guide/">Go 语言 JSON 简介</a></li>
-<li><a href="https://cizixs.com/2016/08/17/golang-http-server-side/">go http 服务器编程</a></li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
-    <title>阅读列表 - Python</title>
-    <url>/2019/09/27/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-Python/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
-<li><a href="https://www.kawabangga.com/posts/2340">理解Python的import</a></li>
-<li><a href="https://www.kawabangga.com/posts/2772">理解Python的Iterable和Iterator</a></li>
-<li><a href="https://www.dongwm.com/post/124/">详解Python元类</a></li>
-<li><a href="https://cizixs.com/2015/08/30/metaclass-in-python/">python metaclass 入门简介</a></li>
-</ul>
-<h2 id="魔法方法"><a href="#魔法方法" class="headerlink" title="魔法方法"></a>魔法方法</h2><ul>
-<li><a href="https://www.dongwm.com/post/46/">python几个特别的__开头的方法</a></li>
-<li><a href="https://www.dongwm.com/post/43/">python的魔法(一)</a></li>
-<li><a href="https://www.dongwm.com/post/44/">python的魔法二</a></li>
-</ul>
-<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><ul>
-<li><p><a href="https://cizixs.com/2015/12/31/python-descriptor-introduction/">python 描述器简介</a></p>
-</li>
-<li><p><a href="https://cizixs.com/2015/05/28/python-mock-usage/">python mock 库的使用</a></p>
-</li>
-<li><p><a href="https://cizixs.com/2016/05/20/python-httpserver/">Python BaseHTTPServer 介绍</a></p>
-</li>
-<li><p><a href="https://cizixs.com/2013/08/10/python-configparser-module/">Python ConfigParser Module</a></p>
-</li>
-<li><p><a href="https://www.jianshu.com/p/a8cb5375171a">Python Traceback详解</a></p>
-</li>
-<li><p><a href="http://wklken.me/posts/2013/08/20/python-extra-itertools.html">Python-进阶-itertools模块小结</a></p>
-</li>
-<li><p><a href="https://yanbin.blog/python-execute-system-command/">Python 执行系统命令 - subprocess 模块的使用</a></p>
-</li>
-<li><p><a href="https://juejin.im/post/5c13960bf265da6134384ae5">time date datetme timestamp 傻傻分不清楚</a></p>
-</li>
-<li><p><a href="https://cuiqingcai.com/6921.html">一看就懂，Python 日志 logging 模块详解及应用</a></p>
-</li>
-<li><p><a href="https://cuiqingcai.com/6598.html">Python3 中使用 Pathlib 模块进行文件操作</a></p>
-</li>
-<li><p><a href="https://mp.weixin.qq.com/s/NQEKTuSf3rPCloJJw1bPYA">你还在用 os.path？快来感受一下 pathlib 给你带来的便捷吧</a></p>
-</li>
-<li><p><a href="https://cuiqingcai.com/7071.html">Python 中 typing 模块和类型注解的使用</a></p>
-</li>
-</ul>
-<h2 id="并发-amp-异步"><a href="#并发-amp-异步" class="headerlink" title="并发 &amp; 异步"></a>并发 &amp; 异步</h2><ul>
-<li><a href="https://zhuanlan.zhihu.com/p/25228075">从0到1，Python异步编程的演进之路</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/27258289">Python Async/Await入门指南</a></li>
-<li><a href="https://lotabout.me/2017/Python-Generator/">Python Generator</a></li>
-<li><a href="https://lotabout.me/2017/understand-python-asyncio/">理解 Python asyncio</a></li>
-<li><a href="https://www.dongwm.com/post/understand-asyncio-1/">深入理解asyncio(一)</a></li>
-<li><a href="https://www.dongwm.com/post/understand-asyncio-2/">深入理解asyncio(二)</a></li>
-<li><a href="https://www.dongwm.com/post/understand-asyncio-3/">深入理解asyncio(三)</a></li>
-<li><a href="https://www.dongwm.com/post/asyncio-shield/">深入asyncio.shield</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/25228075">Python中异步协程的使用方法介绍</a></li>
-</ul>
-<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul>
-<li><a href="https://github.com/piglei/one-python-craftsman">Python 工匠</a></li>
-<li><a href="https://coding.imooc.com/class/213.html">Python3实用编程技巧进阶</a></li>
-<li><a href="https://mp.weixin.qq.com/s/ztMEpv4-MJ0y7ad6gb7dyQ">python3中的unicode和bytes，让编码更流畅</a></li>
-<li><a href="http://cizixs.com/2014/11/08/understand-wsgi/">python wsgi 简介</a></li>
-<li><a href="https://manjusaka.itscoder.com/posts/2018/02/23/something-about-decorator/">怎么样去理解 Python 中的装饰器 </a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>阅读列表-ctf</title>
-    <url>/2021/01/31/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-ctf/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><p><a href="https://saucer-man.com/archives.html">https://saucer-man.com/archives.html</a><br><a href="https://www.hackliu.com/">https://www.hackliu.com/</a></p>
-<h2 id="图书"><a href="#图书" class="headerlink" title="图书"></a>图书</h2><p><a href="http://www.tup.tsinghua.edu.cn/bookscenter/book_07750701.html">Python渗透测试编程技术：方法与实践</a></p>
-<h2 id="靶场"><a href="#靶场" class="headerlink" title="靶场"></a>靶场</h2><p>hack the box<br><a href="https://www.hackthebox.eu/">https://www.hackthebox.eu/</a></p>
-<p><a href="https://github.com/vulhub/vulhub">https://github.com/vulhub/vulhub</a></p>
-<p><a href="https://portswigger.net/web-security">https://portswigger.net/web-security</a></p>
-<p>SQLi-CTF<br><a href="https://github.com/Corb3nik/SQLi-CTF">https://github.com/Corb3nik/SQLi-CTF</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>工具使用-unidbg</title>
     <url>/2021/07/07/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-unidbg/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -1065,6 +883,222 @@
 ]]></content>
   </entry>
   <entry>
+    <title>趣消除App自动化-成语消消乐-半自动化</title>
+    <url>/2019/09/29/%E6%88%90%E8%AF%AD%E6%B6%88%E6%B6%88%E4%B9%90-%E5%8D%8A%E8%87%AA%E5%8A%A8%E5%8C%96/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>做为一个程序员，已成<code>中年油腻大叔</code>了？那怎么行，来<code>趣消除App</code>、<code>扶我起来学数学App</code>的<code>成语消消乐</code>游戏battle下</p>
+<p>做为已毕业十几年的理科生，在这个游戏中的优势肯定不是成语容量，而是工作专业技能 – 上代码</p>
+<h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>App: <code>趣消除App</code>iOS版本、<code>扶我起来学数学App</code>版本<br>工具: mitmproxy、python、Charles<br>背景知识：mitmproxy、python、抓包</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>游戏界面上呈现的：<br><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gaa8f83tbgj30xc0tn0vl.jpg" alt="App游戏界面"></p>
+<p>网络呈现：<br>游戏是通过websocket协议来传输json格式的字符串，举<code>asking</code>消息如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;ask_string&quot;: &quot;步不之来疏笔口平去重学青字斟浅之论暗明尊易伐道不云句来刊酌诛才师&quot;,</span><br><span class="line">  &quot;type&quot;: &quot;asking&quot;,</span><br><span class="line">  &quot;scores&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;nick&quot;: &quot;吕耀辉&quot;,</span><br><span class="line">      ....</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;nick&quot;: &quot;xxxx&quot;,</span><br><span class="line">      ......</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>成语答案：<code>answer</code>消息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;answer&quot;: &quot;口诛笔伐&quot;,</span><br><span class="line">  &quot;answer_index&quot;: [</span><br><span class="line">    &quot;6&quot;,</span><br><span class="line">    &quot;29&quot;,</span><br><span class="line">    &quot;5&quot;,</span><br><span class="line">    &quot;21&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;type&quot;: &quot;answer&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>目的是把上面的<code>&quot;ask_string&quot;: &quot;步不之来疏笔口平去重学青字斟浅之论暗明尊易伐道不云句来刊酌诛才师&quot;</code>解析为一个个成语</p>
+<h4 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h4><p>写2个文件：<code>chengyu_mitm.py</code>[代码文件]、<code>chengyu.text</code>[数据文件]</p>
+<ul>
+<li><code>chengyu_mitm.py</code>从<code>asking</code>消息里解析出<code>ask_string</code>到<code>chengyu.text</code>文件里查找是否包含相应的成语</li>
+<li>如果包含成语，图形化、格式化显示结果</li>
+<li><code>chengyu.text</code>文件刚开始是空的；在每局游戏结束时，游戏都会发送<code>game_result</code>消息给我们，里面有这局游戏的答案成语，把这些成语写到文件中</li>
+<li>玩的局数越多，<code>chengyu.text</code>文件包含的成语越多，查找到答案的可能性越大</li>
+</ul>
+<p>所以我们只要关注：<code>asking</code>消息、<code>game_result</code>消息<br>如果要程序回复答案，可以关注下<code>answer</code>消息[客户端发给服务器的]</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p><code>chengyu_mitm.py</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import json</span><br><span class="line">import time</span><br><span class="line">import collections</span><br><span class="line"></span><br><span class="line">from mitmproxy import ctx</span><br><span class="line"></span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line">&gt; mitmdump -s chengyu_mitm.py &#39;~u websock_m&#x2F;websock_message&#39;</span><br><span class="line">&#39;&#39;&#39;</span><br><span class="line"></span><br><span class="line">Red &#x3D; &#39;\033[0;31m&#39;</span><br><span class="line">Green &#x3D; &#39;\033[0;32m&#39;</span><br><span class="line">Yellow &#x3D; &#39;\033[0;33m&#39;</span><br><span class="line">Blue &#x3D; &#39;\033[0;34m&#39;</span><br><span class="line">Purple &#x3D; &#39;\033[0;35m&#39;</span><br><span class="line">Cyan &#x3D; &#39;\033[0;36m&#39;</span><br><span class="line">White &#x3D; &#39;\033[0;37m&#39;</span><br><span class="line"></span><br><span class="line">colors &#x3D; &#123;</span><br><span class="line">    0:Red,</span><br><span class="line">    1:Purple,</span><br><span class="line">    2:Yellow,</span><br><span class="line">    3:Blue,</span><br><span class="line">    4:White,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Chengyu(object):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        self.dictpath &#x3D; &#39;&#x2F;Users&#x2F;zhoujie&#x2F;chengyu.text&#39;</span><br><span class="line">        self.chengyu &#x3D; set()</span><br><span class="line">        with open(self.dictpath, &#39;rt&#39;) as f:</span><br><span class="line">            for line in f.readlines():</span><br><span class="line">                self.chengyu.add(line.strip())</span><br><span class="line"></span><br><span class="line">        self.answers &#x3D; list()</span><br><span class="line">        self.ask_string &#x3D; &#39;&#39;</span><br><span class="line"></span><br><span class="line">        # &#123;&#39;和&#39;:[1,8], &#39;我&#39;:[11]&#125;</span><br><span class="line">        self.char_indexs_dict &#x3D; dict()</span><br><span class="line"></span><br><span class="line">        # &#123;1:&#39;和&#39;, 8:&#39;和&#39;, 11:&#39;我&#39;&#125;</span><br><span class="line">        self.index_char_dict &#x3D; dict()</span><br><span class="line"></span><br><span class="line">        self.count &#x3D; 0</span><br><span class="line"></span><br><span class="line">        # 自动提交答案的网络发送次数</span><br><span class="line">        self.auto_send_count &#x3D; 0</span><br><span class="line"></span><br><span class="line">        # 自动发送的成语</span><br><span class="line">        self.auto_send_list &#x3D; list()</span><br><span class="line"></span><br><span class="line">        # 服务器确定正确的成语</span><br><span class="line">        self.ack_true_list &#x3D; list()</span><br><span class="line"></span><br><span class="line">        # &#123;&#39;中流砥柱&#39;:[1,9,21,25]&#125;</span><br><span class="line">        self.answer_indexs_dict &#x3D; dict()</span><br><span class="line"></span><br><span class="line">        # 查找到的错误答案</span><br><span class="line">        self.error_answers &#x3D; []</span><br><span class="line"></span><br><span class="line">        # 玩了多少局</span><br><span class="line">        self.play_times &#x3D; 0</span><br><span class="line"></span><br><span class="line">        self.firt_auto_answer &#x3D; True</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # General lifecycle</span><br><span class="line">    def load(self, loader):</span><br><span class="line">        ctx.log.info(&#39;\033[1;31mevent: load\033[0m&#39;)</span><br><span class="line"></span><br><span class="line">    def configure(self, updated):</span><br><span class="line">        ctx.log.info(&#39;\033[1;31mevent: configure\033[0m&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # Websocket lifecycle</span><br><span class="line">    def websocket_message(self, flow):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">            Called when a WebSocket message is received from the client or</span><br><span class="line">            server. The most recent message will be flow.messages[-1]. The</span><br><span class="line">            message is user-modifiable. Currently there are two types of</span><br><span class="line">            messages, corresponding to the BINARY and TEXT frame types.</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">        ctx.log.info(&#39;\033[1;31m websocket_message \033[0m&#39;)</span><br><span class="line"></span><br><span class="line">        # get the latest message</span><br><span class="line">        message &#x3D; flow.messages[-1]</span><br><span class="line"></span><br><span class="line">        # simply print the content of the message</span><br><span class="line">        ctx.log.info(&#39;&#39;)</span><br><span class="line">        ctx.log.info(message.content)</span><br><span class="line">        ctx.log.info(&#39;&#39;)</span><br><span class="line"></span><br><span class="line">        m &#x3D; json.loads(message.content)</span><br><span class="line">        message_type &#x3D; m[&#39;type&#39;]</span><br><span class="line">        if m.get(&#39;ask_string&#39;):</span><br><span class="line">            self.ask_string &#x3D; m[&#39;ask_string&#39;]</span><br><span class="line">            # 计算答案</span><br><span class="line">            self.find_answers_v2(self.ask_string)</span><br><span class="line">            self.play_times +&#x3D; 1</span><br><span class="line"></span><br><span class="line">        # &#123;&quot;answer&quot;: &quot;\u957f\u9a71\u76f4\u5165&quot;, &quot;answer_index&quot;: [&quot;0&quot;, &quot;20&quot;, &quot;43&quot;, &quot;41&quot;], &quot;type&quot;: &quot;answer&quot;&#125;</span><br><span class="line">        if message_type &#x3D;&#x3D; &#39;answer&#39;:</span><br><span class="line">            self.answer_indexs_dict[m[&#39;answer&#39;]] &#x3D; m[&#39;answer_index&#39;]</span><br><span class="line"></span><br><span class="line">        # 删除已回答正确的答案</span><br><span class="line">        ack &#x3D; False</span><br><span class="line"></span><br><span class="line">        # &#123;&quot;answer&quot;:&quot;长驱直入&quot;,&quot;type&quot;:&quot;answer_ack&quot;,&quot;seq&quot;:0,&quot;ack&quot;:1&#125;</span><br><span class="line">        if m.get(&#39;ack&#39;) &#x3D;&#x3D; 1:</span><br><span class="line"></span><br><span class="line">            answer &#x3D; m[&#39;answer&#39;]</span><br><span class="line">            self.ack_true_list.append(answer)</span><br><span class="line">            answer_index &#x3D; self.answer_indexs_dict.get(answer,[])</span><br><span class="line">            for i in answer_index:</span><br><span class="line">                self.index_char_dict[int(i)] &#x3D; &#39;  &#39;</span><br><span class="line"></span><br><span class="line">            for c,i in zip(answer,answer_index):                </span><br><span class="line">                indexs &#x3D; self.char_indexs_dict[c]</span><br><span class="line">                indexs.remove(int(i))</span><br><span class="line"></span><br><span class="line">            try:</span><br><span class="line">                ack &#x3D; True</span><br><span class="line">                self.answers.remove(m[&#39;answer&#39;])</span><br><span class="line">            except:</span><br><span class="line">                pass</span><br><span class="line"></span><br><span class="line">        if message_type &#x3D;&#x3D; &#39;answer_ack&#39; and m.get(&#39;ack&#39;) &#x3D;&#x3D; 0:</span><br><span class="line">            pass</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        # 自动答题</span><br><span class="line">        if message_type &#x3D;&#x3D; &#39;answer_ack&#39; or self.firt_auto_answer:</span><br><span class="line">            </span><br><span class="line">            self.auto_answer(flow)</span><br><span class="line"></span><br><span class="line">        # 显示答案</span><br><span class="line">        if len(self.ask_string):</span><br><span class="line">            self.print_answers()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        if message_type &#x3D;&#x3D; &#39;game_result&#39;:</span><br><span class="line">            # 把答案增加到内存字典中</span><br><span class="line">            self.__add_new_worlds_to_memory(m)</span><br><span class="line"></span><br><span class="line">            self.reset_data_to_init()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def websocket_end(self, flow):</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">            A websocket connection has ended.</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        ctx.log.info(&#39;\033[1;31m websocket_end \033[0m&#39;)</span><br><span class="line"></span><br><span class="line">        self.reset_data_to_init()</span><br><span class="line"></span><br><span class="line">        if self.play_times % 5 &#x3D;&#x3D; 0:</span><br><span class="line">            with open(self.dictpath, &#39;wt&#39;) as f:</span><br><span class="line">                l &#x3D; list(self.chengyu)</span><br><span class="line">                l.sort()</span><br><span class="line">                for item in l:</span><br><span class="line">                    f.write(item)</span><br><span class="line">                    f.write(&#39;\n&#39;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # ---------------------------------------------</span><br><span class="line">    def find_answers_v2(self, ask_string):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">            在内存成语字典查找答案</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        ask_set &#x3D; set(ask_string)</span><br><span class="line">        for i, c in enumerate(ask_string):</span><br><span class="line">            self.char_indexs_dict.setdefault(c, []).append(i)</span><br><span class="line">        self.index_char_dict &#x3D; dict( zip(range(len(ask_string)), ask_string))</span><br><span class="line"></span><br><span class="line">        used_chars &#x3D; set()</span><br><span class="line">        # 找到的的成语中各异字符为2个的答案数量：如 [真真假假]</span><br><span class="line">        answer_2chars_count &#x3D; 0</span><br><span class="line">        max_count &#x3D; len(ask_string) &#x2F; 4</span><br><span class="line">        for item in self.chengyu:</span><br><span class="line">            item_set &#x3D; set(item)</span><br><span class="line">            if not (item_set - ask_set):</span><br><span class="line">                self.answers.append(item)</span><br><span class="line">                used_chars.update(item_set)</span><br><span class="line">                if len(item_set)&lt;4:</span><br><span class="line">                    answer_2chars_count +&#x3D; 1</span><br><span class="line">                if len(self.answers) - answer_2chars_count &gt;&#x3D; max_count and used_chars &gt;&#x3D; ask_set:</span><br><span class="line">                    self.count &#x3D; len(self.answers)</span><br><span class="line">                    return</span><br><span class="line">        self.count &#x3D; len(self.answers)</span><br><span class="line"></span><br><span class="line">    def auto_answer(self, flow):</span><br><span class="line">        while len(self.answers) &gt; 0:</span><br><span class="line">            item &#x3D; self.answers[0]</span><br><span class="line">            answer_index &#x3D; []</span><br><span class="line">            counter &#x3D; collections.Counter(item)</span><br><span class="line"></span><br><span class="line">            b_continue &#x3D; False</span><br><span class="line">            for char, count in counter.items():</span><br><span class="line">                if len(self.char_indexs_dict[char]) &lt; count:</span><br><span class="line">                    self.error_answers.append(item)</span><br><span class="line">                    self.answers.remove(item)</span><br><span class="line">                    b_continue &#x3D; True</span><br><span class="line">                    break # break for</span><br><span class="line"></span><br><span class="line">            if b_continue:</span><br><span class="line">                continue</span><br><span class="line"></span><br><span class="line">            char_index &#x3D; &#123;&#125;</span><br><span class="line">            for c in item:                </span><br><span class="line">                x &#x3D; char_index.get(c, 0)</span><br><span class="line">                index &#x3D; self.char_indexs_dict[c][x]</span><br><span class="line">                answer_index.append( str(index) )</span><br><span class="line">                char_index[c] &#x3D; x+1</span><br><span class="line"></span><br><span class="line">            if len(set(answer_index)) &lt; 4:</span><br><span class="line">                ctx.log.error(f&#39;?算法有错误：&#123;answer_index&#125; 小于4&#39;)</span><br><span class="line">                continue</span><br><span class="line"></span><br><span class="line">            send_message &#x3D; &#123;</span><br><span class="line">                &#39;answer&#39;: item,</span><br><span class="line">                &#39;answer_index&#39;: answer_index,</span><br><span class="line">                &#39;type&#39;: &#39;answer&#39;</span><br><span class="line">            &#125;</span><br><span class="line">            mm &#x3D; json.dumps(send_message)</span><br><span class="line">            # -----------------------</span><br><span class="line">            print(mm)</span><br><span class="line">            # -----------------------</span><br><span class="line">            self.answer_indexs_dict[item] &#x3D; answer_index</span><br><span class="line">            # 向服务器发送消息</span><br><span class="line">            if not flow.ended and not flow.error:</span><br><span class="line">                self.firt_auto_answer &#x3D; False</span><br><span class="line">                self.auto_send_count +&#x3D; 1</span><br><span class="line">                self.auto_send_list.append(item)</span><br><span class="line">                self.answers.remove(item)</span><br><span class="line">                time.sleep(1.5)</span><br><span class="line">                flow.inject_message(flow.server_conn, mm)</span><br><span class="line">                break</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def __add_new_worlds_to_memory(self, m):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">            把答案增加到内存字典中</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        for answer in m[&#39;all_answer&#39;]:</span><br><span class="line">            self.chengyu.add(answer[&#39;phrase&#39;])</span><br><span class="line"></span><br><span class="line">        ctx.log.info(&#39;\033[1;31m 共收录&#123;&#125;个成语 \033[0m&#39;.format(len(self.chengyu)))</span><br><span class="line">        ctx.log.info(f&#39;\033[1;31m 共玩了 &#123;self.play_times&#125; 局\033[0m&#39;)</span><br><span class="line"></span><br><span class="line">    def print_answers(self):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">            图形化、色彩化显示答案</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        self.print_color(self.ask_string)</span><br><span class="line">        self.print_color(&#39;共找到 &#123;&#125;&#x2F;&#123;&#125; 个成语&#39;.format(self.count, len(self.ask_string)&#x2F;&#x2F;4))</span><br><span class="line">        self.print_color(&#39;错误成语 &#123;&#125;&#39;.format(self.error_answers))</span><br><span class="line">        self.print_color(&#39;共自动 &#123;&#125; 次提交&#39;.format(self.auto_send_count))</span><br><span class="line">        self.print_color(&#39;自动&#123;:2&#125;个：&#123;&#125;&#39;.format(len(self.auto_send_list),self.auto_send_list))</span><br><span class="line">        self.print_color(&#39;确认&#123;:2&#125;个：&#123;&#125;&#39;.format(len(self.ack_true_list),self.ack_true_list))</span><br><span class="line">        for item in self.answers:</span><br><span class="line">            self.print_color(item)</span><br><span class="line">            self.print_matrix(item)</span><br><span class="line"></span><br><span class="line">        if (not self.answers) and self.index_char_dict:</span><br><span class="line">            self.print_matrix()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def print_matrix(self, item &#x3D; []):</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        item: &#39;腊尽春回&#39; or []</span><br><span class="line">        &#39;&#39;&#39;</span><br><span class="line">        chars_in_line &#x3D; 6</span><br><span class="line">        length &#x3D; len(self.ask_string)</span><br><span class="line"></span><br><span class="line">        lines &#x3D; (length + chars_in_line - 1) &#x2F;&#x2F; chars_in_line</span><br><span class="line">        PADDING &#x3D; &#39; &#39;*(lines * chars_in_line - length)</span><br><span class="line">        is_need_padding &#x3D; len(PADDING) !&#x3D; 0</span><br><span class="line"></span><br><span class="line">        global colors, White</span><br><span class="line">        </span><br><span class="line">        self.print_color(&#39;--&#39;*chars_in_line)</span><br><span class="line"></span><br><span class="line">        for i, c in self.index_char_dict.items():</span><br><span class="line">            end &#x3D; &#39;&#39;</span><br><span class="line">            if (i+1) % chars_in_line &#x3D;&#x3D; 0 or (i+1) &#x3D;&#x3D; length:</span><br><span class="line">                end &#x3D; &#39;\n&#39;</span><br><span class="line"></span><br><span class="line">            color &#x3D; White</span><br><span class="line">            if c in item:</span><br><span class="line">                color &#x3D; colors[item.index(c)]</span><br><span class="line"></span><br><span class="line">            line, first &#x3D; divmod(i, chars_in_line)</span><br><span class="line">            if is_need_padding and first &#x3D;&#x3D; 0 and (line + 1 &#x3D;&#x3D; lines):</span><br><span class="line">                c &#x3D; PADDING + c</span><br><span class="line"></span><br><span class="line">            self.print_color(c, end&#x3D;end, front_color&#x3D;color)</span><br><span class="line"></span><br><span class="line">        self.print_color(&#39;--&#39;*chars_in_line)</span><br><span class="line"></span><br><span class="line">    def print_color(self, message, end&#x3D;&#39;\n&#39;, front_color&#x3D;Red):</span><br><span class="line">        print(f&#39;&#123;front_color&#125;&#123;message&#125;\033[0m&#39;, end&#x3D;end)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def reset_data_to_init(self):</span><br><span class="line">        self.ask_string &#x3D; &#39;&#39;</span><br><span class="line">        self.answers.clear()</span><br><span class="line">        self.index_char_dict.clear()</span><br><span class="line"></span><br><span class="line">        self.count &#x3D; 0</span><br><span class="line">        self.auto_send_count &#x3D; 0</span><br><span class="line"></span><br><span class="line">        self.answer_indexs_dict.clear()</span><br><span class="line">        self.char_indexs_dict.clear()</span><br><span class="line">        self.error_answers.clear()</span><br><span class="line">        self.ack_true_list.clear()</span><br><span class="line">        self.auto_send_list.clear()</span><br><span class="line">        self.firt_auto_answer &#x3D; True</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">addons &#x3D; [</span><br><span class="line">    Chengyu()</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">if __name__ &#x3D;&#x3D; &quot;__main__&quot;:</span><br><span class="line">    c &#x3D; Chengyu()</span><br><span class="line"></span><br><span class="line">    ask_string &#x3D; &#39;腊见家义降德若功赎仁判悲生升道肘两身乐极尽立罪春命明回人捉襟性暗&#39;</span><br><span class="line">    ask_string &#x3D; &#39;来戴恶自唇而怙到生二不马亡竹锲寒擒梅香听寒星圆其十贼其鸟舍悛口一自不月披青擒王说曝手然擒一齿齿石&#39;</span><br><span class="line">    ask_string &#x3D; &#39;侧拨扮相大拔挈然纲打富提敲如涌门见助济行踽全弄轩责刀危踽击贫独波可云岌日班思求斧乔备泉领旁岌劫装&#39;</span><br><span class="line">    c.ask_string &#x3D; ask_string</span><br><span class="line">    c.find_answers_v2(ask_string)</span><br><span class="line">    print(c.answers)</span><br><span class="line">    c.print_answers()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>chengyu.text</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">一劳永逸</span><br><span class="line">一掷千金</span><br><span class="line">一曝十寒</span><br><span class="line">一石二鸟</span><br><span class="line">一筹莫展</span><br><span class="line">一落千丈</span><br><span class="line">一衣带水</span><br><span class="line">一语破的</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：<code>self.dictpath = &#39;/Users/xxx/chengyu.text&#39;</code> 一定要修改成你自己的chengyu.text所在路径</strong></p>
+<h4 id="运行效果"><a href="#运行效果" class="headerlink" title="运行效果"></a>运行效果</h4><p><img src="https://tva1.sinaimg.cn/large/006tNbRwly1gaa8ni4a5fj30yg0liacl.jpg" alt="运行效果"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html">WebSocket 教程</a></li>
+<li><a href="https://kaazing.com/demos/">https://kaazing.com/demos/</a></li>
+<li><a href="https://github.com/mitmproxy/mitmproxy/blob/master/examples/simple/websocket_messages.py">https://github.com/mitmproxy/mitmproxy/blob/master/examples/simple/websocket_messages.py</a></li>
+<li><a href="https://github.com/mitmproxy/mitmproxy/blob/master/examples/complex/websocket_inject_message.py">https://github.com/mitmproxy/mitmproxy/blob/master/examples/complex/websocket_inject_message.py</a></li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>阅读列表 - GO</title>
+    <url>/2020/11/25/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-Go/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://cizixs.com/2016/12/19/golang-json-guide/">Go 语言 JSON 简介</a></li>
+<li><a href="https://cizixs.com/2016/08/17/golang-http-server-side/">go http 服务器编程</a></li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>阅读列表 - App逆向</title>
+    <url>/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-App%E9%80%86%E5%90%91/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><p><a href="https://blog.csdn.net/qq_44906504">皇帝大大</a><br><a href="https://blog.csdn.net/qq_38851536">白龙~</a></p>
+<h2 id="图书"><a href="#图书" class="headerlink" title="图书"></a>图书</h2><p><a href="https://book.douban.com/subject/27617785/">Android应用安全防护和逆向分析</a><br><a href="https://book.douban.com/subject/26348151/">Android安全攻防权威指南</a><br><a href="https://book.douban.com/subject/34996842/">第一行代码(第3版)</a><br><a href="https://book.douban.com/subject/35367125/">Android编程权威指南</a></p>
+<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/82490125">ARM汇编语言 - 简介 [一]</a></li>
+<li><a href="https://bbs.pediy.com/thread-267043.htm">逆向学习笔记之汇编</a></li>
+<li><a href="https://mp.weixin.qq.com/s/Os3G90V2vapJqZMKHQyBcA">浅析ARM汇编语言子例程设计方法</a></li>
+</ul>
+<hr>
+<ul>
+<li><a href="https://bbs.pediy.com/thread-224330.htm">Unicorn引擎教程</a></li>
+<li><a href="https://app.yinxiang.com/fx/a6cc6633-a93f-4111-a06a-cccd5fa39e0f">Unicorn与Android</a></li>
+<li><a href="https://bbs.pediy.com/thread-253868.htm">Unicorn 在 Android 的应用</a></li>
+<li><a href="https://bbs.pediy.com/thread-225018.htm">使用Unicorn Engine绕过混淆完成算法的调用</a></li>
+<li><a href="https://bbs.pediy.com/thread-266377.htm">记一次unicorn半自动化逆向——还原某东sign算法</a></li>
+<li><a href="https://bbs.pediy.com/thread-252321.htm">ARM64 OLLVM反混淆</a></li>
+<li><a href="http://91fans.com.cn/post/unidbgzyone/">Unidbg模拟执行某段子so实操教程(一) 先把框架搭起来</a></li>
+<li><a href="https://blog.csdn.net/qq_38851536/category_11102404.html?spm=1001.2014.3001.5482">SO逆向实战十三篇</a></li>
+<li><a href="https://www.qinless.com/470">unidbg console debugger 使用</a></li>
+</ul>
+<hr>
+<ul>
+<li><a href="https://blog.gtf35.top/how_to_check_sign/">为何你的应用老是被破解，该如何有效的做签名校验？</a></li>
+<li><a href="https://blog.gtf35.top/app_process-shell-use/">免Root实现静默安装和点击任意位置</a></li>
+</ul>
+<hr>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/l936I_vGAn0EpUiKrWA-8Q">工具使用-IDA从入门到理解</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3MjU3NzU1OA==&mid=2247496391&idx=1&sn=55ea9594712efc82c1cfdf4df3c1c193&source=41#wechat_redirect">介绍下那个可以让你为所欲为的神器 Xposed</a></li>
+<li><a href="https://bbs.pediy.com/thread-266378.htm">深入理解Android逆向调试原理</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/302856081">JEB动态调试</a></li>
+<li><a href="https://mp.weixin.qq.com/s/KSzyWlw9t6CRaxDKBoypog">对安卓反调试和校验检测的一些实践与结论</a></li>
+</ul>
+<hr>
+<ul>
+<li><a href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=1408504&extra=page=1&filter=author&orderby=dateline">DEX壳简单实现过程分析</a></li>
+<li><a href="https://www.52pojie.cn/forum.php?mod=viewthread&tid=778654&extra=page=1&filter=author&orderby=dateline&typeid=343">IDA动态调试脱壳步骤</a></li>
+<li><a href="https://bbs.pediy.com/thread-266972.htm">分析一下乐固</a></li>
+<li><a href=""></a></li>
+</ul>
+<hr>
+<ul>
+<li><a href="https://bbs.pediy.com/thread-229657.htm">进阶Frida–Android逆向之动态加载dex Hook（三）（下篇）</a></li>
+<li><a href="https://bbs.pediy.com/thread-258776.htm">记一次frida实战——对某视频APP的脱壳、hook破解、模拟抓包、协议分析一条龙服务</a></li>
+<li><a href="https://eternalsakura13.com/2020/07/04/frida/">Frida Android hook</a></li>
+<li><a href="https://bbs.pediy.com/thread-265160.htm">Frida 使用经验交流分享</a></li>
+<li><a href="https://github.com/r0ysue/AndroidSecurityStudy">Frida 系列文章</a></li>
+<li><a href="https://www.anquanke.com/post/id/197657">实用Frida进阶：内存漫游、hook anywhere、抓包</a></li>
+</ul>
+<ul>
+<li><a href="https://saucer-man.com/else/692.html">小米手机刷机root教程</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=Mzg3MjU3NzU1OA==&mid=2247496397&idx=2&sn=52455f90262683278013f4cc09ced831&source=41#wechat_redirect">安卓 App 逆向课程一之环境配置</a></li>
+<li><a href="https://mp.weixin.qq.com/s/5LpaRY1O9br1ZnRNA-gH6Q">精品连载丨安卓 App 逆向课程之二逆向神器 frida 的介绍</a></li>
+<li><a href="https://mp.weixin.qq.com/s/F_UGRoAsfDW4SAa7cXMKrg">精品连载丨安卓 App 逆向课程之三 frida 注入 Okhttp 抓包上篇</a></li>
+<li><a href="https://mp.weixin.qq.com/s/PICqN6K_LFGHkjyiXkPzUw">精品连载丨安卓 App 逆向课程之四 frida 注入 Okhttp 抓包中篇</a></li>
+<li><a href="https://mp.weixin.qq.com/s/SBEKXSO6LrFYsO5pOtfxJA">精品连载丨安卓 App 逆向课程之五 frida 注入 Okhttp 抓包下篇</a></li>
+</ul>
+<h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><p><a href="https://www.bilibili.com/video/BV13W411w7jx">零基础入门Android(安卓)逆向</a></p>
+<h2 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h2><ul>
+<li><a href="https://blog.csdn.net/linuxnews/article/details/51900900">为什么Wireshark无法解密HTTPS数据</a></li>
+<li><a href="https://www.jianshu.com/p/75b3ad732183">Drony配合Charles实现App定向抓包</a></li>
+<li><a href="https://juejin.im/post/5cc313755188252d6f11b463">Android平台HTTPS抓包解决方案及问题分析</a></li>
+<li><a href="https://www.52pojie.cn/thread-1213657-1-1.html">android系统https抓包问题分析</a></li>
+<li><a href="https://www.cnblogs.com/c-x-a/p/9174663.html">Android 开发之避免被第三方使用代理抓包</a></li>
+</ul>
+<h2 id="仓库-脚本"><a href="#仓库-脚本" class="headerlink" title="仓库/脚本"></a>仓库/脚本</h2><p><a href="https://codeshare.frida.re/">https://codeshare.frida.re/</a></p>
+<p>frida<br><a href="https://github.com/frida/frida">https://github.com/frida/frida</a></p>
+<p>objection - runtime mobile exploration<br><a href="https://github.com/sensepost/objection">https://github.com/sensepost/objection</a></p>
+<p>jadx - Dex to Java decompiler<br><a href="https://github.com/skylot/jadx">https://github.com/skylot/jadx</a></p>
+<p><a href="https://github.com/deathmemory/FridaContainer">https://github.com/deathmemory/FridaContainer</a></p>
+<p>安卓应用层抓包通杀脚本<br><a href="https://github.com/r0ysue/r0capture">https://github.com/r0ysue/r0capture</a></p>
+<p>脱壳</p>
+<ul>
+<li><a href="https://github.com/hluwa/FRIDA-DEXDump">https://github.com/hluwa/FRIDA-DEXDump</a></li>
+<li><a href="https://github.com/CodingGay/BlackDex">https://github.com/CodingGay/BlackDex</a></li>
+<li><a href="https://github.com/dstmath/frida-unpack">https://github.com/dstmath/frida-unpack</a></li>
+</ul>
+<h2 id="靶场"><a href="#靶场" class="headerlink" title="靶场"></a>靶场</h2><p><a href="https://scrape.center/">https://scrape.center/</a></p>
+<h2 id="Python库"><a href="#Python库" class="headerlink" title="Python库"></a>Python库</h2><ul>
+<li><a href="https://pypi.org/project/JPype1/">JPype1</a> - 运行java代码</li>
+<li><a href="https://pypi.org/project/PyExecJS/">PyExecJS</a> - 运行javascript代码</li>
+<li><a href="https://pypi.org/project/pycrypto/">pycrypto</a> - 加解密</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>逆向</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>阅读列表 - Python</title>
+    <url>/2019/09/27/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-Python/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li><a href="https://www.kawabangga.com/posts/2340">理解Python的import</a></li>
+<li><a href="https://www.kawabangga.com/posts/2772">理解Python的Iterable和Iterator</a></li>
+<li><a href="https://www.dongwm.com/post/124/">详解Python元类</a></li>
+<li><a href="https://cizixs.com/2015/08/30/metaclass-in-python/">python metaclass 入门简介</a></li>
+</ul>
+<h2 id="魔法方法"><a href="#魔法方法" class="headerlink" title="魔法方法"></a>魔法方法</h2><ul>
+<li><a href="https://www.dongwm.com/post/46/">python几个特别的__开头的方法</a></li>
+<li><a href="https://www.dongwm.com/post/43/">python的魔法(一)</a></li>
+<li><a href="https://www.dongwm.com/post/44/">python的魔法二</a></li>
+</ul>
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><ul>
+<li><p><a href="https://cizixs.com/2015/12/31/python-descriptor-introduction/">python 描述器简介</a></p>
+</li>
+<li><p><a href="https://cizixs.com/2015/05/28/python-mock-usage/">python mock 库的使用</a></p>
+</li>
+<li><p><a href="https://cizixs.com/2016/05/20/python-httpserver/">Python BaseHTTPServer 介绍</a></p>
+</li>
+<li><p><a href="https://cizixs.com/2013/08/10/python-configparser-module/">Python ConfigParser Module</a></p>
+</li>
+<li><p><a href="https://www.jianshu.com/p/a8cb5375171a">Python Traceback详解</a></p>
+</li>
+<li><p><a href="http://wklken.me/posts/2013/08/20/python-extra-itertools.html">Python-进阶-itertools模块小结</a></p>
+</li>
+<li><p><a href="https://yanbin.blog/python-execute-system-command/">Python 执行系统命令 - subprocess 模块的使用</a></p>
+</li>
+<li><p><a href="https://juejin.im/post/5c13960bf265da6134384ae5">time date datetme timestamp 傻傻分不清楚</a></p>
+</li>
+<li><p><a href="https://cuiqingcai.com/6921.html">一看就懂，Python 日志 logging 模块详解及应用</a></p>
+</li>
+<li><p><a href="https://cuiqingcai.com/6598.html">Python3 中使用 Pathlib 模块进行文件操作</a></p>
+</li>
+<li><p><a href="https://mp.weixin.qq.com/s/NQEKTuSf3rPCloJJw1bPYA">你还在用 os.path？快来感受一下 pathlib 给你带来的便捷吧</a></p>
+</li>
+<li><p><a href="https://cuiqingcai.com/7071.html">Python 中 typing 模块和类型注解的使用</a></p>
+</li>
+</ul>
+<h2 id="并发-amp-异步"><a href="#并发-amp-异步" class="headerlink" title="并发 &amp; 异步"></a>并发 &amp; 异步</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/25228075">从0到1，Python异步编程的演进之路</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/27258289">Python Async/Await入门指南</a></li>
+<li><a href="https://lotabout.me/2017/Python-Generator/">Python Generator</a></li>
+<li><a href="https://lotabout.me/2017/understand-python-asyncio/">理解 Python asyncio</a></li>
+<li><a href="https://www.dongwm.com/post/understand-asyncio-1/">深入理解asyncio(一)</a></li>
+<li><a href="https://www.dongwm.com/post/understand-asyncio-2/">深入理解asyncio(二)</a></li>
+<li><a href="https://www.dongwm.com/post/understand-asyncio-3/">深入理解asyncio(三)</a></li>
+<li><a href="https://www.dongwm.com/post/asyncio-shield/">深入asyncio.shield</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/25228075">Python中异步协程的使用方法介绍</a></li>
+</ul>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul>
+<li><a href="https://github.com/piglei/one-python-craftsman">Python 工匠</a></li>
+<li><a href="https://coding.imooc.com/class/213.html">Python3实用编程技巧进阶</a></li>
+<li><a href="https://mp.weixin.qq.com/s/ztMEpv4-MJ0y7ad6gb7dyQ">python3中的unicode和bytes，让编码更流畅</a></li>
+<li><a href="http://cizixs.com/2014/11/08/understand-wsgi/">python wsgi 简介</a></li>
+<li><a href="https://manjusaka.itscoder.com/posts/2018/02/23/something-about-decorator/">怎么样去理解 Python 中的装饰器 </a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>阅读列表-ctf</title>
+    <url>/2021/01/31/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-ctf/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><p><a href="https://saucer-man.com/archives.html">https://saucer-man.com/archives.html</a><br><a href="https://www.hackliu.com/">https://www.hackliu.com/</a></p>
+<h2 id="图书"><a href="#图书" class="headerlink" title="图书"></a>图书</h2><p><a href="http://www.tup.tsinghua.edu.cn/bookscenter/book_07750701.html">Python渗透测试编程技术：方法与实践</a></p>
+<p><a href="https://book.douban.com/subject/26590145/">Python黑帽子 黑客与渗透测试编程之道</a></p>
+<h2 id="靶场"><a href="#靶场" class="headerlink" title="靶场"></a>靶场</h2><p>hack the box<br><a href="https://www.hackthebox.eu/">https://www.hackthebox.eu/</a></p>
+<p><a href="https://github.com/vulhub/vulhub">https://github.com/vulhub/vulhub</a></p>
+<p><a href="https://portswigger.net/web-security">https://portswigger.net/web-security</a></p>
+<p>SQLi-CTF<br><a href="https://github.com/Corb3nik/SQLi-CTF">https://github.com/Corb3nik/SQLi-CTF</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>阅读列表-剪辑</title>
     <url>/2021/08/29/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E5%89%AA%E8%BE%91/</url>
     <content><![CDATA[<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p><a href="https://www.bilibili.com/video/BV1dE4118731">视听语言-中国传媒大学-于然、桂笑冬、孙振虎</a></p>
@@ -1077,98 +1111,6 @@
 <h3 id="Ae"><a href="#Ae" class="headerlink" title="Ae"></a>Ae</h3><p><a href="https://www.bilibili.com/cheese/play/ep1183?spm_id_from=333.951">AE超能力学院-入门到精通</a></p>
 <p><a href="https://www.bilibili.com/cheese/play/ep3228?spm_id_from=333.951">AE+Pr高能秘籍课</a></p>
 <p><a href="https://www.bilibili.com/video/BV1ZA411g7Sb?spm_id_from=333.999.0.0">GenJi是真想教会你</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>阅读列表-记忆</title>
-    <url>/2021/06/12/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E8%AE%B0%E5%BF%86/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>阅读列表 - 爬虫逆向</title>
-    <url>/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E7%88%AC%E8%99%AB%E9%80%86%E5%90%91/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><h3 id="AST"><a href="#AST" class="headerlink" title="AST"></a>AST</h3><ul>
-<li><a href="https://www.jianshu.com/p/02e21938e0d4">AST转化网易易盾的部分代码</a></li>
-<li><a href="https://mp.weixin.qq.com/s/KaolFbqyGEjSmQf3_15RMQ">JS逆向：AST还原极验混淆JS实战</a></li>
-<li><a href="https://github.com/yacan8/blog/blob/master/posts/JavaScript%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91AST.md">JavaScript抽象语法树AST</a></li>
-<li><a href="https://mp.weixin.qq.com/s/0c13Uhqoxd8mNMmY-Mmpgg">JavaScript 混淆与逆向必读之 AST 节点类型名词基础</a></li>
-</ul>
-<h3 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h3><ul>
-<li><a href="https://www.jianshu.com/p/4073f4fa9f09">JS逆向：网易某版本滑块验证分析（上）——生成浏览器指纹</a></li>
-<li><a href="https://www.jianshu.com/p/35d81c7428f9">JS逆向：网易某版本滑块验证分析（下）——寻找滑动轨迹</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/115317146">滑块验证码缺口识别技术分享02</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/90916336">利用深度学习识别滑动验证码缺口位置</a></li>
-<li><a href="https://bbs.pediy.com/thread-267277.htm">selenium破解网易易盾滑块</a></li>
-</ul>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
-<li><a href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739271&idx=1&sn=2ca3269df75d5f734f44d8ea0d26d7f7&chksm=ff448859c833014ff0c6e747f1786d4ba331dc07787007f25ff5250a4180a35d21fea2db3cc4&scene=21#wechat_redirect">总结一些网站加密和混淆技术</a></li>
-<li><a href="https://mp.weixin.qq.com/s/F7hOcwPBLk0we3kpAsZ6zg">JavaScript 逆向爬取实战</a></li>
-<li><a href="https://mp.weixin.qq.com/s/S9qtrcLx4tbspjFk61GaUg">JavaScript 逆向爬取实战（下）</a></li>
-<li><a href="https://mp.weixin.qq.com/s/WbyQt6CWYUWZviY4omKBWw">如何用 Hook 实时处理和保存 Ajax 数据</a></li>
-</ul>
-<ul>
-<li><a href="https://mp.weixin.qq.com/s/e7MqoNGvb04teFcFszlYYw">Scrapy 和 Pyppeteer 更优雅的对接方案</a></li>
-<li><a href="https://mp.weixin.qq.com/s/r3MUVEPos2Rm5uKno8HysQ">如何通过 Tampermonkey 快速查找 JavaScript 加密入口</a></li>
-<li><a href="https://www.jianshu.com/p/41773c3e4e56">http的缓存机制在flask的实现</a></li>
-<li><a href="https://germey.gitbooks.io/python3webspider/content/">Python 3网络爬虫开发实战</a></li>
-<li><a href="https://book.douban.com/subject/30175598/">Python 3网络爬虫开发实战</a></li>
-</ul>
-<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
-<li><a href="https://www.jianshu.com/u/3c33ff3bc61e">太阳花田向日葵</a></li>
-<li><a href="https://www.jianshu.com/u/d928b890a441">后山小鲨鱼</a></li>
-<li><a href="https://space.bilibili.com/9532462?spm_id_from=333.788.b_765f7570696e666f.2">暗螟蛉</a></li>
-</ul>
-<h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><ul>
-<li><a href="https://kaiwu.lagou.com/course/courseInfo.htm?courseId=46&sid=30-aggregation-0#/sale">52讲轻松搞定网络爬虫</a></li>
-<li><a href="https://www.bilibili.com/video/BV1yz4y1o7Ex">猿人学-JS逆向-爬虫攻防大赛题目详解合集</a></li>
-</ul>
-<h2 id="框架和库"><a href="#框架和库" class="headerlink" title="框架和库"></a>框架和库</h2><ul>
-<li><a href="https://github.com/scrapy/scrapy">scrapy</a></li>
-<li><a href="https://github.com/rmax/scrapy-redis">scrapy-redis</a></li>
-<li><a href="https://github.com/striver-ing/wechat-spider">wechat-spider</a></li>
-</ul>
-<h2 id="练习平台"><a href="#练习平台" class="headerlink" title="练习平台"></a>练习平台</h2><ul>
-<li><a href="https://scrape.center/">scrape.center</a></li>
-<li><a href="http://match.yuanrenxue.com/list">猿人学Web端爬虫攻防刷题平台</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>逆向</tag>
-        <tag>爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>jni动态注册</title>
-    <url>/2021/07/04/jni%E5%8A%A8%E6%80%81%E6%B3%A8%E5%86%8C/</url>
-    <content><![CDATA[<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>java代码</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 文件：MainActivity.java</span><br><span class="line">package com.jason.testys;</span><br><span class="line"></span><br><span class="line">public class MainActivity extends AppCompatActivity &#123;</span><br><span class="line">    static &#123;</span><br><span class="line">        System.loadLibrary(&quot;native-lib&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;</span><br><span class="line">    </span><br><span class="line">    public native void reginso();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>cpp代码</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 文件：native-lib.cpp</span><br><span class="line"></span><br><span class="line">#include &lt;jni.h&gt;</span><br><span class="line">#include &lt;android&#x2F;log.h&gt;</span><br><span class="line">void native_test2() &#123;</span><br><span class="line">    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME,  &quot;native_test2&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册Java端的方法  以及本地相对应的方法</span><br><span class="line">JNINativeMethod method[] &#x3D; &#123;</span><br><span class="line">        &#123;&quot;reginso&quot;,&quot;()V&quot;,(void*)native_test2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册相应的类以及方法</span><br><span class="line">jint registerNativeMeth(JNIEnv *env)&#123;</span><br><span class="line">    jclass cl&#x3D;env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line">    if((env-&gt;RegisterNatives(cl,method,sizeof(method)&#x2F;sizeof(method[0])))&lt;0)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;实现jni_onload 动态注册方法</span><br><span class="line">jint JNI_OnLoad(JavaVM* vm, void* reserved) &#123;</span><br><span class="line">    JNIEnv* env &#x3D; NULL;</span><br><span class="line">    if (vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4) !&#x3D; JNI_OK) &#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    if(registerNativeMeth(env)!&#x3D;JNI_OK)&#123;&#x2F;&#x2F;注册方法</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return JNI_VERSION_1_4;&#x2F;&#x2F;必须返回这个值</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>IDA分析出的伪代码</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; jint registerNativeMeth(JNIEnv *env)</span><br><span class="line"> </span><br><span class="line">__int64 __fastcall registerNativeMeth(__int64 a1)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v1; &#x2F;&#x2F; x19</span><br><span class="line">  __int64 v2; &#x2F;&#x2F; x0</span><br><span class="line"></span><br><span class="line">  v1 &#x3D; a1;</span><br><span class="line">  v2 &#x3D; (*(__int64 (**)(void))(*(_QWORD *)a1 + 48LL))();</span><br><span class="line">  return (unsigned int)((*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v1 + 1720LL))(</span><br><span class="line">                          v1,</span><br><span class="line">                          v2,</span><br><span class="line">                          method,</span><br><span class="line">                          1LL) &gt;&gt; 31);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; jint JNI_OnLoad(JavaVM* vm, void* reserved)</span><br><span class="line"></span><br><span class="line">signed __int64 __fastcall JNI_OnLoad(__int64 a1)</span><br><span class="line">&#123;</span><br><span class="line">  unsigned __int64 v1; &#x2F;&#x2F; x20</span><br><span class="line">  signed __int64 result; &#x2F;&#x2F; x0</span><br><span class="line">  __int64 v3; &#x2F;&#x2F; x19</span><br><span class="line">  __int64 v4; &#x2F;&#x2F; x0</span><br><span class="line">  __int64 v5; &#x2F;&#x2F; [xsp+0h] [xbp-10h]</span><br><span class="line">  __int64 v6; &#x2F;&#x2F; [xsp+8h] [xbp-8h]</span><br><span class="line"></span><br><span class="line">  v1 &#x3D; _ReadStatusReg(ARM64_SYSREG(3, 3, 13, 0, 2));</span><br><span class="line">  v6 &#x3D; *(_QWORD *)(v1 + 40);</span><br><span class="line">  v5 &#x3D; 0LL;</span><br><span class="line">  if ( (*(unsigned int (**)(void))(*(_QWORD *)a1 + 48LL))() )</span><br><span class="line">  &#123;</span><br><span class="line">    result &#x3D; 0xFFFFFFFFLL;</span><br><span class="line">  &#125;</span><br><span class="line">  else</span><br><span class="line">  &#123;</span><br><span class="line">    v3 &#x3D; v5;</span><br><span class="line">    v4 &#x3D; (*(__int64 (__fastcall **)(__int64, const char *))(*(_QWORD *)v5 + 48LL))(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line">    if ( (*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v3 + 1720LL))(</span><br><span class="line">           v3,</span><br><span class="line">           v4,</span><br><span class="line">           method,</span><br><span class="line">           1LL) &lt; 0 )</span><br><span class="line">      result &#x3D; 1LL;</span><br><span class="line">    else</span><br><span class="line">      result &#x3D; 65540LL;</span><br><span class="line">  &#125;</span><br><span class="line">  *(_QWORD *)(v1 + 40);</span><br><span class="line">  return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">JNINativeMethod method[] &#x3D; &#123;</span><br><span class="line">        &#123;&quot;reginso&quot;,&quot;()V&quot;,(void*)native_test2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">.data:0000000000002B08 ; Segment type: Pure data</span><br><span class="line">.data:0000000000002B08                 AREA .data, DATA, ALIGN&#x3D;3</span><br><span class="line">.data:0000000000002B08                 ; ORG 0x2B08</span><br><span class="line">.data:0000000000002B08                 EXPORT method</span><br><span class="line">.data:0000000000002B08 method          DCQ aReginso            ; DATA XREF: LOAD:00000000000000F8↑o</span><br><span class="line">.data:0000000000002B08                                         ; LOAD:00000000000003B8↑o ...</span><br><span class="line">.data:0000000000002B08                                         ; &quot;reginso&quot;</span><br><span class="line">.data:0000000000002B10                 DCQ aV                  ; &quot;()V&quot;</span><br><span class="line">.data:0000000000002B18                 DCQ _Z12native_test2v   ; native_test2(void)</span><br><span class="line">.data:0000000000002B18 ; .data         ends</span><br><span class="line">.data:0000000000002B18</span><br><span class="line">extern:0000000000002B20 ; &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">extern:0000000000002B20</span><br><span class="line">extern:0000000000002B20 ; Segment type: Externs</span><br><span class="line">extern:0000000000002B20                 IMPORT __cxa_finalize   ; CODE XREF: .__cxa_finalize+C↑j</span><br><span class="line">extern:0000000000002B20                                         ; DATA XREF: .got.plt:off_1AE8↑o</span><br><span class="line">extern:0000000000002B28                 IMPORT __cxa_atexit     ; CODE XREF: .__cxa_atexit+C↑j</span><br><span class="line">extern:0000000000002B28                                         ; DATA XREF: .got.plt:off_1AF0↑o</span><br><span class="line">extern:0000000000002B30                 IMPORT __android_log_print</span><br><span class="line">extern:0000000000002B30                                         ; CODE XREF: .__android_log_print+C↑j</span><br><span class="line">extern:0000000000002B30                                         ; DATA XREF: .got.plt:off_1AF8↑o</span><br><span class="line">extern:0000000000002B38                 IMPORT __stack_chk_fail ; CODE XREF: .__stack_chk_fail+C↑j</span><br><span class="line">extern:0000000000002B38                                         ; DATA XREF: .got.plt:off_1B00↑o</span><br><span class="line">extern:0000000000002B38</span><br><span class="line">extern:0000000000002B38                 END start</span><br></pre></td></tr></table></figure>
-
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">JNIEnv* env &#x3D; NULL;</span><br><span class="line">if (vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4) !&#x3D; JNI_OK) &#123;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">v5 &#x3D; 0LL;</span><br><span class="line">if ( (*(unsigned int (**)(void))(*(_QWORD *)a1 + 48LL))() )</span><br><span class="line">&#123;</span><br><span class="line">    result &#x3D; 0xFFFFFFFFLL;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">    v3 &#x3D; v5;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">1. a1 &#x3D; vm</span><br><span class="line">2. v5 &#x3D; env</span><br><span class="line">3. (*(_QWORD *)a1 + 48LL) &#x3D; vm-&gt;GetEnv</span><br><span class="line">4. v5被赋值了</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">jclass cl&#x3D;env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">v3 &#x3D; v5;</span><br><span class="line">v4 &#x3D; (*(__int64 (__fastcall **)(__int64, const char *))(*(_QWORD *)v5 + 48LL))(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">1. v5 &#x3D; env</span><br><span class="line">2. (*(_QWORD *)v5 + 48LL) &#x3D; env-&gt;FindClass</span><br><span class="line">3. (v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;) &#x3D; (&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line">4. v4 &#x3D; jclass cl </span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">if((env-&gt;RegisterNatives(cl,method,sizeof(method)&#x2F;sizeof(method[0])))&lt;0)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;伪代码  </span><br><span class="line">if ( (*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v3 + 1720LL))(</span><br><span class="line">           v3,</span><br><span class="line">           v4,</span><br><span class="line">           method,</span><br><span class="line">           1LL) &lt; 0 )</span><br><span class="line">      result &#x3D; 1LL;</span><br><span class="line">    else</span><br><span class="line">      result &#x3D; 65540LL;</span><br><span class="line">      </span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">0. v4 &#x3D; cl</span><br><span class="line">1. v3 &#x3D; env</span><br><span class="line">2. (*(_QWORD *)v3 + 1720LL) &#x3D; env-&gt;RegisterNatives</span><br><span class="line">3. (v3, v4, method, 1LL) &#x3D; (cl, method, sizeof(method)&#x2F;sizeof(method[0])))&lt;0) </span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结果</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 参数数量变化</span><br><span class="line"></span><br><span class="line">GetEnv: 2 -&gt; 0</span><br><span class="line">vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4)</span><br><span class="line">(*(_QWORD *)a1 + 48LL)()</span><br><span class="line"></span><br><span class="line">FindClass: 1 -&gt; 2</span><br><span class="line">env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line">(*(_QWORD *)v5 + 48LL)(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line"></span><br><span class="line">RegisterNatives: 3 -&gt; 4</span><br><span class="line">env-&gt;RegisterNatives(cl,method,1)</span><br><span class="line">(*(_QWORD *)v3 + 1720LL)(v3,v4,method,1LL)           </span><br></pre></td></tr></table></figure>
 ]]></content>
   </entry>
   <entry>
@@ -1350,6 +1292,60 @@
 <h2 id="网站"><a href="#网站" class="headerlink" title="网站"></a>网站</h2>]]></content>
   </entry>
   <entry>
+    <title>阅读列表 - 爬虫逆向</title>
+    <url>/2020/12/19/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E7%88%AC%E8%99%AB%E9%80%86%E5%90%91/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><h3 id="AST"><a href="#AST" class="headerlink" title="AST"></a>AST</h3><ul>
+<li><a href="https://www.jianshu.com/p/02e21938e0d4">AST转化网易易盾的部分代码</a></li>
+<li><a href="https://mp.weixin.qq.com/s/KaolFbqyGEjSmQf3_15RMQ">JS逆向：AST还原极验混淆JS实战</a></li>
+<li><a href="https://github.com/yacan8/blog/blob/master/posts/JavaScript%E6%8A%BD%E8%B1%A1%E8%AF%AD%E6%B3%95%E6%A0%91AST.md">JavaScript抽象语法树AST</a></li>
+<li><a href="https://mp.weixin.qq.com/s/0c13Uhqoxd8mNMmY-Mmpgg">JavaScript 混淆与逆向必读之 AST 节点类型名词基础</a></li>
+</ul>
+<h3 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h3><ul>
+<li><a href="https://www.jianshu.com/p/4073f4fa9f09">JS逆向：网易某版本滑块验证分析（上）——生成浏览器指纹</a></li>
+<li><a href="https://www.jianshu.com/p/35d81c7428f9">JS逆向：网易某版本滑块验证分析（下）——寻找滑动轨迹</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/115317146">滑块验证码缺口识别技术分享02</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/90916336">利用深度学习识别滑动验证码缺口位置</a></li>
+<li><a href="https://bbs.pediy.com/thread-267277.htm">selenium破解网易易盾滑块</a></li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzIzNzA4NDk3Nw==&mid=2457739271&idx=1&sn=2ca3269df75d5f734f44d8ea0d26d7f7&chksm=ff448859c833014ff0c6e747f1786d4ba331dc07787007f25ff5250a4180a35d21fea2db3cc4&scene=21#wechat_redirect">总结一些网站加密和混淆技术</a></li>
+<li><a href="https://mp.weixin.qq.com/s/F7hOcwPBLk0we3kpAsZ6zg">JavaScript 逆向爬取实战</a></li>
+<li><a href="https://mp.weixin.qq.com/s/S9qtrcLx4tbspjFk61GaUg">JavaScript 逆向爬取实战（下）</a></li>
+<li><a href="https://mp.weixin.qq.com/s/WbyQt6CWYUWZviY4omKBWw">如何用 Hook 实时处理和保存 Ajax 数据</a></li>
+</ul>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/e7MqoNGvb04teFcFszlYYw">Scrapy 和 Pyppeteer 更优雅的对接方案</a></li>
+<li><a href="https://mp.weixin.qq.com/s/r3MUVEPos2Rm5uKno8HysQ">如何通过 Tampermonkey 快速查找 JavaScript 加密入口</a></li>
+<li><a href="https://www.jianshu.com/p/41773c3e4e56">http的缓存机制在flask的实现</a></li>
+<li><a href="https://germey.gitbooks.io/python3webspider/content/">Python 3网络爬虫开发实战</a></li>
+<li><a href="https://book.douban.com/subject/30175598/">Python 3网络爬虫开发实战</a></li>
+</ul>
+<h2 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h2><ul>
+<li><a href="https://www.jianshu.com/u/3c33ff3bc61e">太阳花田向日葵</a></li>
+<li><a href="https://www.jianshu.com/u/d928b890a441">后山小鲨鱼</a></li>
+<li><a href="https://space.bilibili.com/9532462?spm_id_from=333.788.b_765f7570696e666f.2">暗螟蛉</a></li>
+</ul>
+<h2 id="视频"><a href="#视频" class="headerlink" title="视频"></a>视频</h2><ul>
+<li><a href="https://kaiwu.lagou.com/course/courseInfo.htm?courseId=46&sid=30-aggregation-0#/sale">52讲轻松搞定网络爬虫</a></li>
+<li><a href="https://www.bilibili.com/video/BV1yz4y1o7Ex">猿人学-JS逆向-爬虫攻防大赛题目详解合集</a></li>
+</ul>
+<h2 id="框架和库"><a href="#框架和库" class="headerlink" title="框架和库"></a>框架和库</h2><ul>
+<li><a href="https://github.com/scrapy/scrapy">scrapy</a></li>
+<li><a href="https://github.com/rmax/scrapy-redis">scrapy-redis</a></li>
+<li><a href="https://github.com/striver-ing/wechat-spider">wechat-spider</a></li>
+</ul>
+<h2 id="练习平台"><a href="#练习平台" class="headerlink" title="练习平台"></a>练习平台</h2><ul>
+<li><a href="https://scrape.center/">scrape.center</a></li>
+<li><a href="http://match.yuanrenxue.com/list">猿人学Web端爬虫攻防刷题平台</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>逆向</tag>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>阅读列表-文档图形</title>
     <url>/2021/08/11/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E6%96%87%E6%A1%A3%E5%9B%BE%E5%BD%A2/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -1357,284 +1353,9 @@
 ]]></content>
   </entry>
   <entry>
-    <title>yanbin的博客文章</title>
-    <url>/2020/11/26/%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0-yanbin/</url>
-    <content><![CDATA[<ul>
-<li><a href="https://yanbin.blog/5-best-vim-cheat-sheet/">5 个最好的  Vim 速查卡 (Cheat Sheet)</a></li>
-<li><a href="https://yanbin.blog/akka-actor-start-with-easy-example/">Akka Actor: 从最简单的例子开始</a></li>
-<li><a href="https://yanbin.blog/apache-avro-serializing-deserializing/">Apache Avro 序列化与反序列化 (Java 实现)</a></li>
-<li><a href="https://yanbin.blog/apache-run-python-cgi-config/">Apache 中运行 Python CGI 程序</a></li>
-<li><a href="https://yanbin.blog/bash-emacs-vi-key-bindings/">Bash 下的 emacs 和  vi 键绑定</a></li>
-<li><a href="https://yanbin.blog/bash-common-syntax-control-structures/">Bash 的常用语法，控制结构</a></li>
-<li><a href="https://yanbin.blog/bash-zsh-call-emacs-vim-edit-current-command/">Bash/Zsh 下调用 Emacs/Vim 编辑当前命令</a></li>
-<li><a href="https://yanbin.blog/clojure-lein-repl-connect-session/">Clojure REPL 连接远程会话</a></li>
-<li><a href="https://yanbin.blog/clojure-get-started/">Clojure 快速突击</a></li>
-<li><a href="https://yanbin.blog/clojure-get-started-1/">Clojure 快速突击(续)</a></li>
-<li><a href="https://yanbin.blog/completablefuture-concurrent-performance/">CompletableFuture 的并发性能研究</a></li>
-<li><a href="https://yanbin.blog/docker-compose-in-action/">Docker Compose 实践</a></li>
-<li><a href="https://yanbin.blog/docker-swarm-cluster-in-action/">Docker Swarm 集群模式实操</a></li>
-<li><a href="https://yanbin.blog/docker-attach-deattach-without-exit-container/">Docker attach 后断开时不退出容器</a></li>
-<li><a href="https://yanbin.blog/docker-process-namespace/">Docker 容器内进程与 Namespace</a></li>
-<li><a href="https://yanbin.blog/dockerfile-difference-between-shell-exec-forms/">Dockerfile 中命令的两种书写方式的区别</a></li>
-<li><a href="https://yanbin.blog/flask-vue-js-integration-dev-deploy/">Flask 和  Vue.js 开发及整合部署实例</a></li>
-<li><a href="https://yanbin.blog/flask-replacement-aiohttp-quart/">Flask 的替代品 aiohttp 和 Quart</a></li>
-<li><a href="https://yanbin.blog/flask-vue-js-integrate-with-bootstrap-bootstrapvue/">Flask, Vue.js 中集成 Bootstrap/BootstrapVue</a></li>
-<li><a href="https://yanbin.blog/giter8-put-project-layout-on-github/">Giter8 – 把项目布局模板放到 GitHub 上</a></li>
-<li><a href="https://yanbin.blog/google-guice-hello-world/">Google Guice 轻装上阵</a></li>
-<li><a href="https://yanbin.blog/groovy-multiple-assignment-returns/">Groovy 的多重赋值和方法的多返回值</a></li>
-<li><a href="https://yanbin.blog/hazelcast-introduction/">Hazelcast 介绍与使用(整理)</a></li>
-<li><a href="https://yanbin.blog/hibernate-map-enum-type-field/">Hibernate 映射枚举(Enum) 类型的属性</a></li>
-<li><a href="https://yanbin.blog/intellij-idea-create-maven-scala-project/">IntelliJ IDEA 中创建 Maven Scala 项目</a></li>
-<li><a href="https://yanbin.blog/jmockit-capture-mock-call-arguments/">JMockit 中捕获 mock 对象方法的调用参数</a></li>
-<li><a href="https://yanbin.blog/jmockit-mocked-object-default-field-method-values/">JMockit 中被 Mocked 的对象属性及方法的默认值</a></li>
-<li><a href="https://yanbin.blog/jmockit-partial-mock/">JMockit 如何 Mock 部分方法/属性</a></li>
-<li><a href="https://yanbin.blog/junit-5-work-with-mockito-2/">JUnit 5 使用 Mockito 2 进行测试</a></li>
-<li><a href="https://yanbin.blog/junit-5-new-features-and-get-started/">JUnit 5 快速上手(从 JUnit 4 到 JUnit 5)</a></li>
-<li><a href="https://yanbin.blog/junit-test-instance-lifecycle/">JUnit 中是以测试方法为一个独立的生命周期</a></li>
-<li><a href="https://yanbin.blog/lisp-over-jvm-dialect-clojure-1-9/">JVM 上的 Lisp 方言 Clojure 1.9</a></li>
-<li><a href="https://yanbin.blog/jackson-yn-boolean-value-deserialization/">Jackson 反序列化 “Y”/“N” 为相应的布尔值</a></li>
-<li><a href="https://yanbin.blog/jackson-ignore-specified-field-type/">Jackson 序列化忽略指定类型的属性</a></li>
-<li><a href="https://yanbin.blog/java-8-completablefuture-brief-touch/">Java 8 CompletableFuture 浅入</a></li>
-<li><a href="https://yanbin.blog/java-8-lambda-simple-ways/">Java 8 Lambda 写法与简化</a></li>
-<li><a href="https://yanbin.blog/java-8-lambda-capture-outer-variables/">Java 8 Lambda 捕获外部变量</a></li>
-<li><a href="https://yanbin.blog/java-8-map-new-added-methods/">Java 8 Map 中新增的方法使用记录</a></li>
-<li><a href="https://yanbin.blog/java-8-stream-to-collection/">Java 8 Stream 如何还原为集合</a></li>
-<li><a href="https://yanbin.blog/java8-repeatable-annotations/">Java 8 可重复注解的理解与应用</a></li>
-<li><a href="https://yanbin.blog/java-8-list-deduplication-with-lambda/">Java 8 根据属性值对列表去重</a></li>
-<li><a href="https://yanbin.blog/java-8-groupingby-empty-map-group/">Java 8 的 groupingBy 产生空的 Map 分组</a></li>
-<li><a href="https://yanbin.blog/java-8-groupingby-howto-generate-empty-map/">Java 8 的 groupingBy 能否产生空的 Map 分组</a></li>
-<li><a href="https://yanbin.blog/java-8-generic-enhance/">Java 8 的泛型增强</a></li>
-<li><a href="https://yanbin.blog/java-8-return-the-first-match-element/">Java 8 返回集合中第一个匹配的元素</a></li>
-<li><a href="https://yanbin.blog/java-9-platform-logging-api/">Java 9 - 平台日志 API</a></li>
-<li><a href="https://yanbin.blog/java-9-quick-create-immutable-collections/">Java 9 - 快速创建不可变集合</a></li>
-<li><a href="https://yanbin.blog/java-9-talk-reactive-stream/">Java 9 - 说说响应式流</a></li>
-<li><a href="https://yanbin.blog/java-stack-walking-api/">Java 9 线程栈遍历 API</a></li>
-<li><a href="https://yanbin.blog/java-nio2-aio-readfile/">Java NIO2(AIO) 进行文件异步读取</a></li>
-<li><a href="https://yanbin.blog/java-python-communicate-via-apache-avro/">Java 与 Python 通过 Apache Avro 交换数据</a></li>
-<li><a href="https://yanbin.blog/java-postgresql-unit-test/">Java 与’嵌入式’ PostgreSQL 数据库的单元测试</a></li>
-<li><a href="https://yanbin.blog/java-spring-meta-annotation/">Java 元注解及 Spring 组合注解应用</a></li>
-<li><a href="https://yanbin.blog/java-unit-test-assert-console-output/">Java 单元测试如何断言(检查)控制台输出</a></li>
-<li><a href="https://yanbin.blog/java-reflection-modify-final-field-value/">Java 反射修改 final 属性值</a></li>
-<li><a href="https://yanbin.blog/java-reflection-modify-final-field/">Java 反射有效的修改 final 属性值</a></li>
-<li><a href="https://yanbin.blog/java-varargs-method-error-prone/">Java 可变参 Object…objects 方法的陷进</a></li>
-<li><a href="https://yanbin.blog/java-constant-interface-anti-pattern/">Java 接口常量反模式及如何定义 Java 常量</a></li>
-<li><a href="https://yanbin.blog/common-threadpool-vs-forkjoinpool/">Java 普通线程池与 ForkJoinPool 的效果对比</a></li>
-<li><a href="https://yanbin.blog/java-built-tools-sbt-simplist-project/">Java 构建工具及 sbt 最快速体验</a></li>
-<li><a href="https://yanbin.blog/java-generic-auto-infer-by-declare-type/">Java 泛型 – 依据声明的变量类型自动推断</a></li>
-<li><a href="https://yanbin.blog/java-fork-join-framework-memo/">Java 的  fork-join 框架实例备忘</a></li>
-<li><a href="https://yanbin.blog/java-assertion-guava-preconditions/">Java 的参数检查与断言 - Guava Preconditions</a></li>
-<li><a href="https://yanbin.blog/java-assertion-spring-assert/">Java 的参数检查与断言 - Spring Assert</a></li>
-<li><a href="https://yanbin.blog/java-parse-xml-suppress-fatal-error-output/">Java 解析 XML 时如何屏蔽掉 “[Fatal Error]” 的输出</a></li>
-<li><a href="https://yanbin.blog/java-language-defect-1-no-here-document/">Java 语言的几个缺陷之一: 无 Here Document</a></li>
-<li><a href="https://yanbin.blog/java-language-defect-3-not-support-var-type-infer/">Java 语言的几个缺陷之三: 不支持 var 类型推断</a></li>
-<li><a href="https://yanbin.blog/java-language-defect-2-equals-compare-strings/">Java 语言的几个缺陷之二: equals() 比较字符串</a></li>
-<li><a href="https://yanbin.blog/java-language-defect-no-multiple-returns/">Java 语言的几个缺陷之五: 多返回值问题</a></li>
-<li><a href="https://yanbin.blog/java-language-defect-no-string-interpolation/">Java 语言的几个缺陷之六: 无字符串插值</a></li>
-<li><a href="https://yanbin.blog/java-language-defect-4-outdated-javabean/">Java 语言的几个缺陷之四: 过时的 JavaBean</a></li>
-<li><a href="https://yanbin.blog/java-how-to-get-generic-type/">Java 运行时如何获取泛型参数的类型</a></li>
-<li><a href="https://yanbin.blog/java8-lambda-and-checked-exception/">Java8 Lambda 表达式与 Checked Exception</a></li>
-<li><a href="https://yanbin.blog/java8-optional-several-common-incorrect-usages/">Java8 Optional 几个常见错误用法</a></li>
-<li><a href="https://yanbin.blog/jdbctemplate-java-8-lambda-trick/">JdbcTemplate 易被 Java 8 Lambda 带入的坑</a></li>
-<li><a href="https://yanbin.blog/kafka-connect-how-to/">Kafka Connect 介绍和使用</a></li>
-<li><a href="https://yanbin.blog/kafka-producer-interceptor-record-statistics/">Kafka Producer 设置 Interceptor 来统计消息</a></li>
-<li><a href="https://yanbin.blog/how-kafka-select-partition/">Kafka 发布消息时如何选择 Partition</a></li>
-<li><a href="https://yanbin.blog/kafka-produce-consume-avro-data/">Kafka 生产消费 Avro 序列化数据</a></li>
-<li><a href="https://yanbin.blog/kafka-mirror-maker-in-action/">Kafka 集群间数据镜像实测</a></li>
-<li><a href="https://yanbin.blog/kubernetes-learning-1/">Kubernetes 学习笔记(一) - 初上手</a></li>
-<li><a href="https://yanbin.blog/kubernetes-learning-2-run-service/">Kubernetes 学习笔记(二) - 部署和访问应用</a></li>
-<li><a href="https://yanbin.blog/kubernetes-cluster-internal-ip-issue/">Kubernetes 集群中节点的 INTERNAL-IP 问题</a></li>
-<li><a href="https://yanbin.blog/linux-config-log-ratation-logrotate/">Linux 下配置滚动日志之 logrotate</a></li>
-<li><a href="https://yanbin.blog/linux-config-log-ratation-rotatelogs/">Linux 下配置滚动日志之 rotatelogs</a></li>
-<li><a href="https://yanbin.blog/linux-input-output-redirection/">Linux 输入输出重定向, &amp;&gt;file, 2&gt;&amp;1, 1&gt;&amp;2 等</a></li>
-<li><a href="https://yanbin.blog/mac-os-x-issue-of-brew-update/">Mac OS X 下不能 brew update 的问题</a></li>
-<li><a href="https://yanbin.blog/mac-os-x-experience-docker-new-2/">Mac OS X 下安装使用 Docker (新)</a></li>
-<li><a href="https://yanbin.blog/mockito-capture-method-paramters/">Mockito 中捕获 mock 对象方法的调用参数</a></li>
-<li><a href="https://yanbin.blog/mockito-mocked-default-fields-method-returns/">Mockito 中被 Mocked 的对象属性及方法的默认值</a></li>
-<li><a href="https://yanbin.blog/mockito-mock-final-class-final-method/">Mockito 也能 Mock final 类和 final 方法了</a></li>
-<li><a href="https://yanbin.blog/mockito-how-to-mock-void-method/">Mockito 如何 mock 返回值为 void 的方法</a></li>
-<li><a href="https://yanbin.blog/mockito-anystring-anyfoo-class-cannot-match-null-values/">Mockito 的 anyString(), any(Foo.class) 等不能匹配 null 值</a></li>
-<li><a href="https://yanbin.blog/nginx-gunicorn-flask-integration/">Nginx + Gunicorn + Flask 集成配置</a></li>
-<li><a href="https://yanbin.blog/nodejs-web-server-listen-on-domain-socket/">NodeJS 的 Web 服务也可以监听在 sock 文件</a></li>
-<li><a href="https://yanbin.blog/play2-custom-template-type-java-scala/">Play2 自定义模板类型 (Java&amp;Scala)</a></li>
-<li><a href="https://yanbin.blog/play2-3-custom-view-template-java/">Play2.3 自定义模板类型 – Java 版</a></li>
-<li><a href="https://yanbin.blog/postgresql-unnest-batch-crud-merge/">PostgreSQL 批量插入,  更新和合并操作</a></li>
-<li><a href="https://yanbin.blog/python-urlencode-urldecode/">Python  中的  urlencode 和 urldecode 操作</a></li>
-<li><a href="https://yanbin.blog/python-sort-list-sort-sorted/">Python  列表的排序 - sort/sorted</a></li>
-<li><a href="https://yanbin.blog/python-3-7-what-is-new/">Python 3.7 所带来的新特性</a></li>
-<li><a href="https://yanbin.blog/python-datetime-timezone/">Python datetime 处理时区信息</a></li>
-<li><a href="https://yanbin.blog/python-redirect-print-immediately/">Python print 立即打印内容到重定向的文件</a></li>
-<li><a href="https://yanbin.blog/python-function-argument-unpacking/">Python 函数参数的拆解</a></li>
-<li><a href="https://yanbin.blog/python-function-declaration-order/">Python 函数声明先后顺序的问题</a></li>
-<li><a href="https://yanbin.blog/python-package-manager-venv-virtualenv-1/">Python 包管理及虚拟环境的应用(一: pip)</a></li>
-<li><a href="https://yanbin.blog/python-package-manager-venv-virtualenv-3/">Python 包管理及虚拟环境的应用(三: pipenv)</a></li>
-<li><a href="https://yanbin.blog/python-package-manager-venv-virtualenv-2/">Python 包管理及虚拟环境的应用(二: virtualenv)</a></li>
-<li><a href="https://yanbin.blog/python-package-manager-venv-virtualenv-4/">Python 包管理及虚拟环境的应用(四: conda)</a></li>
-<li><a href="https://yanbin.blog/python-json-choose-ujson-if-necessary/">Python 处理 JSON 必要时我选择 ujson 和 orjson</a></li>
-<li><a href="https://yanbin.blog/python-programming-with-threads/">Python 多线程编程</a></li>
-<li><a href="https://yanbin.blog/add-python-methods-dynamically/">Python 对象当函数使及动态添加方法</a></li>
-<li><a href="https://yanbin.blog/python-datetime-calendar-dateutil/">Python 常用日期处理 – calendar 与 dateutil 模块</a></li>
-<li><a href="https://yanbin.blog/python-date-libraries-usages/">Python 常用日期处理 – 内置模块 datetime</a></li>
-<li><a href="https://yanbin.blog/python-execute-system-command/">Python 执行系统命令 - subprocess 模块的使用</a></li>
-<li><a href="https://yanbin.blog/python-try-with-resources-with-context-manager/">Python 版的 try-with-resources – with 上下文管理器</a></li>
-<li><a href="https://yanbin.blog/python-__str__vs__repr__methods/">Python 的 <strong>str</strong> 和 <strong>repr</strong> 方法比较</a></li>
-<li><a href="https://yanbin.blog/python-module-search-path/">Python 的模块搜索路径</a></li>
-<li><a href="https://yanbin.blog/python-thread-pool-using-bounded-working-queue/">Python 线程池使用有限大小的工作队列</a></li>
-<li><a href="https://yanbin.blog/python-collection-map-reduce-operations/">Python 集合的遍历,推导及 filter/map/reduce 操作</a></li>
-<li><a href="https://yanbin.blog/redis-builtin-lua-script/">Redis 中使用服务端 Lua 脚本</a></li>
-<li><a href="https://yanbin.blog/redis-notes-chaos/">Redis 知识点乱记</a></li>
-<li><a href="https://yanbin.blog/sql-server-and-hsqldb-use-merge-into-do-saveorupdate/">SQL Server 和 HSQLDB 中使用 merge into 完成 saveOrUpdate 操作</a></li>
-<li><a href="https://yanbin.blog/scala-junit-how-to-rule/">Scala + JUnit 怎么使用 @Rule</a></li>
-<li><a href="https://yanbin.blog/scala-concurrent-with-future/">Scala 中应用 Future 并发编程</a></li>
-<li><a href="https://yanbin.blog/scala-infix-prefix-postfix-operators/">Scala 中置, 前置, 后置操作符</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-linux-tools/">Scala 函数式编程学习视频 – Linux 下工具设置</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-mac-os-x-tools/">Scala 函数式编程学习视频 – Mac OS X 下工具设置</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-windows-tools/">Scala 函数式编程学习视频 – Windows 下工具设置</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-example-square-roots-with-newtons-method/">Scala 函数式编程学习视频 – 例子：平方根和牛顿方法</a></li>
-<li><a href="https://yanbin.blog/functional-programming-principles-in-scala-video-catalog/">Scala 函数式编程学习视频 – 总目</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-assignments/">Scala 函数式编程学习视频 – 指导: 编程作业</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-conditionals-value-definitions/">Scala 函数式编程学习视频 – 条件和值定义</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-evaluation-strategies-termination/">Scala 函数式编程学习视频 – 求值策略和终止</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-elements/">Scala 函数式编程学习视频 – 编程元素</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-paradigms/">Scala 函数式编程学习视频 – 编程范式</a></li>
-<li><a href="https://yanbin.blog/scala-functional-programming-course-introduction/">Scala 函数式编程学习视频 – 课程介绍</a></li>
-<li><a href="https://yanbin.blog/scala-java-collections-cast/">Scala 和 Java 的集合类型相互转换</a></li>
-<li><a href="https://yanbin.blog/scala-how-to-test-exception/">Scala 如何测试异常</a></li>
-<li><a href="https://yanbin.blog/scala-parameter-check-and-assertion/">Scala 的参数检查与断言: require, assert, assume 和 ensuring</a></li>
-<li><a href="https://yanbin.blog/scala-self-type-understanding/">Scala 自身类型(self-type) 解析</a></li>
-<li><a href="https://yanbin.blog/scalatest-selenium-integration-test-with-browsers/">ScalaTest + Selenium 集成测试</a></li>
-<li><a href="https://yanbin.blog/spark-submit-invalid-signature-file-digest-error/">Spark 提交任务时 Invalid signature file digest 错误</a></li>
-<li><a href="https://yanbin.blog/springboot-work-with-logback/">Spring Boot 与 Logback 日志配置</a></li>
-<li><a href="https://yanbin.blog/springfox-swagger2-generate-api-documet/">Spring MVC 项目中用 SpringFox 生成 Swagger2 API 文档</a></li>
-<li><a href="https://yanbin.blog/spring-servicelocator-pattern/">Spring ServiceLocator 介绍及应用</a></li>
-<li><a href="https://yanbin.blog/spring-intercept-method-based-on-annotation/">Spring 下基于自定义注解拦截方法调用</a></li>
-<li><a href="https://yanbin.blog/spring-work-with-factorybean/">Spring 中 FactoryBean 的使用</a></li>
-<li><a href="https://yanbin.blog/how-spring-initialize-generic-object/">Spring 如何初始化泛型类实例</a></li>
-<li><a href="https://yanbin.blog/spring-schedule-runner-threads/">Spring 定时任务(Schedule) 和线程</a></li>
-<li><a href="https://yanbin.blog/spring-external-sql-statements/">Spring 项目中把 SQL 语句写在 .sql 文件中</a></li>
-<li><a href="https://yanbin.blog/spring-properties-sql-in-xml-file/">Spring 项目中把属性或 SQL 语句写在 .xml 文件中</a></li>
-<li><a href="https://yanbin.blog/springfox-single-resource-operation-multiple-methods-swagger-documentation/">Springfox 解决在单一资源操作多个方法实现时生成 Swagger 文档的问题</a></li>
-<li><a href="https://yanbin.blog/swift-learning-autoclosure-call-by-name/">Swift 学习笔记(@autoclosure 与 call-by-name)</a></li>
-<li><a href="https://yanbin.blog/swift-learning-function/">Swift 学习笔记(函数)</a></li>
-<li><a href="https://yanbin.blog/swift-learning-function-first-class/">Swift 学习笔记(函数第一等)</a></li>
-<li><a href="https://yanbin.blog/swift-learning-basic-syntax/">Swift 学习笔记(基本语法)</a></li>
-<li><a href="https://yanbin.blog/swift-learning-class-object/">Swift 学习笔记(对象和类)</a></li>
-<li><a href="https://yanbin.blog/swift-learning-closues/">Swift 学习笔记(闭包)</a></li>
-<li><a href="https://yanbin.blog/swift-server-side-development/">Swift 语言 Server 端开发资料收集</a></li>
-<li><a href="https://yanbin.blog/terraform-get-started-with-first-sample/">Terraform 使用 - 从最简单例子开始</a></li>
-<li><a href="https://yanbin.blog/terraform-deploy-lambda-create-resources/">Terraform 进阶 - 部署 Lambda 并创建相关资源</a></li>
-<li><a href="https://yanbin.blog/vi-buffer-basic-operation/">Vi Buffer 的基本操作</a></li>
-<li><a href="https://yanbin.blog/vi-cursor-location-move/">Vi 中的光标位置操作</a></li>
-<li><a href="https://yanbin.blog/vi-vundle-plugininstall-errors/">Vi 使用 Vundle 管理插件执行 PluginInstall 出错</a></li>
-<li><a href="https://yanbin.blog/vi-registers-system-clipboard/">Vi 寄存器操作，及使用系统剪贴板</a></li>
-<li><a href="https://yanbin.blog/vim-java-autocomplete-with-vim-javacomplete2/">Vim 中 Java 代码自动完成 - vim-javacomplete2</a></li>
-<li><a href="https://yanbin.blog/vim-execute-selection-as-shell/">Vim 中使用被选择文本以 Shell 命令执行</a></li>
-<li><a href="https://yanbin.blog/vim-operate-tabs/">Vim 中标签(tab) 操作</a></li>
-<li><a href="https://yanbin.blog/vimer-mac-caps-hjkl-as-arrow-keys/">Vimer 的福音：Mac 下 Caps + hjkl 作为方向键</a></li>
-<li><a href="https://yanbin.blog/vue-js-vue-prism-editor/">Vue.js 项目使用  vue-prism-editor 语法高亮与编辑器</a></li>
-<li><a href="https://yanbin.blog/wordpress-linux-cannot-send-out-email/">WordPress 在 Linux 下不能发送邮件的问题</a></li>
-<li><a href="https://yanbin.blog/wordpress-linux-cannot-send-email-to-gmail/">WordPress 在 Linux 下不能向 Gmail 邮箱发邮件的问题</a></li>
-<li><a href="https://yanbin.blog/zookeeper-fast-get-started/">ZooKeeper 快速搭建与体验</a></li>
-<li><a href="https://yanbin.blog/fish-2-2-0-july-12-2015-support-vi-mode/">fish 2.2.0 (July 12, 2015) 支持 vi 模式</a></li>
-<li><a href="https://yanbin.blog/sbt-tests-execute-in-parallel/">sbt 中单元测试并发执行</a></li>
-<li><a href="https://yanbin.blog/sbt-task-dependency/">sbt 任务间的依赖</a></li>
-<li><a href="https://yanbin.blog/sbt-simplest-inputtask-sample/">sbt 最简单的带输入任务 inputTask</a></li>
-<li><a href="https://yanbin.blog/sbt-project-sbt-aspectj-plugin-use-aspectj/">sbt 项目通过 sbt-aspectj-plugin 使用 AspectJ</a></li>
-<li><a href="https://yanbin.blog/practical-vim-2-notes-1/">《Practical Vim》阅读笔记 (1)</a></li>
-<li><a href="https://yanbin.blog/practical-vim-2-notes-2/">《Practical Vim》阅读笔记 (2)</a></li>
-<li><a href="https://yanbin.blog/practical-vim-2-notes-3/">《Practical Vim》阅读笔记 (3)</a></li>
-<li><a href="https://yanbin.blog/practical-vim-2-notes-4/">《Practical Vim》阅读笔记 (4)</a></li>
-<li><a href="https://yanbin.blog/basic-spring-4-mvc-maven-project/">一个最基础的 Spring 4 MVC Maven 项目</a></li>
-<li><a href="https://yanbin.blog/simple-java-auto-batch-queue/">一个简单的 Java 自动批处理队列</a></li>
-<li><a href="https://yanbin.blog/three-ways-tell-generic-concrete-type/">三种方式告知泛型类或泛型方法具体类型</a></li>
-<li><a href="https://yanbin.blog/two-basic-sorting-algorithms/">两种最基本的排序算法: 冒泡和选择</a></li>
-<li><a href="https://yanbin.blog/from-notbook-to-jupyterlab-with-kite/">从 Notbook 到 JupyterLab,  再配上代码帮手 Kite</a></li>
-<li><a href="https://yanbin.blog/reading-clean-code-note-1/">代码整洁之道(Clean Code) 笔记(一)</a></li>
-<li><a href="https://yanbin.blog/reading-clean-code-note-3/">代码整洁之道(Clean Code) 笔记(三)</a></li>
-<li><a href="https://yanbin.blog/reading-clean-code-note-2/">代码整洁之道(Clean Code) 笔记(二)</a></li>
-<li><a href="https://yanbin.blog/the-principles-of-good-programming/">优秀程序设计的18大原则</a></li>
-<li><a href="https://yanbin.blog/scala-2-12-java-8-sam-lambda/">体验 Scala 2.12 支持的 Java 8 风格(SAM) Lambda</a></li>
-<li><a href="https://yanbin.blog/python-3-8-new-features/">体验一下 Python 3.8 带来的主要新特性</a></li>
-<li><a href="https://yanbin.blog/test-asyn-call-with-awaitility/">使用 Awaitility 测试异步代码</a></li>
-<li><a href="https://yanbin.blog/leverage-bytebuddy-generate-generic-subclass/">使用 Byte Buddy 运行时生成泛型子类</a></li>
-<li><a href="https://yanbin.blog/google-guava-striped-key-based-fine-grain-locks/">使用 Google Guava Striped 实现基于 Key 的并发锁</a></li>
-<li><a href="https://yanbin.blog/jmockit-mock-constructors/">使用 JMockit 来 mock 构造函数</a></li>
-<li><a href="https://yanbin.blog/proper-ways-of-using-java8-optional/">使用 Java8 Optional 的正确姿势</a></li>
-<li><a href="https://yanbin.blog/leverage-javassist-generate-generic-subclass/">使用 Javassist 运行时生成泛型子类</a></li>
-<li><a href="https://yanbin.blog/mockito-modify-private-field/">使用 Mockito 修改私有属性</a></li>
-<li><a href="https://yanbin.blog/mockito-injectmocks-initialize-tested-instance/">使用 Mockito 的 @InjectMocks 创建被测试类实例</a></li>
-<li><a href="https://yanbin.blog/nodejs-atom-shell-gui-app-hello-world/">使用 NodeJS 框架 Atom Shell 编写桌面应用入门</a></li>
-<li><a href="https://yanbin.blog/nodejs-nw-js-gui-app-hello-world/">使用 NodeJS 框架 NW.js 编写桌面应用入门</a></li>
-<li><a href="https://yanbin.blog/use-postgresql-uuid-field-data-type/">使用 PostgreSQL 的 uuid 字段类型</a></li>
-<li><a href="https://yanbin.blog/use-sql-server-uniqueidentifier-data-type/">使用 SQL Server 的 uniqueidentifier 字段类型</a></li>
-<li><a href="https://yanbin.blog/avro-tools-jq-view-apache-avro-file/">使用 avro-tools, jq 查看 Apache Avro 序列化文件</a></li>
-<li><a href="https://yanbin.blog/maven-plugin-aspectj-weaving/">使用插件 aspectj-maven-plugin 织入 AspectJ AOP</a></li>
-<li><a href="https://yanbin.blog/about-apache-flask-integration/">关于 Apache  与  Flask 的集成经历</a></li>
-<li><a href="https://yanbin.blog/rough-interface-based-programming/">再论机械式针对接口编程</a></li>
-<li><a href="https://yanbin.blog/several-method-installing-kubernetes-cluster/">几种简单安装 Kubernetes 集群的方法</a></li>
-<li><a href="https://yanbin.blog/kotlin-function-definition-vs-scala/">函数定义 Kotlin V.S. Scala</a></li>
-<li><a href="https://yanbin.blog/create-python-list-set-dict/">创建 Python 的 list, set, tuple 和 dict</a></li>
-<li><a href="https://yanbin.blog/kafka-enable-saslacl/">启用并测试 Kafka 的 SASL + ACL 认证授权</a></li>
-<li><a href="https://yanbin.blog/pass-arguments-to-docker-container/">如何向 Docker 容器传递参数</a></li>
-<li><a href="https://yanbin.blog/customize-spring-boot-banner/">如何定制 Spring Boot 的 Banner</a></li>
-<li><a href="https://yanbin.blog/happy-with-java8-lambda/">如何快乐的使用 Java 8 的 Lambda</a></li>
-<li><a href="https://yanbin.blog/run-clojure-script-file/">如何直接运行 Clojure 脚本文件</a></li>
-<li><a href="https://yanbin.blog/understand-sort-function/">如何轻松理解排序函数</a></li>
-<li><a href="https://yanbin.blog/learn-junit-5-new-features/">学习并体验 JUnit 5 新特性</a></li>
-<li><a href="https://yanbin.blog/aws-s3-multipe-parts-upload/">实现 Amazon S3 数据(文件)分段上传</a></li>
-<li><a href="https://yanbin.blog/java-9-single-underscore-keyword-thinking/">对 Java 9 把单个下划线作为关键字的猜想</a></li>
-<li><a href="https://yanbin.blog/try-spring-boot-spring-mvc/">小试 Spring Boot - Spring MVC</a></li>
-<li><a href="https://yanbin.blog/consolidate-use-of-java-future/">巩固 Java Future 的使用</a></li>
-<li><a href="https://yanbin.blog/shell-sort-enhanced-insertion-sort/">希尔(Shell) 排序 -  增强版插入排序算法</a></li>
-<li><a href="https://yanbin.blog/different-between-concurrent-and-parallel/">并发(Concurrent) 与并行(Parallel) 的区别</a></li>
-<li><a href="https://yanbin.blog/layout-like-playframework-2/">建立 Play 2 框架一样的目录布局</a></li>
-<li><a href="https://yanbin.blog/aws-boto3-python-ide-autocomplete/">开启 Python 组件 Boto3 在 IDE 中的智能提示</a></li>
-<li><a href="https://yanbin.blog/python-again-lightweight-tools/">开始再战 Python - 重新入门 - 工具篇</a></li>
-<li><a href="https://yanbin.blog/the-last-basic-merge-sorting/">归并排序算法解析</a></li>
-<li><a href="https://yanbin.blog/features-of-ideal-programming-language/">想像中理想编程语言的几个特征</a></li>
-<li><a href="https://yanbin.blog/my-python-warm-up/">我的 Python 快速入门</a></li>
-<li><a href="https://yanbin.blog/split-playframework-2-routes-into-mutiple-files/">拆分 Playframework 2 的 routes 为多个文件</a></li>
-<li><a href="https://yanbin.blog/how-flask-work-with-asyncio/">探索 Flask 对 asyncio 的支持</a></li>
-<li><a href="https://yanbin.blog/push-docker-image-to-amazon-ecr-repository/">推送 Docker 镜像到 Amazon ECR 仓库</a></li>
-<li><a href="https://yanbin.blog/insertion-sort-how-to/">插入排序算法解析</a></li>
-<li><a href="https://yanbin.blog/setup-aws-kubernetes-eks-service/">搭建使用 AWS 的 Kubernetes EKS 服务</a></li>
-<li><a href="https://yanbin.blog/jackson-json-path-support-before/">早先为 Jackson 写的 Json-Path 支持</a></li>
-<li><a href="https://yanbin.blog/show-sbt-dependency-tree/">查看  sbt 项目的依赖关系树</a></li>
-<li><a href="https://yanbin.blog/master-python-decorators/">熟悉和应用 Python 的装饰器</a></li>
-<li><a href="https://yanbin.blog/understand-completablefuture-task-callback-threads/">理解 CompletableFuture 的任务与回调函数的线程</a></li>
-<li><a href="https://yanbin.blog/understand-python-class-definition/">理解 Python 类的变量,方法与属性</a></li>
-<li><a href="https://yanbin.blog/understand-spring-schedule-fixedrate-fixeddelay/">理解 Spring 定时任务的 fixedRate 和 fixedDelay  的区别</a></li>
-<li><a href="https://yanbin.blog/pth-file-append-python-module-search-path/">用 .pth 文件附加 Python 模块搜索路径</a></li>
-<li><a href="https://yanbin.blog/aws-secrets-manager-store-secrets/">用 AWS Secrets Manager 存储和管理密钥</a></li>
-<li><a href="https://yanbin.blog/merge-in-memory-table-data-into-sql-server-table/">用 Java 把内存中的表格数据合并到 SQL Server 表中</a></li>
-<li><a href="https://yanbin.blog/sqlserver-insert-multiple-rows-onetime/">用 PreparedStatement 向 SqlServer 中一次性插入多条记录</a></li>
-<li><a href="https://yanbin.blog/example-understand-es6-export-import/">用一个例子理解 ES6 的 export/import 用法</a></li>
-<li><a href="https://yanbin.blog/from-java-10-var-to-11-candicate-multiple-line-string/">相比于 Java 10 的 var, 更期待 Java 11 支持多行字符串</a></li>
-<li><a href="https://yanbin.blog/real-advanced-sorting-algorithm-quick/">真正有些水准的排序算法 - 快速排序</a></li>
-<li><a href="https://yanbin.blog/wait-all-completablefuture-done/">等待所有的  CompletableFuture 完成</a></li>
-<li><a href="https://yanbin.blog/initial-apache-kafka-environment/">简单搭建 Apache Kafka 分布式消息系统</a></li>
-<li><a href="https://yanbin.blog/customize-jackson-annotation-and-disable-specific-annotation/">自定义 Jackson 注解与禁用某一特定的注解</a></li>
-<li><a href="https://yanbin.blog/custom-classload-dynamic-load-jdbc-driver/">自定义类加载器动态加载 JDBC 驱动</a></li>
-<li><a href="https://yanbin.blog/fix-jvisualvm-stuck-at-computing-description-issue/">解决 jvisualvm 启动后长时间 Computing description… 的问题</a></li>
-<li><a href="https://yanbin.blog/python-database-query-return-dictionary-result/">让 Python 的数据库查询返回字典记录</a></li>
-<li><a href="https://yanbin.blog/scala-space-in-test-method-name-not-shows-u0020/">让 Scala 测试方法名中的空格不再显示为 $u0020</a></li>
-<li><a href="https://yanbin.blog/how-spring-scan-beans-resources/">记录一下 Spring 如何扫描注解的 Bean 与资源</a></li>
-<li><a href="https://yanbin.blog/frequently-used-linux-shell-script/">记录自己常用的一些 Linux Shell 脚本</a></li>
-<li><a href="https://yanbin.blog/rxjava-get-started/">试手 RxJava 2.x 及对线程的初步理解</a></li>
-<li><a href="https://yanbin.blog/how-to-upgrade-from-java-8-to-10/">该如何从 Java 8 升级到 Java 10</a></li>
-<li><a href="https://yanbin.blog/why-http-get-cannot-sent-data-with-reuqest-body/">谁说 HTTP GET 就不能通过 Body 来发送数据呢？</a></li>
-<li><a href="https://yanbin.blog/becomming-functional-1/">走进函数式编程 (Becomming Functional) (1)</a></li>
-<li><a href="https://yanbin.blog/becomming-functional-2/">走进函数式编程 (Becomming Functional) (2)</a></li>
-<li><a href="https://yanbin.blog/becomming-functional-3/">走进函数式编程 (Becomming Functional) (不可变性)</a></li>
-<li><a href="https://yanbin.blog/becomming-functional-4/">走进函数式编程 (Becomming Functional) (递归)</a></li>
-<li><a href="https://yanbin.blog/create-java-instance-bypass-constructor/">跳过构造函数创建 Java 对象(测试)</a></li>
-<li><a href="https://yanbin.blog/convert-iterator-to-java-8-stream/">转换  Iterator 为 Java 8 的 Stream</a></li>
-<li><a href="https://yanbin.blog/dynamic-creating-spring-bean-runtime/">运行时动态创建 Spring Bean</a></li>
-<li><a href="https://yanbin.blog/understand-java-enum-with-bytecode/">通过反编译字节码来理解 Java 枚举</a></li>
-<li><a href="https://yanbin.blog/config-vim-word-with-scala/">配置 Scala 的 vim 编辑环境</a></li>
-<li><a href="https://yanbin.blog/configure-vim-dictionary/">配置 VIM 英语字典</a></li>
-<li><a href="https://yanbin.blog/program-to-interface-and-agile/">针对接口编程及敏捷编程</a></li>
-</ul>
-]]></content>
+    <title>阅读列表-记忆</title>
+    <url>/2021/06/12/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E8%AE%B0%E5%BF%86/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>mitmproxy的使用</title>
@@ -2259,6 +1980,286 @@
         <tag>charles</tag>
         <tag>mitmproxy</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>yanbin的博客文章</title>
+    <url>/2020/11/26/%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0-yanbin/</url>
+    <content><![CDATA[<ul>
+<li><a href="https://yanbin.blog/5-best-vim-cheat-sheet/">5 个最好的  Vim 速查卡 (Cheat Sheet)</a></li>
+<li><a href="https://yanbin.blog/akka-actor-start-with-easy-example/">Akka Actor: 从最简单的例子开始</a></li>
+<li><a href="https://yanbin.blog/apache-avro-serializing-deserializing/">Apache Avro 序列化与反序列化 (Java 实现)</a></li>
+<li><a href="https://yanbin.blog/apache-run-python-cgi-config/">Apache 中运行 Python CGI 程序</a></li>
+<li><a href="https://yanbin.blog/bash-emacs-vi-key-bindings/">Bash 下的 emacs 和  vi 键绑定</a></li>
+<li><a href="https://yanbin.blog/bash-common-syntax-control-structures/">Bash 的常用语法，控制结构</a></li>
+<li><a href="https://yanbin.blog/bash-zsh-call-emacs-vim-edit-current-command/">Bash/Zsh 下调用 Emacs/Vim 编辑当前命令</a></li>
+<li><a href="https://yanbin.blog/clojure-lein-repl-connect-session/">Clojure REPL 连接远程会话</a></li>
+<li><a href="https://yanbin.blog/clojure-get-started/">Clojure 快速突击</a></li>
+<li><a href="https://yanbin.blog/clojure-get-started-1/">Clojure 快速突击(续)</a></li>
+<li><a href="https://yanbin.blog/completablefuture-concurrent-performance/">CompletableFuture 的并发性能研究</a></li>
+<li><a href="https://yanbin.blog/docker-compose-in-action/">Docker Compose 实践</a></li>
+<li><a href="https://yanbin.blog/docker-swarm-cluster-in-action/">Docker Swarm 集群模式实操</a></li>
+<li><a href="https://yanbin.blog/docker-attach-deattach-without-exit-container/">Docker attach 后断开时不退出容器</a></li>
+<li><a href="https://yanbin.blog/docker-process-namespace/">Docker 容器内进程与 Namespace</a></li>
+<li><a href="https://yanbin.blog/dockerfile-difference-between-shell-exec-forms/">Dockerfile 中命令的两种书写方式的区别</a></li>
+<li><a href="https://yanbin.blog/flask-vue-js-integration-dev-deploy/">Flask 和  Vue.js 开发及整合部署实例</a></li>
+<li><a href="https://yanbin.blog/flask-replacement-aiohttp-quart/">Flask 的替代品 aiohttp 和 Quart</a></li>
+<li><a href="https://yanbin.blog/flask-vue-js-integrate-with-bootstrap-bootstrapvue/">Flask, Vue.js 中集成 Bootstrap/BootstrapVue</a></li>
+<li><a href="https://yanbin.blog/giter8-put-project-layout-on-github/">Giter8 – 把项目布局模板放到 GitHub 上</a></li>
+<li><a href="https://yanbin.blog/google-guice-hello-world/">Google Guice 轻装上阵</a></li>
+<li><a href="https://yanbin.blog/groovy-multiple-assignment-returns/">Groovy 的多重赋值和方法的多返回值</a></li>
+<li><a href="https://yanbin.blog/hazelcast-introduction/">Hazelcast 介绍与使用(整理)</a></li>
+<li><a href="https://yanbin.blog/hibernate-map-enum-type-field/">Hibernate 映射枚举(Enum) 类型的属性</a></li>
+<li><a href="https://yanbin.blog/intellij-idea-create-maven-scala-project/">IntelliJ IDEA 中创建 Maven Scala 项目</a></li>
+<li><a href="https://yanbin.blog/jmockit-capture-mock-call-arguments/">JMockit 中捕获 mock 对象方法的调用参数</a></li>
+<li><a href="https://yanbin.blog/jmockit-mocked-object-default-field-method-values/">JMockit 中被 Mocked 的对象属性及方法的默认值</a></li>
+<li><a href="https://yanbin.blog/jmockit-partial-mock/">JMockit 如何 Mock 部分方法/属性</a></li>
+<li><a href="https://yanbin.blog/junit-5-work-with-mockito-2/">JUnit 5 使用 Mockito 2 进行测试</a></li>
+<li><a href="https://yanbin.blog/junit-5-new-features-and-get-started/">JUnit 5 快速上手(从 JUnit 4 到 JUnit 5)</a></li>
+<li><a href="https://yanbin.blog/junit-test-instance-lifecycle/">JUnit 中是以测试方法为一个独立的生命周期</a></li>
+<li><a href="https://yanbin.blog/lisp-over-jvm-dialect-clojure-1-9/">JVM 上的 Lisp 方言 Clojure 1.9</a></li>
+<li><a href="https://yanbin.blog/jackson-yn-boolean-value-deserialization/">Jackson 反序列化 “Y”/“N” 为相应的布尔值</a></li>
+<li><a href="https://yanbin.blog/jackson-ignore-specified-field-type/">Jackson 序列化忽略指定类型的属性</a></li>
+<li><a href="https://yanbin.blog/java-8-completablefuture-brief-touch/">Java 8 CompletableFuture 浅入</a></li>
+<li><a href="https://yanbin.blog/java-8-lambda-simple-ways/">Java 8 Lambda 写法与简化</a></li>
+<li><a href="https://yanbin.blog/java-8-lambda-capture-outer-variables/">Java 8 Lambda 捕获外部变量</a></li>
+<li><a href="https://yanbin.blog/java-8-map-new-added-methods/">Java 8 Map 中新增的方法使用记录</a></li>
+<li><a href="https://yanbin.blog/java-8-stream-to-collection/">Java 8 Stream 如何还原为集合</a></li>
+<li><a href="https://yanbin.blog/java8-repeatable-annotations/">Java 8 可重复注解的理解与应用</a></li>
+<li><a href="https://yanbin.blog/java-8-list-deduplication-with-lambda/">Java 8 根据属性值对列表去重</a></li>
+<li><a href="https://yanbin.blog/java-8-groupingby-empty-map-group/">Java 8 的 groupingBy 产生空的 Map 分组</a></li>
+<li><a href="https://yanbin.blog/java-8-groupingby-howto-generate-empty-map/">Java 8 的 groupingBy 能否产生空的 Map 分组</a></li>
+<li><a href="https://yanbin.blog/java-8-generic-enhance/">Java 8 的泛型增强</a></li>
+<li><a href="https://yanbin.blog/java-8-return-the-first-match-element/">Java 8 返回集合中第一个匹配的元素</a></li>
+<li><a href="https://yanbin.blog/java-9-platform-logging-api/">Java 9 - 平台日志 API</a></li>
+<li><a href="https://yanbin.blog/java-9-quick-create-immutable-collections/">Java 9 - 快速创建不可变集合</a></li>
+<li><a href="https://yanbin.blog/java-9-talk-reactive-stream/">Java 9 - 说说响应式流</a></li>
+<li><a href="https://yanbin.blog/java-stack-walking-api/">Java 9 线程栈遍历 API</a></li>
+<li><a href="https://yanbin.blog/java-nio2-aio-readfile/">Java NIO2(AIO) 进行文件异步读取</a></li>
+<li><a href="https://yanbin.blog/java-python-communicate-via-apache-avro/">Java 与 Python 通过 Apache Avro 交换数据</a></li>
+<li><a href="https://yanbin.blog/java-postgresql-unit-test/">Java 与’嵌入式’ PostgreSQL 数据库的单元测试</a></li>
+<li><a href="https://yanbin.blog/java-spring-meta-annotation/">Java 元注解及 Spring 组合注解应用</a></li>
+<li><a href="https://yanbin.blog/java-unit-test-assert-console-output/">Java 单元测试如何断言(检查)控制台输出</a></li>
+<li><a href="https://yanbin.blog/java-reflection-modify-final-field-value/">Java 反射修改 final 属性值</a></li>
+<li><a href="https://yanbin.blog/java-reflection-modify-final-field/">Java 反射有效的修改 final 属性值</a></li>
+<li><a href="https://yanbin.blog/java-varargs-method-error-prone/">Java 可变参 Object…objects 方法的陷进</a></li>
+<li><a href="https://yanbin.blog/java-constant-interface-anti-pattern/">Java 接口常量反模式及如何定义 Java 常量</a></li>
+<li><a href="https://yanbin.blog/common-threadpool-vs-forkjoinpool/">Java 普通线程池与 ForkJoinPool 的效果对比</a></li>
+<li><a href="https://yanbin.blog/java-built-tools-sbt-simplist-project/">Java 构建工具及 sbt 最快速体验</a></li>
+<li><a href="https://yanbin.blog/java-generic-auto-infer-by-declare-type/">Java 泛型 – 依据声明的变量类型自动推断</a></li>
+<li><a href="https://yanbin.blog/java-fork-join-framework-memo/">Java 的  fork-join 框架实例备忘</a></li>
+<li><a href="https://yanbin.blog/java-assertion-guava-preconditions/">Java 的参数检查与断言 - Guava Preconditions</a></li>
+<li><a href="https://yanbin.blog/java-assertion-spring-assert/">Java 的参数检查与断言 - Spring Assert</a></li>
+<li><a href="https://yanbin.blog/java-parse-xml-suppress-fatal-error-output/">Java 解析 XML 时如何屏蔽掉 “[Fatal Error]” 的输出</a></li>
+<li><a href="https://yanbin.blog/java-language-defect-1-no-here-document/">Java 语言的几个缺陷之一: 无 Here Document</a></li>
+<li><a href="https://yanbin.blog/java-language-defect-3-not-support-var-type-infer/">Java 语言的几个缺陷之三: 不支持 var 类型推断</a></li>
+<li><a href="https://yanbin.blog/java-language-defect-2-equals-compare-strings/">Java 语言的几个缺陷之二: equals() 比较字符串</a></li>
+<li><a href="https://yanbin.blog/java-language-defect-no-multiple-returns/">Java 语言的几个缺陷之五: 多返回值问题</a></li>
+<li><a href="https://yanbin.blog/java-language-defect-no-string-interpolation/">Java 语言的几个缺陷之六: 无字符串插值</a></li>
+<li><a href="https://yanbin.blog/java-language-defect-4-outdated-javabean/">Java 语言的几个缺陷之四: 过时的 JavaBean</a></li>
+<li><a href="https://yanbin.blog/java-how-to-get-generic-type/">Java 运行时如何获取泛型参数的类型</a></li>
+<li><a href="https://yanbin.blog/java8-lambda-and-checked-exception/">Java8 Lambda 表达式与 Checked Exception</a></li>
+<li><a href="https://yanbin.blog/java8-optional-several-common-incorrect-usages/">Java8 Optional 几个常见错误用法</a></li>
+<li><a href="https://yanbin.blog/jdbctemplate-java-8-lambda-trick/">JdbcTemplate 易被 Java 8 Lambda 带入的坑</a></li>
+<li><a href="https://yanbin.blog/kafka-connect-how-to/">Kafka Connect 介绍和使用</a></li>
+<li><a href="https://yanbin.blog/kafka-producer-interceptor-record-statistics/">Kafka Producer 设置 Interceptor 来统计消息</a></li>
+<li><a href="https://yanbin.blog/how-kafka-select-partition/">Kafka 发布消息时如何选择 Partition</a></li>
+<li><a href="https://yanbin.blog/kafka-produce-consume-avro-data/">Kafka 生产消费 Avro 序列化数据</a></li>
+<li><a href="https://yanbin.blog/kafka-mirror-maker-in-action/">Kafka 集群间数据镜像实测</a></li>
+<li><a href="https://yanbin.blog/kubernetes-learning-1/">Kubernetes 学习笔记(一) - 初上手</a></li>
+<li><a href="https://yanbin.blog/kubernetes-learning-2-run-service/">Kubernetes 学习笔记(二) - 部署和访问应用</a></li>
+<li><a href="https://yanbin.blog/kubernetes-cluster-internal-ip-issue/">Kubernetes 集群中节点的 INTERNAL-IP 问题</a></li>
+<li><a href="https://yanbin.blog/linux-config-log-ratation-logrotate/">Linux 下配置滚动日志之 logrotate</a></li>
+<li><a href="https://yanbin.blog/linux-config-log-ratation-rotatelogs/">Linux 下配置滚动日志之 rotatelogs</a></li>
+<li><a href="https://yanbin.blog/linux-input-output-redirection/">Linux 输入输出重定向, &amp;&gt;file, 2&gt;&amp;1, 1&gt;&amp;2 等</a></li>
+<li><a href="https://yanbin.blog/mac-os-x-issue-of-brew-update/">Mac OS X 下不能 brew update 的问题</a></li>
+<li><a href="https://yanbin.blog/mac-os-x-experience-docker-new-2/">Mac OS X 下安装使用 Docker (新)</a></li>
+<li><a href="https://yanbin.blog/mockito-capture-method-paramters/">Mockito 中捕获 mock 对象方法的调用参数</a></li>
+<li><a href="https://yanbin.blog/mockito-mocked-default-fields-method-returns/">Mockito 中被 Mocked 的对象属性及方法的默认值</a></li>
+<li><a href="https://yanbin.blog/mockito-mock-final-class-final-method/">Mockito 也能 Mock final 类和 final 方法了</a></li>
+<li><a href="https://yanbin.blog/mockito-how-to-mock-void-method/">Mockito 如何 mock 返回值为 void 的方法</a></li>
+<li><a href="https://yanbin.blog/mockito-anystring-anyfoo-class-cannot-match-null-values/">Mockito 的 anyString(), any(Foo.class) 等不能匹配 null 值</a></li>
+<li><a href="https://yanbin.blog/nginx-gunicorn-flask-integration/">Nginx + Gunicorn + Flask 集成配置</a></li>
+<li><a href="https://yanbin.blog/nodejs-web-server-listen-on-domain-socket/">NodeJS 的 Web 服务也可以监听在 sock 文件</a></li>
+<li><a href="https://yanbin.blog/play2-custom-template-type-java-scala/">Play2 自定义模板类型 (Java&amp;Scala)</a></li>
+<li><a href="https://yanbin.blog/play2-3-custom-view-template-java/">Play2.3 自定义模板类型 – Java 版</a></li>
+<li><a href="https://yanbin.blog/postgresql-unnest-batch-crud-merge/">PostgreSQL 批量插入,  更新和合并操作</a></li>
+<li><a href="https://yanbin.blog/python-urlencode-urldecode/">Python  中的  urlencode 和 urldecode 操作</a></li>
+<li><a href="https://yanbin.blog/python-sort-list-sort-sorted/">Python  列表的排序 - sort/sorted</a></li>
+<li><a href="https://yanbin.blog/python-3-7-what-is-new/">Python 3.7 所带来的新特性</a></li>
+<li><a href="https://yanbin.blog/python-datetime-timezone/">Python datetime 处理时区信息</a></li>
+<li><a href="https://yanbin.blog/python-redirect-print-immediately/">Python print 立即打印内容到重定向的文件</a></li>
+<li><a href="https://yanbin.blog/python-function-argument-unpacking/">Python 函数参数的拆解</a></li>
+<li><a href="https://yanbin.blog/python-function-declaration-order/">Python 函数声明先后顺序的问题</a></li>
+<li><a href="https://yanbin.blog/python-package-manager-venv-virtualenv-1/">Python 包管理及虚拟环境的应用(一: pip)</a></li>
+<li><a href="https://yanbin.blog/python-package-manager-venv-virtualenv-3/">Python 包管理及虚拟环境的应用(三: pipenv)</a></li>
+<li><a href="https://yanbin.blog/python-package-manager-venv-virtualenv-2/">Python 包管理及虚拟环境的应用(二: virtualenv)</a></li>
+<li><a href="https://yanbin.blog/python-package-manager-venv-virtualenv-4/">Python 包管理及虚拟环境的应用(四: conda)</a></li>
+<li><a href="https://yanbin.blog/python-json-choose-ujson-if-necessary/">Python 处理 JSON 必要时我选择 ujson 和 orjson</a></li>
+<li><a href="https://yanbin.blog/python-programming-with-threads/">Python 多线程编程</a></li>
+<li><a href="https://yanbin.blog/add-python-methods-dynamically/">Python 对象当函数使及动态添加方法</a></li>
+<li><a href="https://yanbin.blog/python-datetime-calendar-dateutil/">Python 常用日期处理 – calendar 与 dateutil 模块</a></li>
+<li><a href="https://yanbin.blog/python-date-libraries-usages/">Python 常用日期处理 – 内置模块 datetime</a></li>
+<li><a href="https://yanbin.blog/python-execute-system-command/">Python 执行系统命令 - subprocess 模块的使用</a></li>
+<li><a href="https://yanbin.blog/python-try-with-resources-with-context-manager/">Python 版的 try-with-resources – with 上下文管理器</a></li>
+<li><a href="https://yanbin.blog/python-__str__vs__repr__methods/">Python 的 <strong>str</strong> 和 <strong>repr</strong> 方法比较</a></li>
+<li><a href="https://yanbin.blog/python-module-search-path/">Python 的模块搜索路径</a></li>
+<li><a href="https://yanbin.blog/python-thread-pool-using-bounded-working-queue/">Python 线程池使用有限大小的工作队列</a></li>
+<li><a href="https://yanbin.blog/python-collection-map-reduce-operations/">Python 集合的遍历,推导及 filter/map/reduce 操作</a></li>
+<li><a href="https://yanbin.blog/redis-builtin-lua-script/">Redis 中使用服务端 Lua 脚本</a></li>
+<li><a href="https://yanbin.blog/redis-notes-chaos/">Redis 知识点乱记</a></li>
+<li><a href="https://yanbin.blog/sql-server-and-hsqldb-use-merge-into-do-saveorupdate/">SQL Server 和 HSQLDB 中使用 merge into 完成 saveOrUpdate 操作</a></li>
+<li><a href="https://yanbin.blog/scala-junit-how-to-rule/">Scala + JUnit 怎么使用 @Rule</a></li>
+<li><a href="https://yanbin.blog/scala-concurrent-with-future/">Scala 中应用 Future 并发编程</a></li>
+<li><a href="https://yanbin.blog/scala-infix-prefix-postfix-operators/">Scala 中置, 前置, 后置操作符</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-linux-tools/">Scala 函数式编程学习视频 – Linux 下工具设置</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-mac-os-x-tools/">Scala 函数式编程学习视频 – Mac OS X 下工具设置</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-windows-tools/">Scala 函数式编程学习视频 – Windows 下工具设置</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-example-square-roots-with-newtons-method/">Scala 函数式编程学习视频 – 例子：平方根和牛顿方法</a></li>
+<li><a href="https://yanbin.blog/functional-programming-principles-in-scala-video-catalog/">Scala 函数式编程学习视频 – 总目</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-assignments/">Scala 函数式编程学习视频 – 指导: 编程作业</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-conditionals-value-definitions/">Scala 函数式编程学习视频 – 条件和值定义</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-evaluation-strategies-termination/">Scala 函数式编程学习视频 – 求值策略和终止</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-elements/">Scala 函数式编程学习视频 – 编程元素</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-paradigms/">Scala 函数式编程学习视频 – 编程范式</a></li>
+<li><a href="https://yanbin.blog/scala-functional-programming-course-introduction/">Scala 函数式编程学习视频 – 课程介绍</a></li>
+<li><a href="https://yanbin.blog/scala-java-collections-cast/">Scala 和 Java 的集合类型相互转换</a></li>
+<li><a href="https://yanbin.blog/scala-how-to-test-exception/">Scala 如何测试异常</a></li>
+<li><a href="https://yanbin.blog/scala-parameter-check-and-assertion/">Scala 的参数检查与断言: require, assert, assume 和 ensuring</a></li>
+<li><a href="https://yanbin.blog/scala-self-type-understanding/">Scala 自身类型(self-type) 解析</a></li>
+<li><a href="https://yanbin.blog/scalatest-selenium-integration-test-with-browsers/">ScalaTest + Selenium 集成测试</a></li>
+<li><a href="https://yanbin.blog/spark-submit-invalid-signature-file-digest-error/">Spark 提交任务时 Invalid signature file digest 错误</a></li>
+<li><a href="https://yanbin.blog/springboot-work-with-logback/">Spring Boot 与 Logback 日志配置</a></li>
+<li><a href="https://yanbin.blog/springfox-swagger2-generate-api-documet/">Spring MVC 项目中用 SpringFox 生成 Swagger2 API 文档</a></li>
+<li><a href="https://yanbin.blog/spring-servicelocator-pattern/">Spring ServiceLocator 介绍及应用</a></li>
+<li><a href="https://yanbin.blog/spring-intercept-method-based-on-annotation/">Spring 下基于自定义注解拦截方法调用</a></li>
+<li><a href="https://yanbin.blog/spring-work-with-factorybean/">Spring 中 FactoryBean 的使用</a></li>
+<li><a href="https://yanbin.blog/how-spring-initialize-generic-object/">Spring 如何初始化泛型类实例</a></li>
+<li><a href="https://yanbin.blog/spring-schedule-runner-threads/">Spring 定时任务(Schedule) 和线程</a></li>
+<li><a href="https://yanbin.blog/spring-external-sql-statements/">Spring 项目中把 SQL 语句写在 .sql 文件中</a></li>
+<li><a href="https://yanbin.blog/spring-properties-sql-in-xml-file/">Spring 项目中把属性或 SQL 语句写在 .xml 文件中</a></li>
+<li><a href="https://yanbin.blog/springfox-single-resource-operation-multiple-methods-swagger-documentation/">Springfox 解决在单一资源操作多个方法实现时生成 Swagger 文档的问题</a></li>
+<li><a href="https://yanbin.blog/swift-learning-autoclosure-call-by-name/">Swift 学习笔记(@autoclosure 与 call-by-name)</a></li>
+<li><a href="https://yanbin.blog/swift-learning-function/">Swift 学习笔记(函数)</a></li>
+<li><a href="https://yanbin.blog/swift-learning-function-first-class/">Swift 学习笔记(函数第一等)</a></li>
+<li><a href="https://yanbin.blog/swift-learning-basic-syntax/">Swift 学习笔记(基本语法)</a></li>
+<li><a href="https://yanbin.blog/swift-learning-class-object/">Swift 学习笔记(对象和类)</a></li>
+<li><a href="https://yanbin.blog/swift-learning-closues/">Swift 学习笔记(闭包)</a></li>
+<li><a href="https://yanbin.blog/swift-server-side-development/">Swift 语言 Server 端开发资料收集</a></li>
+<li><a href="https://yanbin.blog/terraform-get-started-with-first-sample/">Terraform 使用 - 从最简单例子开始</a></li>
+<li><a href="https://yanbin.blog/terraform-deploy-lambda-create-resources/">Terraform 进阶 - 部署 Lambda 并创建相关资源</a></li>
+<li><a href="https://yanbin.blog/vi-buffer-basic-operation/">Vi Buffer 的基本操作</a></li>
+<li><a href="https://yanbin.blog/vi-cursor-location-move/">Vi 中的光标位置操作</a></li>
+<li><a href="https://yanbin.blog/vi-vundle-plugininstall-errors/">Vi 使用 Vundle 管理插件执行 PluginInstall 出错</a></li>
+<li><a href="https://yanbin.blog/vi-registers-system-clipboard/">Vi 寄存器操作，及使用系统剪贴板</a></li>
+<li><a href="https://yanbin.blog/vim-java-autocomplete-with-vim-javacomplete2/">Vim 中 Java 代码自动完成 - vim-javacomplete2</a></li>
+<li><a href="https://yanbin.blog/vim-execute-selection-as-shell/">Vim 中使用被选择文本以 Shell 命令执行</a></li>
+<li><a href="https://yanbin.blog/vim-operate-tabs/">Vim 中标签(tab) 操作</a></li>
+<li><a href="https://yanbin.blog/vimer-mac-caps-hjkl-as-arrow-keys/">Vimer 的福音：Mac 下 Caps + hjkl 作为方向键</a></li>
+<li><a href="https://yanbin.blog/vue-js-vue-prism-editor/">Vue.js 项目使用  vue-prism-editor 语法高亮与编辑器</a></li>
+<li><a href="https://yanbin.blog/wordpress-linux-cannot-send-out-email/">WordPress 在 Linux 下不能发送邮件的问题</a></li>
+<li><a href="https://yanbin.blog/wordpress-linux-cannot-send-email-to-gmail/">WordPress 在 Linux 下不能向 Gmail 邮箱发邮件的问题</a></li>
+<li><a href="https://yanbin.blog/zookeeper-fast-get-started/">ZooKeeper 快速搭建与体验</a></li>
+<li><a href="https://yanbin.blog/fish-2-2-0-july-12-2015-support-vi-mode/">fish 2.2.0 (July 12, 2015) 支持 vi 模式</a></li>
+<li><a href="https://yanbin.blog/sbt-tests-execute-in-parallel/">sbt 中单元测试并发执行</a></li>
+<li><a href="https://yanbin.blog/sbt-task-dependency/">sbt 任务间的依赖</a></li>
+<li><a href="https://yanbin.blog/sbt-simplest-inputtask-sample/">sbt 最简单的带输入任务 inputTask</a></li>
+<li><a href="https://yanbin.blog/sbt-project-sbt-aspectj-plugin-use-aspectj/">sbt 项目通过 sbt-aspectj-plugin 使用 AspectJ</a></li>
+<li><a href="https://yanbin.blog/practical-vim-2-notes-1/">《Practical Vim》阅读笔记 (1)</a></li>
+<li><a href="https://yanbin.blog/practical-vim-2-notes-2/">《Practical Vim》阅读笔记 (2)</a></li>
+<li><a href="https://yanbin.blog/practical-vim-2-notes-3/">《Practical Vim》阅读笔记 (3)</a></li>
+<li><a href="https://yanbin.blog/practical-vim-2-notes-4/">《Practical Vim》阅读笔记 (4)</a></li>
+<li><a href="https://yanbin.blog/basic-spring-4-mvc-maven-project/">一个最基础的 Spring 4 MVC Maven 项目</a></li>
+<li><a href="https://yanbin.blog/simple-java-auto-batch-queue/">一个简单的 Java 自动批处理队列</a></li>
+<li><a href="https://yanbin.blog/three-ways-tell-generic-concrete-type/">三种方式告知泛型类或泛型方法具体类型</a></li>
+<li><a href="https://yanbin.blog/two-basic-sorting-algorithms/">两种最基本的排序算法: 冒泡和选择</a></li>
+<li><a href="https://yanbin.blog/from-notbook-to-jupyterlab-with-kite/">从 Notbook 到 JupyterLab,  再配上代码帮手 Kite</a></li>
+<li><a href="https://yanbin.blog/reading-clean-code-note-1/">代码整洁之道(Clean Code) 笔记(一)</a></li>
+<li><a href="https://yanbin.blog/reading-clean-code-note-3/">代码整洁之道(Clean Code) 笔记(三)</a></li>
+<li><a href="https://yanbin.blog/reading-clean-code-note-2/">代码整洁之道(Clean Code) 笔记(二)</a></li>
+<li><a href="https://yanbin.blog/the-principles-of-good-programming/">优秀程序设计的18大原则</a></li>
+<li><a href="https://yanbin.blog/scala-2-12-java-8-sam-lambda/">体验 Scala 2.12 支持的 Java 8 风格(SAM) Lambda</a></li>
+<li><a href="https://yanbin.blog/python-3-8-new-features/">体验一下 Python 3.8 带来的主要新特性</a></li>
+<li><a href="https://yanbin.blog/test-asyn-call-with-awaitility/">使用 Awaitility 测试异步代码</a></li>
+<li><a href="https://yanbin.blog/leverage-bytebuddy-generate-generic-subclass/">使用 Byte Buddy 运行时生成泛型子类</a></li>
+<li><a href="https://yanbin.blog/google-guava-striped-key-based-fine-grain-locks/">使用 Google Guava Striped 实现基于 Key 的并发锁</a></li>
+<li><a href="https://yanbin.blog/jmockit-mock-constructors/">使用 JMockit 来 mock 构造函数</a></li>
+<li><a href="https://yanbin.blog/proper-ways-of-using-java8-optional/">使用 Java8 Optional 的正确姿势</a></li>
+<li><a href="https://yanbin.blog/leverage-javassist-generate-generic-subclass/">使用 Javassist 运行时生成泛型子类</a></li>
+<li><a href="https://yanbin.blog/mockito-modify-private-field/">使用 Mockito 修改私有属性</a></li>
+<li><a href="https://yanbin.blog/mockito-injectmocks-initialize-tested-instance/">使用 Mockito 的 @InjectMocks 创建被测试类实例</a></li>
+<li><a href="https://yanbin.blog/nodejs-atom-shell-gui-app-hello-world/">使用 NodeJS 框架 Atom Shell 编写桌面应用入门</a></li>
+<li><a href="https://yanbin.blog/nodejs-nw-js-gui-app-hello-world/">使用 NodeJS 框架 NW.js 编写桌面应用入门</a></li>
+<li><a href="https://yanbin.blog/use-postgresql-uuid-field-data-type/">使用 PostgreSQL 的 uuid 字段类型</a></li>
+<li><a href="https://yanbin.blog/use-sql-server-uniqueidentifier-data-type/">使用 SQL Server 的 uniqueidentifier 字段类型</a></li>
+<li><a href="https://yanbin.blog/avro-tools-jq-view-apache-avro-file/">使用 avro-tools, jq 查看 Apache Avro 序列化文件</a></li>
+<li><a href="https://yanbin.blog/maven-plugin-aspectj-weaving/">使用插件 aspectj-maven-plugin 织入 AspectJ AOP</a></li>
+<li><a href="https://yanbin.blog/about-apache-flask-integration/">关于 Apache  与  Flask 的集成经历</a></li>
+<li><a href="https://yanbin.blog/rough-interface-based-programming/">再论机械式针对接口编程</a></li>
+<li><a href="https://yanbin.blog/several-method-installing-kubernetes-cluster/">几种简单安装 Kubernetes 集群的方法</a></li>
+<li><a href="https://yanbin.blog/kotlin-function-definition-vs-scala/">函数定义 Kotlin V.S. Scala</a></li>
+<li><a href="https://yanbin.blog/create-python-list-set-dict/">创建 Python 的 list, set, tuple 和 dict</a></li>
+<li><a href="https://yanbin.blog/kafka-enable-saslacl/">启用并测试 Kafka 的 SASL + ACL 认证授权</a></li>
+<li><a href="https://yanbin.blog/pass-arguments-to-docker-container/">如何向 Docker 容器传递参数</a></li>
+<li><a href="https://yanbin.blog/customize-spring-boot-banner/">如何定制 Spring Boot 的 Banner</a></li>
+<li><a href="https://yanbin.blog/happy-with-java8-lambda/">如何快乐的使用 Java 8 的 Lambda</a></li>
+<li><a href="https://yanbin.blog/run-clojure-script-file/">如何直接运行 Clojure 脚本文件</a></li>
+<li><a href="https://yanbin.blog/understand-sort-function/">如何轻松理解排序函数</a></li>
+<li><a href="https://yanbin.blog/learn-junit-5-new-features/">学习并体验 JUnit 5 新特性</a></li>
+<li><a href="https://yanbin.blog/aws-s3-multipe-parts-upload/">实现 Amazon S3 数据(文件)分段上传</a></li>
+<li><a href="https://yanbin.blog/java-9-single-underscore-keyword-thinking/">对 Java 9 把单个下划线作为关键字的猜想</a></li>
+<li><a href="https://yanbin.blog/try-spring-boot-spring-mvc/">小试 Spring Boot - Spring MVC</a></li>
+<li><a href="https://yanbin.blog/consolidate-use-of-java-future/">巩固 Java Future 的使用</a></li>
+<li><a href="https://yanbin.blog/shell-sort-enhanced-insertion-sort/">希尔(Shell) 排序 -  增强版插入排序算法</a></li>
+<li><a href="https://yanbin.blog/different-between-concurrent-and-parallel/">并发(Concurrent) 与并行(Parallel) 的区别</a></li>
+<li><a href="https://yanbin.blog/layout-like-playframework-2/">建立 Play 2 框架一样的目录布局</a></li>
+<li><a href="https://yanbin.blog/aws-boto3-python-ide-autocomplete/">开启 Python 组件 Boto3 在 IDE 中的智能提示</a></li>
+<li><a href="https://yanbin.blog/python-again-lightweight-tools/">开始再战 Python - 重新入门 - 工具篇</a></li>
+<li><a href="https://yanbin.blog/the-last-basic-merge-sorting/">归并排序算法解析</a></li>
+<li><a href="https://yanbin.blog/features-of-ideal-programming-language/">想像中理想编程语言的几个特征</a></li>
+<li><a href="https://yanbin.blog/my-python-warm-up/">我的 Python 快速入门</a></li>
+<li><a href="https://yanbin.blog/split-playframework-2-routes-into-mutiple-files/">拆分 Playframework 2 的 routes 为多个文件</a></li>
+<li><a href="https://yanbin.blog/how-flask-work-with-asyncio/">探索 Flask 对 asyncio 的支持</a></li>
+<li><a href="https://yanbin.blog/push-docker-image-to-amazon-ecr-repository/">推送 Docker 镜像到 Amazon ECR 仓库</a></li>
+<li><a href="https://yanbin.blog/insertion-sort-how-to/">插入排序算法解析</a></li>
+<li><a href="https://yanbin.blog/setup-aws-kubernetes-eks-service/">搭建使用 AWS 的 Kubernetes EKS 服务</a></li>
+<li><a href="https://yanbin.blog/jackson-json-path-support-before/">早先为 Jackson 写的 Json-Path 支持</a></li>
+<li><a href="https://yanbin.blog/show-sbt-dependency-tree/">查看  sbt 项目的依赖关系树</a></li>
+<li><a href="https://yanbin.blog/master-python-decorators/">熟悉和应用 Python 的装饰器</a></li>
+<li><a href="https://yanbin.blog/understand-completablefuture-task-callback-threads/">理解 CompletableFuture 的任务与回调函数的线程</a></li>
+<li><a href="https://yanbin.blog/understand-python-class-definition/">理解 Python 类的变量,方法与属性</a></li>
+<li><a href="https://yanbin.blog/understand-spring-schedule-fixedrate-fixeddelay/">理解 Spring 定时任务的 fixedRate 和 fixedDelay  的区别</a></li>
+<li><a href="https://yanbin.blog/pth-file-append-python-module-search-path/">用 .pth 文件附加 Python 模块搜索路径</a></li>
+<li><a href="https://yanbin.blog/aws-secrets-manager-store-secrets/">用 AWS Secrets Manager 存储和管理密钥</a></li>
+<li><a href="https://yanbin.blog/merge-in-memory-table-data-into-sql-server-table/">用 Java 把内存中的表格数据合并到 SQL Server 表中</a></li>
+<li><a href="https://yanbin.blog/sqlserver-insert-multiple-rows-onetime/">用 PreparedStatement 向 SqlServer 中一次性插入多条记录</a></li>
+<li><a href="https://yanbin.blog/example-understand-es6-export-import/">用一个例子理解 ES6 的 export/import 用法</a></li>
+<li><a href="https://yanbin.blog/from-java-10-var-to-11-candicate-multiple-line-string/">相比于 Java 10 的 var, 更期待 Java 11 支持多行字符串</a></li>
+<li><a href="https://yanbin.blog/real-advanced-sorting-algorithm-quick/">真正有些水准的排序算法 - 快速排序</a></li>
+<li><a href="https://yanbin.blog/wait-all-completablefuture-done/">等待所有的  CompletableFuture 完成</a></li>
+<li><a href="https://yanbin.blog/initial-apache-kafka-environment/">简单搭建 Apache Kafka 分布式消息系统</a></li>
+<li><a href="https://yanbin.blog/customize-jackson-annotation-and-disable-specific-annotation/">自定义 Jackson 注解与禁用某一特定的注解</a></li>
+<li><a href="https://yanbin.blog/custom-classload-dynamic-load-jdbc-driver/">自定义类加载器动态加载 JDBC 驱动</a></li>
+<li><a href="https://yanbin.blog/fix-jvisualvm-stuck-at-computing-description-issue/">解决 jvisualvm 启动后长时间 Computing description… 的问题</a></li>
+<li><a href="https://yanbin.blog/python-database-query-return-dictionary-result/">让 Python 的数据库查询返回字典记录</a></li>
+<li><a href="https://yanbin.blog/scala-space-in-test-method-name-not-shows-u0020/">让 Scala 测试方法名中的空格不再显示为 $u0020</a></li>
+<li><a href="https://yanbin.blog/how-spring-scan-beans-resources/">记录一下 Spring 如何扫描注解的 Bean 与资源</a></li>
+<li><a href="https://yanbin.blog/frequently-used-linux-shell-script/">记录自己常用的一些 Linux Shell 脚本</a></li>
+<li><a href="https://yanbin.blog/rxjava-get-started/">试手 RxJava 2.x 及对线程的初步理解</a></li>
+<li><a href="https://yanbin.blog/how-to-upgrade-from-java-8-to-10/">该如何从 Java 8 升级到 Java 10</a></li>
+<li><a href="https://yanbin.blog/why-http-get-cannot-sent-data-with-reuqest-body/">谁说 HTTP GET 就不能通过 Body 来发送数据呢？</a></li>
+<li><a href="https://yanbin.blog/becomming-functional-1/">走进函数式编程 (Becomming Functional) (1)</a></li>
+<li><a href="https://yanbin.blog/becomming-functional-2/">走进函数式编程 (Becomming Functional) (2)</a></li>
+<li><a href="https://yanbin.blog/becomming-functional-3/">走进函数式编程 (Becomming Functional) (不可变性)</a></li>
+<li><a href="https://yanbin.blog/becomming-functional-4/">走进函数式编程 (Becomming Functional) (递归)</a></li>
+<li><a href="https://yanbin.blog/create-java-instance-bypass-constructor/">跳过构造函数创建 Java 对象(测试)</a></li>
+<li><a href="https://yanbin.blog/convert-iterator-to-java-8-stream/">转换  Iterator 为 Java 8 的 Stream</a></li>
+<li><a href="https://yanbin.blog/dynamic-creating-spring-bean-runtime/">运行时动态创建 Spring Bean</a></li>
+<li><a href="https://yanbin.blog/understand-java-enum-with-bytecode/">通过反编译字节码来理解 Java 枚举</a></li>
+<li><a href="https://yanbin.blog/config-vim-word-with-scala/">配置 Scala 的 vim 编辑环境</a></li>
+<li><a href="https://yanbin.blog/configure-vim-dictionary/">配置 VIM 英语字典</a></li>
+<li><a href="https://yanbin.blog/program-to-interface-and-agile/">针对接口编程及敏捷编程</a></li>
+</ul>
+]]></content>
   </entry>
   <entry>
     <title>趣消除App自动化 - 成语消消乐-全自动化</title>
