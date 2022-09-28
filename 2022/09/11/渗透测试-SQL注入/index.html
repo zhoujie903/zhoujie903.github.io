@@ -29,17 +29,19 @@ enable_page_level_ads: true
     var CONFIG = {"hostname":"zhoujie903.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta property="og:type" content="article">
-<meta property="og:title" content="阅读列表-记忆">
-<meta property="og:url" content="https://zhoujie903.github.io/2021/06/12/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E8%AE%B0%E5%BF%86/index.html">
+  <meta name="description" content="[TOC] 知识点MySQL &gt; 5.0数据库：information_schema表：schemata, tables, columns  schemata: 存储该用户创建的所有数据库的库名，库名字段schema_name tables: 存储该用户创建的所有数据库的库名和表名，table_schema,table_name columns: 存储该用户创建的所有数据库的库名、表名、字段">
+<meta property="og:type" content="article">
+<meta property="og:title" content="渗透测试-SQL注入">
+<meta property="og:url" content="https://zhoujie903.github.io/2022/09/11/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-SQL%E6%B3%A8%E5%85%A5/index.html">
 <meta property="og:site_name" content="一吻江山">
+<meta property="og:description" content="[TOC] 知识点MySQL &gt; 5.0数据库：information_schema表：schemata, tables, columns  schemata: 存储该用户创建的所有数据库的库名，库名字段schema_name tables: 存储该用户创建的所有数据库的库名和表名，table_schema,table_name columns: 存储该用户创建的所有数据库的库名、表名、字段">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-06-12T08:51:32.000Z">
-<meta property="article:modified_time" content="2021-06-12T08:51:32.449Z">
+<meta property="article:published_time" content="2022-09-11T05:57:02.000Z">
+<meta property="article:modified_time" content="2022-09-11T22:37:27.515Z">
 <meta property="article:author" content="jason zhou">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://zhoujie903.github.io/2021/06/12/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E8%AE%B0%E5%BF%86/">
+<link rel="canonical" href="https://zhoujie903.github.io/2022/09/11/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-SQL%E6%B3%A8%E5%85%A5/">
 
 
 <script id="page-configurations">
@@ -52,7 +54,7 @@ enable_page_level_ads: true
   };
 </script>
 
-  <title>阅读列表-记忆 | 一吻江山</title>
+  <title>渗透测试-SQL注入 | 一吻江山</title>
   
 
 
@@ -187,7 +189,7 @@ enable_page_level_ads: true
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://zhoujie903.github.io/2021/06/12/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E8%AE%B0%E5%BF%86/">
+    <link itemprop="mainEntityOfPage" href="https://zhoujie903.github.io/2022/09/11/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-SQL%E6%B3%A8%E5%85%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -200,7 +202,7 @@ enable_page_level_ads: true
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          阅读列表-记忆
+          渗透测试-SQL注入
         </h1>
 
         <div class="post-meta">
@@ -210,8 +212,15 @@ enable_page_level_ads: true
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-06-12 16:51:32" itemprop="dateCreated datePublished" datetime="2021-06-12T16:51:32+08:00">2021-06-12</time>
+              <time title="创建时间：2022-09-11 13:57:02" itemprop="dateCreated datePublished" datetime="2022-09-11T13:57:02+08:00">2022-09-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-12 06:37:27" itemprop="dateModified" datetime="2022-09-12T06:37:27+08:00">2022-09-12</time>
+              </span>
 
           
 
@@ -224,7 +233,22 @@ enable_page_level_ads: true
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <p>[TOC]</p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>MySQL &gt; 5.0<br>数据库：<code>information_schema</code><br>表：<code>schemata</code>, <code>tables</code>, <code>columns</code></p>
+<ul>
+<li><code>schemata</code>: 存储该用户创建的所有数据库的库名，库名字段<code>schema_name</code></li>
+<li><code>tables</code>: 存储该用户创建的所有数据库的库名和表名，<code>table_schema</code>,<code>table_name</code></li>
+<li><code>columns</code>: 存储该用户创建的所有数据库的库名、表名、字段名. <code>table_schema</code>,<code>table_name</code>,<code>column_name</code></li>
+<li>注释符: <code>#</code>, <code>空格</code>， <code>/**/</code> </li>
+<li>内联注释: <code>/*! code */</code><br>比如：<code>id=15/*! union*//*! select*/1,2,3</code></li>
+<li>浏览器中输入<code>%23</code>或<code>--+</code>才能变为数据库中的<code>#</code></li>
+<li><code>order by 1-99</code>: 查询该数据表的字段数量</li>
+</ul>
+<h2 id="阅读列表"><a href="#阅读列表" class="headerlink" title="阅读列表"></a>阅读列表</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/l8PK85IJQ0kCoylvQu3Kvw">sql注入学习分享</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/hxhxhxhxx/article/details/107643024">sqli-labs大详解</a>  </li>
+</ul>
+
     </div>
 
     
@@ -239,12 +263,12 @@ enable_page_level_ads: true
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/03/03/Android-App%E9%80%86%E5%90%91/" rel="prev" title="Android App逆向">
-      <i class="fa fa-chevron-left"></i> Android App逆向
+    <a href="/2022/08/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4/" rel="prev" title="工具使用-网络命令">
+      <i class="fa fa-chevron-left"></i> 工具使用-网络命令
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/07/04/jni%E5%8A%A8%E6%80%81%E6%B3%A8%E5%86%8C/" rel="next" title="jni动态注册">
-      jni动态注册 <i class="fa fa-chevron-right"></i>
+    <a href="/2022/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-BeEF/" rel="next" title="工具使用-BeEF">
+      工具使用-BeEF <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -305,6 +329,7 @@ enable_page_level_ads: true
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">阅读列表</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -491,7 +516,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'zhoujie903.github.io',
       owner       : 'zhoujie903',
       admin       : [''],
-      id          : '8af356ca0a9570a181a0c5ef72aae1c3',
+      id          : '9d47252ced51712b804418b483a26671',
         language: '',
       distractionFreeMode: true
     });
