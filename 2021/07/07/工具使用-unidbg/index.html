@@ -29,12 +29,12 @@ enable_page_level_ads: true
     var CONFIG = {"hostname":"zhoujie903.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="[TOC] unidbg 版本：0.9.3 下载地址：  环境 app: ddan.1.27.1.1028.1607website.434.apk so: libInnoSecure.so  代码 类      unidbg java smail     ByteArray byte[] [B   StringObject String      创建 1234567891011121314151">
+  <meta name="description" content="[TOC] unidbg 版本：0.9.3 下载地址：  环境 app: ddan.1.27.1.1028.1607website.434.apk so: libInnoSecure.so  代码 类     unidbg java smail    ByteArray byte[] [B   StringObject String     创建 1234567891011121314151617">
 <meta property="og:type" content="article">
 <meta property="og:title" content="工具使用-unidbg">
 <meta property="og:url" content="https://zhoujie903.github.io/2021/07/07/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-unidbg/index.html">
 <meta property="og:site_name" content="一吻江山">
-<meta property="og:description" content="[TOC] unidbg 版本：0.9.3 下载地址：  环境 app: ddan.1.27.1.1028.1607website.434.apk so: libInnoSecure.so  代码 类      unidbg java smail     ByteArray byte[] [B   StringObject String      创建 1234567891011121314151">
+<meta property="og:description" content="[TOC] unidbg 版本：0.9.3 下载地址：  环境 app: ddan.1.27.1.1028.1607website.434.apk so: libInnoSecure.so  代码 类     unidbg java smail    ByteArray byte[] [B   StringObject String     创建 1234567891011121314151617">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://gitee.com/zhoujie903/image-repo/raw/master/img/AndroidEmulator.png">
 <meta property="og:image" content="https://gitee.com/zhoujie903/image-repo/raw/master/img/VM.png">
@@ -248,34 +248,32 @@ enable_page_level_ads: true
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><ul>
 <li>类</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:left">unidbg</th>
+<th align="left">unidbg</th>
 <th>java</th>
 <th>smail</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:left">ByteArray</td>
+<tbody><tr>
+<td align="left">ByteArray</td>
 <td>byte[]</td>
 <td>[B</td>
 </tr>
 <tr>
-<td style="text-align:left">StringObject</td>
+<td align="left">StringObject</td>
 <td>String</td>
+<td></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <ul>
 <li><p>创建</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">1. </span><br><span class="line">byte[] data &#x3D; new byte[16];</span><br><span class="line">new ByteArray(vm, data)</span><br><span class="line"></span><br><span class="line">2. </span><br><span class="line">new StringObject(vm, &quot;12345&quot;)</span><br><span class="line"></span><br><span class="line">3.</span><br><span class="line">DvmInteger dvmInt &#x3D; DvmInteger.valueof(vm, 2)</span><br><span class="line"></span><br><span class="line">3. </span><br><span class="line">DvmObject&lt;?&gt; context &#x3D; vm.resolveClass(&quot;android&#x2F;content&#x2F;Context&quot;).newObject(null)</span><br><span class="line">vm.addLocalObject(context)</span><br><span class="line"></span><br><span class="line">4.</span><br><span class="line">class UnidbgPointer extends Pointer </span><br><span class="line"></span><br><span class="line">模块</span><br><span class="line">AndroidModule   extends VirtualModule&lt;VM&gt;</span><br><span class="line">DalvikModule</span><br><span class="line">Module</span><br><span class="line">LinuxModule     extends Module      </span><br></pre></td></tr></table></figure>
 </li>
 <li><p>打补丁</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int patchCode &#x3D; 0x4FF00100; &#x2F;&#x2F;0x4FF00100：mov r0,1的机器码</span><br><span class="line">emulator.getMemory().pointer(module.base + 0x1E86).setInt(0,patchCode);</span><br><span class="line"></span><br><span class="line">Pointer pointer &#x3D; UnidbgPointer.pointer(emulator, module.base + 0x1E86);</span><br><span class="line">byte[] patch</span><br><span class="line">pointer.write(0, patch, 0, patch.length);</span><br></pre></td></tr></table></figure>
+
 </li>
 </ul>
 <h3 id="定义类"><a href="#定义类" class="headerlink" title="定义类"></a>定义类</h3><ul>
@@ -287,6 +285,7 @@ enable_page_level_ads: true
 <li>有二种方式</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">方式一：extends方式</span><br><span class="line">public class TestDanDan  extends AbstractJni &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">方式二：</span><br><span class="line">public class TestDanDan &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>推荐用方式一：<code>public class TestDanDan  extends AbstractJni</code></p>
 <ul>
 <li>2种方式的区别：</li>
@@ -306,6 +305,7 @@ enable_page_level_ads: true
 <p>发现出错了，改为<code>for32Bit()</code></p>
 <p><strong>方法二：</strong>file命令查看<code>libInnoSecure.so</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">➜ file libInnoSecure.so</span><br><span class="line">libInnoSecure.so: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, BuildID[sha1]&#x3D;aa4d75912e8c15080bdf1eafaeb45c3267b5e4b8, stripped</span><br></pre></td></tr></table></figure>
+
 <p><strong>方法三：</strong> 查看apk的lib目录</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lib</span><br><span class="line">    armeabi-v7a&#x2F;</span><br><span class="line">        libInnoSecure.so</span><br><span class="line">    x86&#x2F;</span><br><span class="line">        libInnoSecure.so</span><br></pre></td></tr></table></figure>
 <p><code>armeabi-v7a</code>为32位</p>
@@ -320,6 +320,7 @@ enable_page_level_ads: true
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String libso &#x3D; &quot;InnoSecure&quot;;</span><br><span class="line">DalvikModule dm &#x3D; vm.loadLibrary( libso,false);</span><br></pre></td></tr></table></figure>
 <p>这里只给了so的名字<code>InnoSecure</code>，<code>vm.loadLibrary</code>知道从哪里加载。<br>因为有写如下代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vm &#x3D; emulator.createDalvikVM(new File(apkFilePath));</span><br><span class="line">vm.setVerbose(true);</span><br><span class="line">vm.setJni(this);</span><br><span class="line">new AndroidModule(emulator, vm).register(memory);</span><br></pre></td></tr></table></figure>
+
 <p>这里的场景是：只给了一个apk，没有单独的so文件，把apk做为AndroidModule加载到内存register(memory)，<code>vm.loadLibrary</code>从内存memory加载so</p>
 <h2 id="函数调用"><a href="#函数调用" class="headerlink" title="函数调用"></a>函数调用</h2><ul>
 <li><p>DvmClass</p>
@@ -328,6 +329,9 @@ enable_page_level_ads: true
 <li><p>Module</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Number[] callFunction(Emulator&lt;?&gt; emulator, long offset, Object... args)</span><br><span class="line"></span><br><span class="line">Number[] callFunction(Emulator&lt;?&gt; emulator, String symbolName, Object... args)</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;获取JNIEnv *</span><br><span class="line">Pointer jniEnv &#x3D; vm.getJNIEnv();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;创建jobject对象</span><br><span class="line">DvmObject&lt;?&gt; thiz &#x3D; vm.resolveClass(&quot;com.kanxue.test2&quot;).newObject(null);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;准备入参</span><br><span class="line">List&lt;Object&gt; args &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">args.add(jniEnv);</span><br><span class="line">args.add(vm.addLocalObject(thiz));</span><br><span class="line">args.add(vm.addLocalObject(new StringObject(vm,&quot;XuE&quot;)));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;根据地址调用</span><br><span class="line">Number[] numbers &#x3D; module.callFunction(emulator, 0x9180 + 1, args.toArray());</span><br><span class="line">System.out.println(numbers[0].intValue());</span><br></pre></td></tr></table></figure>
+
+
+
 </li>
 </ul>
 <h2 id="AbstractJni方法重写"><a href="#AbstractJni方法重写" class="headerlink" title="AbstractJni方法重写"></a>AbstractJni方法重写</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String apkFilePath &#x3D; &quot;&#x2F;Users&#x2F;zhoujie&#x2F;Downloads&#x2F;ddan.1.27.1.1028.1607website.434.apk&quot;;        </span><br><span class="line">String classPath &#x3D; &quot;com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils&quot;;</span><br><span class="line">String libso &#x3D; &quot;InnoSecure&quot;;</span><br><span class="line">TestDanDan test &#x3D; new TestDanDan(apkFilePath, libso, classPath);</span><br><span class="line">test.destroy();</span><br></pre></td></tr></table></figure>
@@ -338,18 +342,25 @@ enable_page_level_ads: true
 <li>调用so中方法</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// java中的声明：public native String getn();</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDanDan</span>  <span class="keyword">extends</span> <span class="title">AbstractJni</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> DvmClass MainActivity;</span><br><span class="line">    MainActivity = vm.resolveClass(classPath);</span><br><span class="line">    <span class="function">String <span class="title">getn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        DvmObject obj = MainActivity.newObject(<span class="keyword">null</span>);</span><br><span class="line">        DvmObject result = obj.callJniMethodObject(emulator, <span class="string">&quot;getn()Ljava/lang/String;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>  result.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DvmObject&lt;String&gt; result = obj.callJniMethodObject(emulator, <span class="string">&quot;getn()Ljava/lang/String;&quot;</span>);</span><br><span class="line"><span class="keyword">return</span> result.getValue();</span><br></pre></td></tr></table></figure>
+
+
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line">    TestDanDan test = <span class="keyword">new</span> TestDanDan(apkFilePath, libso, classPath);</span><br><span class="line">    String r = test.getn();</span><br><span class="line">    System.out.println(r);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 出错：</span></span><br><span class="line">JNIEnv-&gt;CallStaticObjectMethod(<span class="class"><span class="keyword">class</span> <span class="title">android</span>/<span class="title">app</span>/<span class="title">ActivityThread</span>, <span class="title">currentApplication</span>()<span class="title">Landroid</span>/<span class="title">app</span>/<span class="title">Application</span></span>;) was called from RX@<span class="number">0x40001d73</span>[libInnoSecure.so]<span class="number">0x1d73</span></span><br><span class="line">[<span class="number">10</span>:<span class="number">19</span>:<span class="number">55</span> <span class="number">045</span>]  WARN [com.github.unidbg.linux.ARM32SyscallHandler] (ARM32SyscallHandler:<span class="number">436</span>) - handleInterrupt intno=<span class="number">2</span>, NR=-<span class="number">1073744048</span>, svcNumber=<span class="number">0x12e</span>, PC=unidbg@<span class="number">0xfffe0374</span>[libandroid.so]<span class="number">0x374</span>, syscall=<span class="keyword">null</span></span><br><span class="line">java.lang.UnsupportedOperationException: android/app/ActivityThread-&gt;currentApplication()Landroid/app/Application;</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.AbstractJni.callStaticObjectMethod(AbstractJni.java:<span class="number">340</span>)</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.AbstractJni.callStaticObjectMethod(AbstractJni.java:<span class="number">335</span>)</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.DvmMethod.callStaticObjectMethod(DvmMethod.java:<span class="number">55</span>)</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.DalvikVM$<span class="number">47.</span>handle(DalvikVM.java:<span class="number">1032</span>)</span><br><span class="line">	at com.github.unidbg.linux.ARM32SyscallHandler.hook(ARM32SyscallHandler.java:<span class="number">93</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>添加<code>callStaticObjectMethod</code></li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> DvmObject&lt;?&gt; callStaticObjectMethod(BaseVM vm, DvmClass dvmClass, String signature, VarArg varArg) &#123;</span><br><span class="line">    <span class="keyword">if</span> (signature.equals(<span class="string">&quot;android/app/ActivityThread-&gt;currentApplication()Landroid/app/Application;&quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> vm.resolveClass(<span class="string">&quot;android/app/Application&quot;</span>, vm.resolveClass(<span class="string">&quot;android/content/ContextWrapper&quot;</span>, vm.resolveClass(<span class="string">&quot;android/content/Context&quot;</span>))).newObject(signature);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">super</span>.callStaticObjectMethod(vm,dvmClass,signature,varArg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><code>callStaticObjectMethod</code> vs <code>callStaticObjectMethodV</code></li>
 <li><code>callObjectMethod</code> vs <code>callObjectMethodV</code> </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> DvmObject&lt;?&gt; callStaticObjectMethod(BaseVM vm, DvmClass dvmClass, String signature, VarArg varArg) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(signature);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> DvmObject&lt;?&gt; callStaticObjectMethodV(BaseVM vm, DvmClass dvmClass, String signature, VaList vaList) &#123;</span><br><span class="line">    <span class="comment">//...... 一大堆代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public DvmObject&lt;?&gt; callObjectMethod(BaseVM vm, DvmObject&lt;?&gt; dvmObject, String signature, VarArg varArg) &#123;</span><br><span class="line">    &#x2F;&#x2F;...... 一大堆代码</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public DvmObject&lt;?&gt; callObjectMethodV(BaseVM vm, DvmObject&lt;?&gt; dvmObject, String signature, VaList vaList) &#123;</span><br><span class="line">    &#x2F;&#x2F;...... 一大堆代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ol>
 <li>优先重写<code>callStaticObjectMethod</code>和<code>callObjectMethod</code></li>
 <li>带V的一般没调用到</li>
@@ -358,6 +369,9 @@ enable_page_level_ads: true
 <li>被调用的系统API</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">android&#x2F;app&#x2F;ActivityThread-&gt;currentApplication()Landroid&#x2F;app&#x2F;Application;</span><br><span class="line">android&#x2F;app&#x2F;Application-&gt;getPackageManager()Landroid&#x2F;content&#x2F;pm&#x2F;PackageManager;</span><br><span class="line">android&#x2F;app&#x2F;Application-&gt;getPackageName()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">android&#x2F;content&#x2F;pm&#x2F;PackageManager-&gt;getPackageInfo(Ljava&#x2F;lang&#x2F;String;I)Landroid&#x2F;content&#x2F;pm&#x2F;PackageInfo;</span><br><span class="line">android&#x2F;content&#x2F;pm&#x2F;Signature-&gt;toCharsString()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">java&#x2F;lang&#x2F;String-&gt;getBytes(Ljava&#x2F;lang&#x2F;String;)[B</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><ul>
 <li>AndroidEmulator<br><img src="https://gitee.com/zhoujie903/image-repo/raw/master/img/AndroidEmulator.png" alt="AndroidEmulator"></li>
 <li>VM<br><img src="https://gitee.com/zhoujie903/image-repo/raw/master/img/VM.png" alt="VM"></li>
