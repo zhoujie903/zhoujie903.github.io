@@ -208,39 +208,6 @@
       </tags>
   </entry>
   <entry>
-    <title>jni动态注册</title>
-    <url>/2021/07/04/jni%E5%8A%A8%E6%80%81%E6%B3%A8%E5%86%8C/</url>
-    <content><![CDATA[<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>java代码</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 文件：MainActivity.java</span><br><span class="line">package com.jason.testys;</span><br><span class="line"></span><br><span class="line">public class MainActivity extends AppCompatActivity &#123;</span><br><span class="line">    static &#123;</span><br><span class="line">        System.loadLibrary(&quot;native-lib&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;</span><br><span class="line">    </span><br><span class="line">    public native void reginso();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>cpp代码</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 文件：native-lib.cpp</span><br><span class="line"></span><br><span class="line">#include &lt;jni.h&gt;</span><br><span class="line">#include &lt;android&#x2F;log.h&gt;</span><br><span class="line">void native_test2() &#123;</span><br><span class="line">    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME,  &quot;native_test2&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册Java端的方法  以及本地相对应的方法</span><br><span class="line">JNINativeMethod method[] &#x3D; &#123;</span><br><span class="line">        &#123;&quot;reginso&quot;,&quot;()V&quot;,(void*)native_test2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册相应的类以及方法</span><br><span class="line">jint registerNativeMeth(JNIEnv *env)&#123;</span><br><span class="line">    jclass cl&#x3D;env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line">    if((env-&gt;RegisterNatives(cl,method,sizeof(method)&#x2F;sizeof(method[0])))&lt;0)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;实现jni_onload 动态注册方法</span><br><span class="line">jint JNI_OnLoad(JavaVM* vm, void* reserved) &#123;</span><br><span class="line">    JNIEnv* env &#x3D; NULL;</span><br><span class="line">    if (vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4) !&#x3D; JNI_OK) &#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    if(registerNativeMeth(env)!&#x3D;JNI_OK)&#123;&#x2F;&#x2F;注册方法</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return JNI_VERSION_1_4;&#x2F;&#x2F;必须返回这个值</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>IDA分析出的伪代码</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; jint registerNativeMeth(JNIEnv *env)</span><br><span class="line"> </span><br><span class="line">__int64 __fastcall registerNativeMeth(__int64 a1)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v1; &#x2F;&#x2F; x19</span><br><span class="line">  __int64 v2; &#x2F;&#x2F; x0</span><br><span class="line"></span><br><span class="line">  v1 &#x3D; a1;</span><br><span class="line">  v2 &#x3D; (*(__int64 (**)(void))(*(_QWORD *)a1 + 48LL))();</span><br><span class="line">  return (unsigned int)((*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v1 + 1720LL))(</span><br><span class="line">                          v1,</span><br><span class="line">                          v2,</span><br><span class="line">                          method,</span><br><span class="line">                          1LL) &gt;&gt; 31);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; jint JNI_OnLoad(JavaVM* vm, void* reserved)</span><br><span class="line"></span><br><span class="line">signed __int64 __fastcall JNI_OnLoad(__int64 a1)</span><br><span class="line">&#123;</span><br><span class="line">  unsigned __int64 v1; &#x2F;&#x2F; x20</span><br><span class="line">  signed __int64 result; &#x2F;&#x2F; x0</span><br><span class="line">  __int64 v3; &#x2F;&#x2F; x19</span><br><span class="line">  __int64 v4; &#x2F;&#x2F; x0</span><br><span class="line">  __int64 v5; &#x2F;&#x2F; [xsp+0h] [xbp-10h]</span><br><span class="line">  __int64 v6; &#x2F;&#x2F; [xsp+8h] [xbp-8h]</span><br><span class="line"></span><br><span class="line">  v1 &#x3D; _ReadStatusReg(ARM64_SYSREG(3, 3, 13, 0, 2));</span><br><span class="line">  v6 &#x3D; *(_QWORD *)(v1 + 40);</span><br><span class="line">  v5 &#x3D; 0LL;</span><br><span class="line">  if ( (*(unsigned int (**)(void))(*(_QWORD *)a1 + 48LL))() )</span><br><span class="line">  &#123;</span><br><span class="line">    result &#x3D; 0xFFFFFFFFLL;</span><br><span class="line">  &#125;</span><br><span class="line">  else</span><br><span class="line">  &#123;</span><br><span class="line">    v3 &#x3D; v5;</span><br><span class="line">    v4 &#x3D; (*(__int64 (__fastcall **)(__int64, const char *))(*(_QWORD *)v5 + 48LL))(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line">    if ( (*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v3 + 1720LL))(</span><br><span class="line">           v3,</span><br><span class="line">           v4,</span><br><span class="line">           method,</span><br><span class="line">           1LL) &lt; 0 )</span><br><span class="line">      result &#x3D; 1LL;</span><br><span class="line">    else</span><br><span class="line">      result &#x3D; 65540LL;</span><br><span class="line">  &#125;</span><br><span class="line">  *(_QWORD *)(v1 + 40);</span><br><span class="line">  return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">JNINativeMethod method[] &#x3D; &#123;</span><br><span class="line">        &#123;&quot;reginso&quot;,&quot;()V&quot;,(void*)native_test2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">.data:0000000000002B08 ; Segment type: Pure data</span><br><span class="line">.data:0000000000002B08                 AREA .data, DATA, ALIGN&#x3D;3</span><br><span class="line">.data:0000000000002B08                 ; ORG 0x2B08</span><br><span class="line">.data:0000000000002B08                 EXPORT method</span><br><span class="line">.data:0000000000002B08 method          DCQ aReginso            ; DATA XREF: LOAD:00000000000000F8↑o</span><br><span class="line">.data:0000000000002B08                                         ; LOAD:00000000000003B8↑o ...</span><br><span class="line">.data:0000000000002B08                                         ; &quot;reginso&quot;</span><br><span class="line">.data:0000000000002B10                 DCQ aV                  ; &quot;()V&quot;</span><br><span class="line">.data:0000000000002B18                 DCQ _Z12native_test2v   ; native_test2(void)</span><br><span class="line">.data:0000000000002B18 ; .data         ends</span><br><span class="line">.data:0000000000002B18</span><br><span class="line">extern:0000000000002B20 ; &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">extern:0000000000002B20</span><br><span class="line">extern:0000000000002B20 ; Segment type: Externs</span><br><span class="line">extern:0000000000002B20                 IMPORT __cxa_finalize   ; CODE XREF: .__cxa_finalize+C↑j</span><br><span class="line">extern:0000000000002B20                                         ; DATA XREF: .got.plt:off_1AE8↑o</span><br><span class="line">extern:0000000000002B28                 IMPORT __cxa_atexit     ; CODE XREF: .__cxa_atexit+C↑j</span><br><span class="line">extern:0000000000002B28                                         ; DATA XREF: .got.plt:off_1AF0↑o</span><br><span class="line">extern:0000000000002B30                 IMPORT __android_log_print</span><br><span class="line">extern:0000000000002B30                                         ; CODE XREF: .__android_log_print+C↑j</span><br><span class="line">extern:0000000000002B30                                         ; DATA XREF: .got.plt:off_1AF8↑o</span><br><span class="line">extern:0000000000002B38                 IMPORT __stack_chk_fail ; CODE XREF: .__stack_chk_fail+C↑j</span><br><span class="line">extern:0000000000002B38                                         ; DATA XREF: .got.plt:off_1B00↑o</span><br><span class="line">extern:0000000000002B38</span><br><span class="line">extern:0000000000002B38                 END start</span><br></pre></td></tr></table></figure>
-
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">JNIEnv* env &#x3D; NULL;</span><br><span class="line">if (vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4) !&#x3D; JNI_OK) &#123;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">v5 &#x3D; 0LL;</span><br><span class="line">if ( (*(unsigned int (**)(void))(*(_QWORD *)a1 + 48LL))() )</span><br><span class="line">&#123;</span><br><span class="line">    result &#x3D; 0xFFFFFFFFLL;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">    v3 &#x3D; v5;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">1. a1 &#x3D; vm</span><br><span class="line">2. v5 &#x3D; env</span><br><span class="line">3. (*(_QWORD *)a1 + 48LL) &#x3D; vm-&gt;GetEnv</span><br><span class="line">4. v5被赋值了</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">jclass cl&#x3D;env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">v3 &#x3D; v5;</span><br><span class="line">v4 &#x3D; (*(__int64 (__fastcall **)(__int64, const char *))(*(_QWORD *)v5 + 48LL))(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">1. v5 &#x3D; env</span><br><span class="line">2. (*(_QWORD *)v5 + 48LL) &#x3D; env-&gt;FindClass</span><br><span class="line">3. (v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;) &#x3D; (&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line">4. v4 &#x3D; jclass cl </span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">if((env-&gt;RegisterNatives(cl,method,sizeof(method)&#x2F;sizeof(method[0])))&lt;0)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;伪代码  </span><br><span class="line">if ( (*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v3 + 1720LL))(</span><br><span class="line">           v3,</span><br><span class="line">           v4,</span><br><span class="line">           method,</span><br><span class="line">           1LL) &lt; 0 )</span><br><span class="line">      result &#x3D; 1LL;</span><br><span class="line">    else</span><br><span class="line">      result &#x3D; 65540LL;</span><br><span class="line">      </span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">0. v4 &#x3D; cl</span><br><span class="line">1. v3 &#x3D; env</span><br><span class="line">2. (*(_QWORD *)v3 + 1720LL) &#x3D; env-&gt;RegisterNatives</span><br><span class="line">3. (v3, v4, method, 1LL) &#x3D; (cl, method, sizeof(method)&#x2F;sizeof(method[0])))&lt;0) </span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>结果</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 参数数量变化</span><br><span class="line"></span><br><span class="line">GetEnv: 2 -&gt; 0</span><br><span class="line">vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4)</span><br><span class="line">(*(_QWORD *)a1 + 48LL)()</span><br><span class="line"></span><br><span class="line">FindClass: 1 -&gt; 2</span><br><span class="line">env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line">(*(_QWORD *)v5 + 48LL)(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line"></span><br><span class="line">RegisterNatives: 3 -&gt; 4</span><br><span class="line">env-&gt;RegisterNatives(cl,method,1)</span><br><span class="line">(*(_QWORD *)v3 + 1720LL)(v3,v4,method,1LL)           </span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
     <title>mitmproxy与charles的抓包应用</title>
     <url>/2019/09/29/mitmproxy-and-charles-use/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -738,23 +705,33 @@
       </tags>
   </entry>
   <entry>
-    <title>渗透测试-SQL注入</title>
-    <url>/2022/09/11/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-SQL%E6%B3%A8%E5%85%A5/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>MySQL &gt; 5.0<br>数据库：<code>information_schema</code><br>表：<code>schemata</code>, <code>tables</code>, <code>columns</code></p>
-<ul>
-<li><code>schemata</code>: 存储该用户创建的所有数据库的库名，库名字段<code>schema_name</code></li>
-<li><code>tables</code>: 存储该用户创建的所有数据库的库名和表名，<code>table_schema</code>,<code>table_name</code></li>
-<li><code>columns</code>: 存储该用户创建的所有数据库的库名、表名、字段名. <code>table_schema</code>,<code>table_name</code>,<code>column_name</code></li>
-<li>注释符: <code>#</code>, <code>空格</code>， <code>/**/</code> </li>
-<li>内联注释: <code>/*! code */</code><br>比如：<code>id=15/*! union*//*! select*/1,2,3</code></li>
-<li>浏览器中输入<code>%23</code>或<code>--+</code>才能变为数据库中的<code>#</code></li>
-<li><code>order by 1-99</code>: 查询该数据表的字段数量</li>
+    <title>工具使用-BeEF</title>
+    <url>/2022/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-BeEF/</url>
+    <content><![CDATA[<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>Docker</li>
+<li>BeEF</li>
+<li>存在xss漏洞的Web App: DVWA</li>
 </ul>
-<h2 id="阅读列表"><a href="#阅读列表" class="headerlink" title="阅读列表"></a>阅读列表</h2><ul>
-<li><a href="https://mp.weixin.qq.com/s/l8PK85IJQ0kCoylvQu3Kvw">sql注入学习分享</a></li>
-<li><a href="https://blog.csdn.net/hxhxhxhxx/article/details/107643024">sqli-labs大详解</a>  </li>
-</ul>
+<h2 id="建立环境"><a href="#建立环境" class="headerlink" title="建立环境"></a>建立环境</h2><h3 id="启动Docker"><a href="#启动Docker" class="headerlink" title="启动Docker"></a>启动Docker</h3><h3 id="BeEF"><a href="#BeEF" class="headerlink" title="BeEF"></a>BeEF</h3><ol>
+<li><p>命令行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull janes&#x2F;beef</span><br><span class="line"></span><br><span class="line">docker run -d --name BeEF -p 0.0.0.0:3000:3000  janes&#x2F;beef:latest</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>浏览器：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:3000&#x2F;ui&#x2F;authentication</span><br><span class="line"></span><br><span class="line">Username: beef</span><br><span class="line">Password: beef</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="Web-App-DVWA"><a href="#Web-App-DVWA" class="headerlink" title="Web App: DVWA"></a>Web App: DVWA</h3><ol>
+<li><p>命令行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull citizenstig&#x2F;dvwa</span><br><span class="line"></span><br><span class="line">docker run -d --name DVWA -p 0.0.0.0:80:80  citizenstig&#x2F;dvwa:latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>浏览器：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost</span><br><span class="line"></span><br><span class="line">Username: admin</span><br><span class="line">Password: password</span><br><span class="line"></span><br><span class="line">把 DVWA 的 Security Level 调整为 low</span><br><span class="line"></span><br><span class="line">打开 XSS(Reflected)页面</span><br><span class="line">http:&#x2F;&#x2F;localhost&#x2F;vulnerabilities&#x2F;xss_r&#x2F; </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>浏览器：What’s your name?</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入</span><br><span class="line">&lt;script src&#x3D;&quot;http:&#x2F;&#x2F;192.168.1.100:3000&#x2F;hook.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">注意：192.168.1.100是运行BeEF机器的ip地址</span><br><span class="line"></span><br><span class="line">注意：保持这个页面一直打开，不要关闭</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 ]]></content>
   </entry>
   <entry>
@@ -793,6 +770,26 @@
 <li><a href="https://kaazing.com/demos/">https://kaazing.com/demos/</a></li>
 <li><a href="https://github.com/mitmproxy/mitmproxy/blob/master/examples/simple/websocket_messages.py">https://github.com/mitmproxy/mitmproxy/blob/master/examples/simple/websocket_messages.py</a></li>
 <li><a href="https://github.com/mitmproxy/mitmproxy/blob/master/examples/complex/websocket_inject_message.py">https://github.com/mitmproxy/mitmproxy/blob/master/examples/complex/websocket_inject_message.py</a></li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>渗透测试-SQL注入</title>
+    <url>/2022/09/11/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95-SQL%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>MySQL &gt; 5.0<br>数据库：<code>information_schema</code><br>表：<code>schemata</code>, <code>tables</code>, <code>columns</code></p>
+<ul>
+<li><code>schemata</code>: 存储该用户创建的所有数据库的库名，库名字段<code>schema_name</code></li>
+<li><code>tables</code>: 存储该用户创建的所有数据库的库名和表名，<code>table_schema</code>,<code>table_name</code></li>
+<li><code>columns</code>: 存储该用户创建的所有数据库的库名、表名、字段名. <code>table_schema</code>,<code>table_name</code>,<code>column_name</code></li>
+<li>注释符: <code>#</code>, <code>空格</code>， <code>/**/</code> </li>
+<li>内联注释: <code>/*! code */</code><br>比如：<code>id=15/*! union*//*! select*/1,2,3</code></li>
+<li>浏览器中输入<code>%23</code>或<code>--+</code>才能变为数据库中的<code>#</code></li>
+<li><code>order by 1-99</code>: 查询该数据表的字段数量</li>
+</ul>
+<h2 id="阅读列表"><a href="#阅读列表" class="headerlink" title="阅读列表"></a>阅读列表</h2><ul>
+<li><a href="https://mp.weixin.qq.com/s/l8PK85IJQ0kCoylvQu3Kvw">sql注入学习分享</a></li>
+<li><a href="https://blog.csdn.net/hxhxhxhxx/article/details/107643024">sqli-labs大详解</a>  </li>
 </ul>
 ]]></content>
   </entry>
@@ -1088,49 +1085,212 @@
 ]]></content>
   </entry>
   <entry>
-    <title>阅读列表-基础</title>
-    <url>/2022/03/25/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
-<li><a href="http://www.ruanyifeng.com/blog/2018/01/assembly-language-primer.html">汇编语言入门教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html">理解字节序</a></li>
-<li><a href="http://jalan.space/2019/11/26/2019/binary-show/">深入浅出：举个例子解读原码、反码与补码</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/30007037">C/C++内存对齐详解</a></li>
-<li><a href="https://www.jianshu.com/p/5092d6d5caa3">彻底搞清楚 GOT 和 PLT</a></li>
-<li><a href="https://blog.frytea.com/archives/504/">加速各种 GitHub 资源拉取</a></li>
-<li><a href="https://cloverkits.github.io/2018/08/12/%E5%A6%82%E4%BD%95%E7%94%A8%E5%A5%BD%E8%B0%B7%E6%AD%8C%E7%AD%89%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">如何用好谷歌等搜索引擎</a></li>
-<li><a href="http://deerchao.net/tutorials/regex/regex.htm">正则表达式30分钟入门教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2016/07/yaml.html">YAML 语言教程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html">理解OAuth 2.0</a></li>
-<li><a href="https://www.ruanyifeng.com/blog/2022/08/dns-query.html">DNS 查询原理详解</a></li>
-<li><a href="https://www.jianshu.com/p/65225f50fe76">基于python flask详述 OAuth 2.0 的运作流程</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html">RESTful API 最佳实践</a></li>
-<li><a href="https://www.zhihu.com/question/19793879">基于python的scrapy爬虫，关于增量爬取是怎么处理的？</a></li>
-<li><a href="https://juejin.cn/post/6898093501376905230">用js写一个js解释器</a></li>
-<li><a href="https://www.iosdevlog.com/2019-01-03-nlp/">自然语言处理简明教程</a></li>
-<li><a href="https://www.codesky.me/archives/mweb-to-blog-publish.wind">MWeb 发布到任意系统的研究</a></li>
-<li><a href="https://yuanfentiank789.github.io/2017/09/21/Gradle%E5%92%8CGroovy/">Gradle和Groovy</a></li>
+    <title>工具使用-网络命令</title>
+    <url>/2022/08/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 设置代理的2种方法</span><br><span class="line">&gt; env http_proxy&#x3D;http:&#x2F;&#x2F;localhost:8080 curl -I http:&#x2F;&#x2F;google.com</span><br><span class="line"></span><br><span class="line">&gt; curl --proxy http:&#x2F;&#x2F;localhost:8080 https:&#x2F;&#x2F;example.com</span><br></pre></td></tr></table></figure>
+<p><a href="http://www.ruanyifeng.com/blog/2011/09/curl.html">curl网站开发指南</a></p>
+<p>问：ip命令来自哪个包<br>答：ip 命令来自于 iproute2 安装包，一般系统会默认安装，如果没有的话，请读者自行安装</p>
+<p>问：服务名称与port number的对应在Linux当中，是用那个文件来设定对应的？<br>答：/etc/services</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ cat &#x2F;etc&#x2F;resolv.conf</span><br><span class="line"># This file is not consulted for DNS hostname resolution, address</span><br><span class="line"># resolution, or the DNS query routing mechanism used by most</span><br><span class="line"># processes on this system.</span><br><span class="line">#</span><br><span class="line"># To view the DNS configuration used by this system, use:</span><br><span class="line">#   scutil --dns</span><br><span class="line">#</span><br><span class="line"># SEE ALSO</span><br><span class="line">#   dns-sd(1), scutil(8)</span><br><span class="line">#</span><br><span class="line"># This file is automatically generated.</span><br><span class="line">#</span><br><span class="line">nameserver 202.101.172.35</span><br><span class="line">nameserver 202.101.172.47</span><br></pre></td></tr></table></figure>
+
+<h1 id="route"><a href="#route" class="headerlink" title="route"></a>route</h1><h1 id="host-nslookup"><a href="#host-nslookup" class="headerlink" title="host, nslookup"></a>host, nslookup</h1><p>侦测主机名与IP对应</p>
+<p>host这个指令可以用来查出某个主机名的IP喔！<br>范例一：找出tw.yahoo.com的IP</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ host tw.yahoo.com</span><br><span class="line">tw.yahoo.com is an alias for atsv2-fp-shed.wg1.b.yahoo.com.</span><br><span class="line">atsv2-fp-shed.wg1.b.yahoo.com has address 124.108.103.103</span><br><span class="line">atsv2-fp-shed.wg1.b.yahoo.com has address 124.108.103.104</span><br><span class="line">atsv2-fp-shed.wg1.b.yahoo.com has IPv6 address 2406:2000:ec:815::3</span><br><span class="line">atsv2-fp-shed.wg1.b.yahoo.com has IPv6 address 2406:2000:ec:815::4</span><br></pre></td></tr></table></figure>
+
+<p>范例一：找出<a href="http://www.google.com的ip/">www.google.com的IP</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ nslookup www.google.com</span><br><span class="line">Server:		202.101.172.35</span><br><span class="line">Address:	202.101.172.35#53</span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">Name:	www.google.com</span><br><span class="line">Address: 64.13.192.76</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ nslookup 64.13.192.76</span><br><span class="line">Server:		202.101.172.35</span><br><span class="line">Address:	202.101.172.35#53</span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">76.192.13.64.in-addr.arpa	name &#x3D; acmkokecgc.gs01.gridserver.com.</span><br><span class="line"></span><br><span class="line">Authoritative answers can be found from:</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h1><p>netstat的输出主要分为两大部分，分别是TCP/IP的网络接口部分，以及传统的Unix socket部分。</p>
+<p>基本上，我们常常谈到的netstat的功能，就是在观察网络的联机状态了，而网络联机状态中，又以观察『我目前开了多少的port在等待客户端的联机』以及『目前我的网络联机状态中，有多少联机已建立或产生问题』最常见。</p>
+<p>Unix socket通常是用在一些仅在本机上运作的程序所开启的插槽接口文件，例如X Window不都是在本机上运作而已吗？那何必启动网络的port呢？当然可以使用Unix socket啰，另外，例如Postfix这一类的网络服务器，由于很多动作都是在本机上头来完成的，所以以会占用很多的Unixsocket喔！</p>
+<p>netstat – show network status<br>netstat命令显示各种网络相关的数据结构。<br>对于显示的信息，依据选项，有多种输出格式。<br>第一种格式：显示各种协议所有的sockets<br>第二种格式：根据所选择的选项显示其他网络数据结构之一的内容<br>第三种格式：在指定等待间隔的情况下，netstat将在配置的网络接口上连续显示有关数据包流量的信息<br>第四种格式：显示指定协议或地址系列的统计信息。如果指定了等待间隔，将显示最后一个间隔的协议信息<br>第五种格式：显示指定协议或地址系列的每个接口统计信息<br>第六种格式：显示mbuf(9)统计信息<br>第七种格式：显示指定地址系列的路由表<br>第八种格式：显示路由统计信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat [-AaLlnW] [-f address_family | -p protocol]</span><br><span class="line">netstat [-gilns] [-v] [-f address_family] [-I interface]</span><br><span class="line">netstat -i | -I interface [-w wait] [-c queue] [-abdgqRtS]</span><br><span class="line">netstat -s [-s] [-f address_family | -p protocol] [-w wait]</span><br><span class="line">netstat -i | -I interface -s [-f address_family | -p protocol]</span><br><span class="line">netstat -m [-m]</span><br><span class="line">netstat -r [-Aaln] [-f address_family]</span><br><span class="line">netstat -rs [-s]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 与路由有关的参数</span><br><span class="line"># -r 列出路由表，功能如同route这个指令</span><br><span class="line"># -n 不使用主机名与服务名称，使用IP与port number，如同route -n</span><br><span class="line">netstat -[rn] </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#范例一：列出目前的路由表状态，且以IP及port number显示：</span><br><span class="line">➜  ~ netstat -rn</span><br><span class="line">Kernel IP routing table</span><br><span class="line">Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface</span><br><span class="line">0.0.0.0         10.211.55.1     0.0.0.0         UG        0 0          0 enp0s5</span><br><span class="line">10.211.55.0     0.0.0.0         255.255.255.0   U         0 0          0 enp0s5</span><br><span class="line">169.254.0.0     0.0.0.0         255.255.0.0     U         0 0          0 enp0s5</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#范例二：列出目前的网络联机状态，且以IP及port number显示：</span><br><span class="line"># -a：列出所有的联机状态，包括tcp&#x2F;udp&#x2F;unix socket等</span><br><span class="line">➜  ~ netstat -an</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#范例三：列出目前已启动的网络服务：</span><br><span class="line">#最重要的其实是那个-l的参数，因为可以仅列出有在Listen的</span><br><span class="line">➜  ~ netstat -tulpn</span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID&#x2F;Program name</span><br><span class="line">tcp        0      0 127.0.1.1:53            0.0.0.0:*               LISTEN      -</span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -</span><br><span class="line">tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      -</span><br><span class="line">tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      -</span><br><span class="line">tcp6       0      0 :::22                   :::*                    LISTEN      -</span><br><span class="line">tcp6       0      0 ::1:631                 :::*                    LISTEN      -</span><br><span class="line">tcp6       0      0 :::8080                 :::*                    LISTEN      -</span><br><span class="line">udp        0      0 0.0.0.0:35144           0.0.0.0:*                           -</span><br><span class="line">udp        0      0 127.0.1.1:53            0.0.0.0:*                           -</span><br><span class="line">udp        0      0 0.0.0.0:68              0.0.0.0:*                           -</span><br><span class="line">udp        0      0 0.0.0.0:631             0.0.0.0:*                           -</span><br><span class="line">udp        0      0 0.0.0.0:40666           0.0.0.0:*                           -</span><br><span class="line">udp        0      0 0.0.0.0:5353            0.0.0.0:*                           -</span><br><span class="line">udp6       0      0 :::50198                :::*                                -</span><br><span class="line">udp6       0      0 :::33848                :::*                                -</span><br><span class="line">udp6       0      0 :::5353                 :::*                                -</span><br><span class="line">udp6       0      0 :::5353                 :::*                                -</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
+    <title>jni动态注册</title>
+    <url>/2021/07/04/jni%E5%8A%A8%E6%80%81%E6%B3%A8%E5%86%8C/</url>
+    <content><![CDATA[<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>java代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 文件：MainActivity.java</span><br><span class="line">package com.jason.testys;</span><br><span class="line"></span><br><span class="line">public class MainActivity extends AppCompatActivity &#123;</span><br><span class="line">    static &#123;</span><br><span class="line">        System.loadLibrary(&quot;native-lib&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    &#x2F;&#x2F;</span><br><span class="line">    </span><br><span class="line">    public native void reginso();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>cpp代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 文件：native-lib.cpp</span><br><span class="line"></span><br><span class="line">#include &lt;jni.h&gt;</span><br><span class="line">#include &lt;android&#x2F;log.h&gt;</span><br><span class="line">void native_test2() &#123;</span><br><span class="line">    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME,  &quot;native_test2&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册Java端的方法  以及本地相对应的方法</span><br><span class="line">JNINativeMethod method[] &#x3D; &#123;</span><br><span class="line">        &#123;&quot;reginso&quot;,&quot;()V&quot;,(void*)native_test2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;注册相应的类以及方法</span><br><span class="line">jint registerNativeMeth(JNIEnv *env)&#123;</span><br><span class="line">    jclass cl&#x3D;env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line">    if((env-&gt;RegisterNatives(cl,method,sizeof(method)&#x2F;sizeof(method[0])))&lt;0)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;实现jni_onload 动态注册方法</span><br><span class="line">jint JNI_OnLoad(JavaVM* vm, void* reserved) &#123;</span><br><span class="line">    JNIEnv* env &#x3D; NULL;</span><br><span class="line">    if (vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4) !&#x3D; JNI_OK) &#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    if(registerNativeMeth(env)!&#x3D;JNI_OK)&#123;&#x2F;&#x2F;注册方法</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return JNI_VERSION_1_4;&#x2F;&#x2F;必须返回这个值</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>IDA分析出的伪代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; jint registerNativeMeth(JNIEnv *env)</span><br><span class="line"> </span><br><span class="line">__int64 __fastcall registerNativeMeth(__int64 a1)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 v1; &#x2F;&#x2F; x19</span><br><span class="line">  __int64 v2; &#x2F;&#x2F; x0</span><br><span class="line"></span><br><span class="line">  v1 &#x3D; a1;</span><br><span class="line">  v2 &#x3D; (*(__int64 (**)(void))(*(_QWORD *)a1 + 48LL))();</span><br><span class="line">  return (unsigned int)((*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v1 + 1720LL))(</span><br><span class="line">                          v1,</span><br><span class="line">                          v2,</span><br><span class="line">                          method,</span><br><span class="line">                          1LL) &gt;&gt; 31);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; jint JNI_OnLoad(JavaVM* vm, void* reserved)</span><br><span class="line"></span><br><span class="line">signed __int64 __fastcall JNI_OnLoad(__int64 a1)</span><br><span class="line">&#123;</span><br><span class="line">  unsigned __int64 v1; &#x2F;&#x2F; x20</span><br><span class="line">  signed __int64 result; &#x2F;&#x2F; x0</span><br><span class="line">  __int64 v3; &#x2F;&#x2F; x19</span><br><span class="line">  __int64 v4; &#x2F;&#x2F; x0</span><br><span class="line">  __int64 v5; &#x2F;&#x2F; [xsp+0h] [xbp-10h]</span><br><span class="line">  __int64 v6; &#x2F;&#x2F; [xsp+8h] [xbp-8h]</span><br><span class="line"></span><br><span class="line">  v1 &#x3D; _ReadStatusReg(ARM64_SYSREG(3, 3, 13, 0, 2));</span><br><span class="line">  v6 &#x3D; *(_QWORD *)(v1 + 40);</span><br><span class="line">  v5 &#x3D; 0LL;</span><br><span class="line">  if ( (*(unsigned int (**)(void))(*(_QWORD *)a1 + 48LL))() )</span><br><span class="line">  &#123;</span><br><span class="line">    result &#x3D; 0xFFFFFFFFLL;</span><br><span class="line">  &#125;</span><br><span class="line">  else</span><br><span class="line">  &#123;</span><br><span class="line">    v3 &#x3D; v5;</span><br><span class="line">    v4 &#x3D; (*(__int64 (__fastcall **)(__int64, const char *))(*(_QWORD *)v5 + 48LL))(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line">    if ( (*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v3 + 1720LL))(</span><br><span class="line">           v3,</span><br><span class="line">           v4,</span><br><span class="line">           method,</span><br><span class="line">           1LL) &lt; 0 )</span><br><span class="line">      result &#x3D; 1LL;</span><br><span class="line">    else</span><br><span class="line">      result &#x3D; 65540LL;</span><br><span class="line">  &#125;</span><br><span class="line">  *(_QWORD *)(v1 + 40);</span><br><span class="line">  return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">JNINativeMethod method[] &#x3D; &#123;</span><br><span class="line">        &#123;&quot;reginso&quot;,&quot;()V&quot;,(void*)native_test2&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">.data:0000000000002B08 ; Segment type: Pure data</span><br><span class="line">.data:0000000000002B08                 AREA .data, DATA, ALIGN&#x3D;3</span><br><span class="line">.data:0000000000002B08                 ; ORG 0x2B08</span><br><span class="line">.data:0000000000002B08                 EXPORT method</span><br><span class="line">.data:0000000000002B08 method          DCQ aReginso            ; DATA XREF: LOAD:00000000000000F8↑o</span><br><span class="line">.data:0000000000002B08                                         ; LOAD:00000000000003B8↑o ...</span><br><span class="line">.data:0000000000002B08                                         ; &quot;reginso&quot;</span><br><span class="line">.data:0000000000002B10                 DCQ aV                  ; &quot;()V&quot;</span><br><span class="line">.data:0000000000002B18                 DCQ _Z12native_test2v   ; native_test2(void)</span><br><span class="line">.data:0000000000002B18 ; .data         ends</span><br><span class="line">.data:0000000000002B18</span><br><span class="line">extern:0000000000002B20 ; &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</span><br><span class="line">extern:0000000000002B20</span><br><span class="line">extern:0000000000002B20 ; Segment type: Externs</span><br><span class="line">extern:0000000000002B20                 IMPORT __cxa_finalize   ; CODE XREF: .__cxa_finalize+C↑j</span><br><span class="line">extern:0000000000002B20                                         ; DATA XREF: .got.plt:off_1AE8↑o</span><br><span class="line">extern:0000000000002B28                 IMPORT __cxa_atexit     ; CODE XREF: .__cxa_atexit+C↑j</span><br><span class="line">extern:0000000000002B28                                         ; DATA XREF: .got.plt:off_1AF0↑o</span><br><span class="line">extern:0000000000002B30                 IMPORT __android_log_print</span><br><span class="line">extern:0000000000002B30                                         ; CODE XREF: .__android_log_print+C↑j</span><br><span class="line">extern:0000000000002B30                                         ; DATA XREF: .got.plt:off_1AF8↑o</span><br><span class="line">extern:0000000000002B38                 IMPORT __stack_chk_fail ; CODE XREF: .__stack_chk_fail+C↑j</span><br><span class="line">extern:0000000000002B38                                         ; DATA XREF: .got.plt:off_1B00↑o</span><br><span class="line">extern:0000000000002B38</span><br><span class="line">extern:0000000000002B38                 END start</span><br></pre></td></tr></table></figure>
+
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">JNIEnv* env &#x3D; NULL;</span><br><span class="line">if (vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4) !&#x3D; JNI_OK) &#123;</span><br><span class="line">    return -1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">v5 &#x3D; 0LL;</span><br><span class="line">if ( (*(unsigned int (**)(void))(*(_QWORD *)a1 + 48LL))() )</span><br><span class="line">&#123;</span><br><span class="line">    result &#x3D; 0xFFFFFFFFLL;</span><br><span class="line">&#125;</span><br><span class="line">else</span><br><span class="line">&#123;</span><br><span class="line">    v3 &#x3D; v5;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">1. a1 &#x3D; vm</span><br><span class="line">2. v5 &#x3D; env</span><br><span class="line">3. (*(_QWORD *)a1 + 48LL) &#x3D; vm-&gt;GetEnv</span><br><span class="line">4. v5被赋值了</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">jclass cl&#x3D;env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;伪代码</span><br><span class="line">v3 &#x3D; v5;</span><br><span class="line">v4 &#x3D; (*(__int64 (__fastcall **)(__int64, const char *))(*(_QWORD *)v5 + 48LL))(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">1. v5 &#x3D; env</span><br><span class="line">2. (*(_QWORD *)v5 + 48LL) &#x3D; env-&gt;FindClass</span><br><span class="line">3. (v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;) &#x3D; (&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line">4. v4 &#x3D; jclass cl </span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;java代码</span><br><span class="line">if((env-&gt;RegisterNatives(cl,method,sizeof(method)&#x2F;sizeof(method[0])))&lt;0)&#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#x2F;&#x2F;伪代码  </span><br><span class="line">if ( (*(signed int (__fastcall **)(__int64, __int64, char **, signed __int64))(*(_QWORD *)v3 + 1720LL))(</span><br><span class="line">           v3,</span><br><span class="line">           v4,</span><br><span class="line">           method,</span><br><span class="line">           1LL) &lt; 0 )</span><br><span class="line">      result &#x3D; 1LL;</span><br><span class="line">    else</span><br><span class="line">      result &#x3D; 65540LL;</span><br><span class="line">      </span><br><span class="line">&#x2F;&#x2F;分析</span><br><span class="line">0. v4 &#x3D; cl</span><br><span class="line">1. v3 &#x3D; env</span><br><span class="line">2. (*(_QWORD *)v3 + 1720LL) &#x3D; env-&gt;RegisterNatives</span><br><span class="line">3. (v3, v4, method, 1LL) &#x3D; (cl, method, sizeof(method)&#x2F;sizeof(method[0])))&lt;0) </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>结果</li>
 </ul>
-<h2 id="课程"><a href="#课程" class="headerlink" title="课程"></a>课程</h2><ul>
-<li><a href="https://time.geekbang.org/column/intro/219">编译原理之美</a></li>
-<li><a href="https://time.geekbang.org/column/intro/100017301">数据结构与算法之美</a></li>
-<li><a href="https://time.geekbang.org/column/intro/450">编程高手必学的内存知识</a></li>
-</ul>
-<h2 id="图书"><a href="#图书" class="headerlink" title="图书"></a>图书</h2><ul>
-<li><a href="https://book.douban.com/subject/2039913/">Professional Assembly Language</a></li>
-<li><a href="https://book.douban.com/subject/25837796/">汇编语言：基于linux环境（第3版）</a></li>
-<li><a href="https://book.douban.com/subject/3652388/">程序员的自我修养</a></li>
-<li><a href="https://item.jd.com/11942019.html">图解密码技术</a></li>
-<li><a href="https://book.douban.com/subject/24841239/">SQL基础教程（第2版）</a></li>
-<li><a href="https://book.douban.com/subject/27082372/">ANTLR 4权威指南</a></li>
-<li><a href="https://book.douban.com/subject/10546925/">白帽子讲Web安全</a></li>
-</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 参数数量变化</span><br><span class="line"></span><br><span class="line">GetEnv: 2 -&gt; 0</span><br><span class="line">vm-&gt;GetEnv((void**) &amp;env, JNI_VERSION_1_4)</span><br><span class="line">(*(_QWORD *)a1 + 48LL)()</span><br><span class="line"></span><br><span class="line">FindClass: 1 -&gt; 2</span><br><span class="line">env-&gt;FindClass(&quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line">(*(_QWORD *)v5 + 48LL)(v5, &quot;com&#x2F;jason&#x2F;testys&#x2F;MainActivity&quot;)</span><br><span class="line"></span><br><span class="line">RegisterNatives: 3 -&gt; 4</span><br><span class="line">env-&gt;RegisterNatives(cl,method,1)</span><br><span class="line">(*(_QWORD *)v3 + 1720LL)(v3,v4,method,1LL)           </span><br></pre></td></tr></table></figure>
 ]]></content>
   </entry>
   <entry>
-    <title>阅读列表-文档图形</title>
-    <url>/2021/08/11/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E6%96%87%E6%A1%A3%E5%9B%BE%E5%BD%A2/</url>
+    <title>工具使用-unidbg</title>
+    <url>/2021/07/07/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-unidbg/</url>
     <content><![CDATA[<p>[TOC]</p>
-<h2 id="Markdown"><a href="#Markdown" class="headerlink" title="Markdown"></a>Markdown</h2><p><a href="https://yuanfentiank789.github.io/2017/04/12/flowchart/">Markdown绘制流程图的方法</a></p>
+<h2 id="unidbg"><a href="#unidbg" class="headerlink" title="unidbg"></a>unidbg</h2><ul>
+<li>版本：0.9.3</li>
+<li>下载地址：</li>
+</ul>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>app: <code>ddan.1.27.1.1028.1607website.434.apk</code></li>
+<li>so: libInnoSecure.so</li>
+</ul>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><ul>
+<li>类</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">unidbg</th>
+<th>java</th>
+<th>smail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ByteArray</td>
+<td>byte[]</td>
+<td>[B</td>
+</tr>
+<tr>
+<td align="left">StringObject</td>
+<td>String</td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>创建</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. </span><br><span class="line">byte[] data &#x3D; new byte[16];</span><br><span class="line">new ByteArray(vm, data)</span><br><span class="line"></span><br><span class="line">2. </span><br><span class="line">new StringObject(vm, &quot;12345&quot;)</span><br><span class="line"></span><br><span class="line">3.</span><br><span class="line">DvmInteger dvmInt &#x3D; DvmInteger.valueof(vm, 2)</span><br><span class="line"></span><br><span class="line">3. </span><br><span class="line">DvmObject&lt;?&gt; context &#x3D; vm.resolveClass(&quot;android&#x2F;content&#x2F;Context&quot;).newObject(null)</span><br><span class="line">vm.addLocalObject(context)</span><br><span class="line"></span><br><span class="line">4.</span><br><span class="line">class UnidbgPointer extends Pointer </span><br><span class="line"></span><br><span class="line">模块</span><br><span class="line">AndroidModule   extends VirtualModule&lt;VM&gt;</span><br><span class="line">DalvikModule</span><br><span class="line">Module</span><br><span class="line">LinuxModule     extends Module      </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打补丁</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int patchCode &#x3D; 0x4FF00100; &#x2F;&#x2F;0x4FF00100：mov r0,1的机器码</span><br><span class="line">emulator.getMemory().pointer(module.base + 0x1E86).setInt(0,patchCode);</span><br><span class="line"></span><br><span class="line">Pointer pointer &#x3D; UnidbgPointer.pointer(emulator, module.base + 0x1E86);</span><br><span class="line">byte[] patch</span><br><span class="line">pointer.write(0, patch, 0, patch.length);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="定义类"><a href="#定义类" class="headerlink" title="定义类"></a>定义类</h3><ul>
+<li>位置</li>
+</ul>
+<p><code>unidbg-android/src/test/java/com/</code>包下新建一个包，名字自己定，比如：jason.qjp</p>
+<p>在自己建的包下新建类，名字自己定，比如：TestDanDan</p>
+<ul>
+<li>有二种方式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">方式一：extends方式</span><br><span class="line">public class TestDanDan  extends AbstractJni &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">方式二：</span><br><span class="line">public class TestDanDan &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>推荐用方式一：<code>public class TestDanDan  extends AbstractJni</code></p>
+<ul>
+<li>2种方式的区别：</li>
+</ul>
+<p>extends方式：方式二适用的场景，全部适用，还能解决方式二不适用的场景</p>
+<h3 id="变量值"><a href="#变量值" class="headerlink" title="变量值"></a>变量值</h3><p>需要确定的变量值：</p>
+<ol>
+<li>for32Bit() / for64Bit()</li>
+<li>classPath</li>
+</ol>
+<ul>
+<li>32位还是64位</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;for32Bit(), for64Bit() 可选</span><br><span class="line">emulator &#x3D; AndroidEmulatorBuilder.for32Bit().setProcessName(&quot;com.jifen.dandan&quot;).build();</span><br></pre></td></tr></table></figure>
+<p>确定方法：<br><strong>方法一：</strong>试错法<br>在确定apk内有<code>libInnoSecure.so</code>的情况下，先试<code>for64Bit()</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.IllegalStateException: load library failed: InnoSecure</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.BaseVM.loadLibrary(BaseVM.java:206)</span><br><span class="line">	at com.jason.qjp.TestDanDan.&lt;init&gt;(TestDanDan.java:61)</span><br><span class="line">	at com.jason.qjp.TestDanDan.main(TestDanDan.java:28)</span><br></pre></td></tr></table></figure>
+<p>发现出错了，改为<code>for32Bit()</code></p>
+<p><strong>方法二：</strong>file命令查看<code>libInnoSecure.so</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜ file libInnoSecure.so</span><br><span class="line">libInnoSecure.so: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, BuildID[sha1]&#x3D;aa4d75912e8c15080bdf1eafaeb45c3267b5e4b8, stripped</span><br></pre></td></tr></table></figure>
+
+<p><strong>方法三：</strong> 查看apk的lib目录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lib</span><br><span class="line">    armeabi-v7a&#x2F;</span><br><span class="line">        libInnoSecure.so</span><br><span class="line">    x86&#x2F;</span><br><span class="line">        libInnoSecure.so</span><br></pre></td></tr></table></figure>
+<p><code>armeabi-v7a</code>为32位</p>
+<ul>
+<li>classPath</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String classPath &#x3D; &quot;com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils&quot;;</span><br><span class="line">vm.resolveClass(classPath);</span><br></pre></td></tr></table></figure>
+<p>jadx-gui反编译apk，在里面搜索<code>System.loadLibrary(&quot;InnoSecure&quot;);</code>，所在的类为：<code>com.inno.innosecure.InnoSecureUtils</code>， 把<code>.</code>替换为<code>/</code>即为classPath的值</p>
+<ul>
+<li>libso </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String libso &#x3D; &quot;InnoSecure&quot;;</span><br><span class="line">DalvikModule dm &#x3D; vm.loadLibrary( libso,false);</span><br></pre></td></tr></table></figure>
+<p>这里只给了so的名字<code>InnoSecure</code>，<code>vm.loadLibrary</code>知道从哪里加载。<br>因为有写如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vm &#x3D; emulator.createDalvikVM(new File(apkFilePath));</span><br><span class="line">vm.setVerbose(true);</span><br><span class="line">vm.setJni(this);</span><br><span class="line">new AndroidModule(emulator, vm).register(memory);</span><br></pre></td></tr></table></figure>
+
+<p>这里的场景是：只给了一个apk，没有单独的so文件，把apk做为AndroidModule加载到内存register(memory)，<code>vm.loadLibrary</code>从内存memory加载so</p>
+<h2 id="函数调用"><a href="#函数调用" class="headerlink" title="函数调用"></a>函数调用</h2><ul>
+<li><p>DvmClass</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DvmObject callStaticJniMethodObject(Emulator&lt;?&gt; emulator, String method, Object...args)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Module</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Number[] callFunction(Emulator&lt;?&gt; emulator, long offset, Object... args)</span><br><span class="line"></span><br><span class="line">Number[] callFunction(Emulator&lt;?&gt; emulator, String symbolName, Object... args)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;获取JNIEnv *</span><br><span class="line">Pointer jniEnv &#x3D; vm.getJNIEnv();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;创建jobject对象</span><br><span class="line">DvmObject&lt;?&gt; thiz &#x3D; vm.resolveClass(&quot;com.kanxue.test2&quot;).newObject(null);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;准备入参</span><br><span class="line">List&lt;Object&gt; args &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">args.add(jniEnv);</span><br><span class="line">args.add(vm.addLocalObject(thiz));</span><br><span class="line">args.add(vm.addLocalObject(new StringObject(vm,&quot;XuE&quot;)));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;根据地址调用</span><br><span class="line">Number[] numbers &#x3D; module.callFunction(emulator, 0x9180 + 1, args.toArray());</span><br><span class="line">System.out.println(numbers[0].intValue());</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<h2 id="AbstractJni方法重写"><a href="#AbstractJni方法重写" class="headerlink" title="AbstractJni方法重写"></a>AbstractJni方法重写</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String apkFilePath &#x3D; &quot;&#x2F;Users&#x2F;zhoujie&#x2F;Downloads&#x2F;ddan.1.27.1.1028.1607website.434.apk&quot;;        </span><br><span class="line">String classPath &#x3D; &quot;com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils&quot;;</span><br><span class="line">String libso &#x3D; &quot;InnoSecure&quot;;</span><br><span class="line">TestDanDan test &#x3D; new TestDanDan(apkFilePath, libso, classPath);</span><br><span class="line">test.destroy();</span><br></pre></td></tr></table></figure>
+<p>运行输出如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">JNIEnv-&gt;FindClass(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils) was called from RX@0x4000245d[libInnoSecure.so]0x245d</span><br><span class="line">JNIEnv-&gt;RegisterNatives(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, RW@0x4000a004[libInnoSecure.so]0xa004, 4) was called from RX@0x40002473[libInnoSecure.so]0x2473</span><br><span class="line">RegisterNative(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, secure(Ljava&#x2F;lang&#x2F;String;Ljava&#x2F;lang&#x2F;String;Ljava&#x2F;lang&#x2F;String;[B)[B, RX@0x40005d75[libInnoSecure.so]0x5d75)</span><br><span class="line">RegisterNative(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, decode([BLjava&#x2F;lang&#x2F;String;[B)[B, RX@0x40005edd[libInnoSecure.so]0x5edd)</span><br><span class="line">RegisterNative(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, getn()Ljava&#x2F;lang&#x2F;String;, RX@0x40006069[libInnoSecure.so]0x6069)</span><br><span class="line">RegisterNative(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, getv([B)Ljava&#x2F;lang&#x2F;String;, RX@0x400060ed[libInnoSecure.so]0x60ed)</span><br></pre></td></tr></table></figure>
+<p>是因为设置了如下代码：<code>vm.setVerbose(true)</code>，设置是否打印Jni调用细节<br>从输出可以看出<code>libInnoSecure.so</code>动态注册了4个方法</p>
+<ul>
+<li>调用so中方法</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// java中的声明：public native String getn();</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDanDan</span>  <span class="keyword">extends</span> <span class="title">AbstractJni</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> DvmClass MainActivity;</span><br><span class="line">    MainActivity = vm.resolveClass(classPath);</span><br><span class="line">    <span class="function">String <span class="title">getn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        DvmObject obj = MainActivity.newObject(<span class="keyword">null</span>);</span><br><span class="line">        DvmObject result = obj.callJniMethodObject(emulator, <span class="string">&quot;getn()Ljava/lang/String;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>  result.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">DvmObject&lt;String&gt; result = obj.callJniMethodObject(emulator, <span class="string">&quot;getn()Ljava/lang/String;&quot;</span>);</span><br><span class="line"><span class="keyword">return</span> result.getValue();</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line">    TestDanDan test = <span class="keyword">new</span> TestDanDan(apkFilePath, libso, classPath);</span><br><span class="line">    String r = test.getn();</span><br><span class="line">    System.out.println(r);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 出错：</span></span><br><span class="line">JNIEnv-&gt;CallStaticObjectMethod(<span class="class"><span class="keyword">class</span> <span class="title">android</span>/<span class="title">app</span>/<span class="title">ActivityThread</span>, <span class="title">currentApplication</span>()<span class="title">Landroid</span>/<span class="title">app</span>/<span class="title">Application</span></span>;) was called from RX@<span class="number">0x40001d73</span>[libInnoSecure.so]<span class="number">0x1d73</span></span><br><span class="line">[<span class="number">10</span>:<span class="number">19</span>:<span class="number">55</span> <span class="number">045</span>]  WARN [com.github.unidbg.linux.ARM32SyscallHandler] (ARM32SyscallHandler:<span class="number">436</span>) - handleInterrupt intno=<span class="number">2</span>, NR=-<span class="number">1073744048</span>, svcNumber=<span class="number">0x12e</span>, PC=unidbg@<span class="number">0xfffe0374</span>[libandroid.so]<span class="number">0x374</span>, syscall=<span class="keyword">null</span></span><br><span class="line">java.lang.UnsupportedOperationException: android/app/ActivityThread-&gt;currentApplication()Landroid/app/Application;</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.AbstractJni.callStaticObjectMethod(AbstractJni.java:<span class="number">340</span>)</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.AbstractJni.callStaticObjectMethod(AbstractJni.java:<span class="number">335</span>)</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.DvmMethod.callStaticObjectMethod(DvmMethod.java:<span class="number">55</span>)</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.DalvikVM$<span class="number">47.</span>handle(DalvikVM.java:<span class="number">1032</span>)</span><br><span class="line">	at com.github.unidbg.linux.ARM32SyscallHandler.hook(ARM32SyscallHandler.java:<span class="number">93</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>添加<code>callStaticObjectMethod</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> DvmObject&lt;?&gt; callStaticObjectMethod(BaseVM vm, DvmClass dvmClass, String signature, VarArg varArg) &#123;</span><br><span class="line">    <span class="keyword">if</span> (signature.equals(<span class="string">&quot;android/app/ActivityThread-&gt;currentApplication()Landroid/app/Application;&quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> vm.resolveClass(<span class="string">&quot;android/app/Application&quot;</span>, vm.resolveClass(<span class="string">&quot;android/content/ContextWrapper&quot;</span>, vm.resolveClass(<span class="string">&quot;android/content/Context&quot;</span>))).newObject(signature);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">super</span>.callStaticObjectMethod(vm,dvmClass,signature,varArg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>callStaticObjectMethod</code> vs <code>callStaticObjectMethodV</code></li>
+<li><code>callObjectMethod</code> vs <code>callObjectMethodV</code> </li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> DvmObject&lt;?&gt; callStaticObjectMethod(BaseVM vm, DvmClass dvmClass, String signature, VarArg varArg) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(signature);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> DvmObject&lt;?&gt; callStaticObjectMethodV(BaseVM vm, DvmClass dvmClass, String signature, VaList vaList) &#123;</span><br><span class="line">    <span class="comment">//...... 一大堆代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public DvmObject&lt;?&gt; callObjectMethod(BaseVM vm, DvmObject&lt;?&gt; dvmObject, String signature, VarArg varArg) &#123;</span><br><span class="line">    &#x2F;&#x2F;...... 一大堆代码</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public DvmObject&lt;?&gt; callObjectMethodV(BaseVM vm, DvmObject&lt;?&gt; dvmObject, String signature, VaList vaList) &#123;</span><br><span class="line">    &#x2F;&#x2F;...... 一大堆代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>优先重写<code>callStaticObjectMethod</code>和<code>callObjectMethod</code></li>
+<li>带V的一般没调用到</li>
+</ol>
+<ul>
+<li>被调用的系统API</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">android&#x2F;app&#x2F;ActivityThread-&gt;currentApplication()Landroid&#x2F;app&#x2F;Application;</span><br><span class="line">android&#x2F;app&#x2F;Application-&gt;getPackageManager()Landroid&#x2F;content&#x2F;pm&#x2F;PackageManager;</span><br><span class="line">android&#x2F;app&#x2F;Application-&gt;getPackageName()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">android&#x2F;content&#x2F;pm&#x2F;PackageManager-&gt;getPackageInfo(Ljava&#x2F;lang&#x2F;String;I)Landroid&#x2F;content&#x2F;pm&#x2F;PackageInfo;</span><br><span class="line">android&#x2F;content&#x2F;pm&#x2F;Signature-&gt;toCharsString()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">java&#x2F;lang&#x2F;String-&gt;getBytes(Ljava&#x2F;lang&#x2F;String;)[B</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><ul>
+<li>AndroidEmulator<br><img src="https://gitee.com/zhoujie903/image-repo/raw/master/img/AndroidEmulator.png" alt="AndroidEmulator"></li>
+<li>VM<br><img src="https://gitee.com/zhoujie903/image-repo/raw/master/img/VM.png" alt="VM"></li>
+</ul>
 ]]></content>
   </entry>
   <entry>
@@ -1336,213 +1496,53 @@
       </tags>
   </entry>
   <entry>
+    <title>阅读列表-文档图形</title>
+    <url>/2021/08/11/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E6%96%87%E6%A1%A3%E5%9B%BE%E5%BD%A2/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="Markdown"><a href="#Markdown" class="headerlink" title="Markdown"></a>Markdown</h2><p><a href="https://yuanfentiank789.github.io/2017/04/12/flowchart/">Markdown绘制流程图的方法</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>阅读列表-记忆</title>
     <url>/2021/06/12/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E8%AE%B0%E5%BF%86/</url>
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>工具使用-网络命令</title>
-    <url>/2022/08/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 设置代理的2种方法</span><br><span class="line">&gt; env http_proxy&#x3D;http:&#x2F;&#x2F;localhost:8080 curl -I http:&#x2F;&#x2F;google.com</span><br><span class="line"></span><br><span class="line">&gt; curl --proxy http:&#x2F;&#x2F;localhost:8080 https:&#x2F;&#x2F;example.com</span><br></pre></td></tr></table></figure>
-<p><a href="http://www.ruanyifeng.com/blog/2011/09/curl.html">curl网站开发指南</a></p>
-<p>问：ip命令来自哪个包<br>答：ip 命令来自于 iproute2 安装包，一般系统会默认安装，如果没有的话，请读者自行安装</p>
-<p>问：服务名称与port number的对应在Linux当中，是用那个文件来设定对应的？<br>答：/etc/services</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ cat &#x2F;etc&#x2F;resolv.conf</span><br><span class="line"># This file is not consulted for DNS hostname resolution, address</span><br><span class="line"># resolution, or the DNS query routing mechanism used by most</span><br><span class="line"># processes on this system.</span><br><span class="line">#</span><br><span class="line"># To view the DNS configuration used by this system, use:</span><br><span class="line">#   scutil --dns</span><br><span class="line">#</span><br><span class="line"># SEE ALSO</span><br><span class="line">#   dns-sd(1), scutil(8)</span><br><span class="line">#</span><br><span class="line"># This file is automatically generated.</span><br><span class="line">#</span><br><span class="line">nameserver 202.101.172.35</span><br><span class="line">nameserver 202.101.172.47</span><br></pre></td></tr></table></figure>
-
-<h1 id="route"><a href="#route" class="headerlink" title="route"></a>route</h1><h1 id="host-nslookup"><a href="#host-nslookup" class="headerlink" title="host, nslookup"></a>host, nslookup</h1><p>侦测主机名与IP对应</p>
-<p>host这个指令可以用来查出某个主机名的IP喔！<br>范例一：找出tw.yahoo.com的IP</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ host tw.yahoo.com</span><br><span class="line">tw.yahoo.com is an alias for atsv2-fp-shed.wg1.b.yahoo.com.</span><br><span class="line">atsv2-fp-shed.wg1.b.yahoo.com has address 124.108.103.103</span><br><span class="line">atsv2-fp-shed.wg1.b.yahoo.com has address 124.108.103.104</span><br><span class="line">atsv2-fp-shed.wg1.b.yahoo.com has IPv6 address 2406:2000:ec:815::3</span><br><span class="line">atsv2-fp-shed.wg1.b.yahoo.com has IPv6 address 2406:2000:ec:815::4</span><br></pre></td></tr></table></figure>
-
-<p>范例一：找出<a href="http://www.google.com的ip/">www.google.com的IP</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ nslookup www.google.com</span><br><span class="line">Server:		202.101.172.35</span><br><span class="line">Address:	202.101.172.35#53</span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">Name:	www.google.com</span><br><span class="line">Address: 64.13.192.76</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜  ~ nslookup 64.13.192.76</span><br><span class="line">Server:		202.101.172.35</span><br><span class="line">Address:	202.101.172.35#53</span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">76.192.13.64.in-addr.arpa	name &#x3D; acmkokecgc.gs01.gridserver.com.</span><br><span class="line"></span><br><span class="line">Authoritative answers can be found from:</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h1><p>netstat的输出主要分为两大部分，分别是TCP/IP的网络接口部分，以及传统的Unix socket部分。</p>
-<p>基本上，我们常常谈到的netstat的功能，就是在观察网络的联机状态了，而网络联机状态中，又以观察『我目前开了多少的port在等待客户端的联机』以及『目前我的网络联机状态中，有多少联机已建立或产生问题』最常见。</p>
-<p>Unix socket通常是用在一些仅在本机上运作的程序所开启的插槽接口文件，例如X Window不都是在本机上运作而已吗？那何必启动网络的port呢？当然可以使用Unix socket啰，另外，例如Postfix这一类的网络服务器，由于很多动作都是在本机上头来完成的，所以以会占用很多的Unixsocket喔！</p>
-<p>netstat – show network status<br>netstat命令显示各种网络相关的数据结构。<br>对于显示的信息，依据选项，有多种输出格式。<br>第一种格式：显示各种协议所有的sockets<br>第二种格式：根据所选择的选项显示其他网络数据结构之一的内容<br>第三种格式：在指定等待间隔的情况下，netstat将在配置的网络接口上连续显示有关数据包流量的信息<br>第四种格式：显示指定协议或地址系列的统计信息。如果指定了等待间隔，将显示最后一个间隔的协议信息<br>第五种格式：显示指定协议或地址系列的每个接口统计信息<br>第六种格式：显示mbuf(9)统计信息<br>第七种格式：显示指定地址系列的路由表<br>第八种格式：显示路由统计信息</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat [-AaLlnW] [-f address_family | -p protocol]</span><br><span class="line">netstat [-gilns] [-v] [-f address_family] [-I interface]</span><br><span class="line">netstat -i | -I interface [-w wait] [-c queue] [-abdgqRtS]</span><br><span class="line">netstat -s [-s] [-f address_family | -p protocol] [-w wait]</span><br><span class="line">netstat -i | -I interface -s [-f address_family | -p protocol]</span><br><span class="line">netstat -m [-m]</span><br><span class="line">netstat -r [-Aaln] [-f address_family]</span><br><span class="line">netstat -rs [-s]</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 与路由有关的参数</span><br><span class="line"># -r 列出路由表，功能如同route这个指令</span><br><span class="line"># -n 不使用主机名与服务名称，使用IP与port number，如同route -n</span><br><span class="line">netstat -[rn] </span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#范例一：列出目前的路由表状态，且以IP及port number显示：</span><br><span class="line">➜  ~ netstat -rn</span><br><span class="line">Kernel IP routing table</span><br><span class="line">Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface</span><br><span class="line">0.0.0.0         10.211.55.1     0.0.0.0         UG        0 0          0 enp0s5</span><br><span class="line">10.211.55.0     0.0.0.0         255.255.255.0   U         0 0          0 enp0s5</span><br><span class="line">169.254.0.0     0.0.0.0         255.255.0.0     U         0 0          0 enp0s5</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#范例二：列出目前的网络联机状态，且以IP及port number显示：</span><br><span class="line"># -a：列出所有的联机状态，包括tcp&#x2F;udp&#x2F;unix socket等</span><br><span class="line">➜  ~ netstat -an</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#范例三：列出目前已启动的网络服务：</span><br><span class="line">#最重要的其实是那个-l的参数，因为可以仅列出有在Listen的</span><br><span class="line">➜  ~ netstat -tulpn</span><br><span class="line">Active Internet connections (only servers)</span><br><span class="line">Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID&#x2F;Program name</span><br><span class="line">tcp        0      0 127.0.1.1:53            0.0.0.0:*               LISTEN      -</span><br><span class="line">tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -</span><br><span class="line">tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      -</span><br><span class="line">tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      -</span><br><span class="line">tcp6       0      0 :::22                   :::*                    LISTEN      -</span><br><span class="line">tcp6       0      0 ::1:631                 :::*                    LISTEN      -</span><br><span class="line">tcp6       0      0 :::8080                 :::*                    LISTEN      -</span><br><span class="line">udp        0      0 0.0.0.0:35144           0.0.0.0:*                           -</span><br><span class="line">udp        0      0 127.0.1.1:53            0.0.0.0:*                           -</span><br><span class="line">udp        0      0 0.0.0.0:68              0.0.0.0:*                           -</span><br><span class="line">udp        0      0 0.0.0.0:631             0.0.0.0:*                           -</span><br><span class="line">udp        0      0 0.0.0.0:40666           0.0.0.0:*                           -</span><br><span class="line">udp        0      0 0.0.0.0:5353            0.0.0.0:*                           -</span><br><span class="line">udp6       0      0 :::50198                :::*                                -</span><br><span class="line">udp6       0      0 :::33848                :::*                                -</span><br><span class="line">udp6       0      0 :::5353                 :::*                                -</span><br><span class="line">udp6       0      0 :::5353                 :::*                                -</span><br></pre></td></tr></table></figure>]]></content>
-  </entry>
-  <entry>
-    <title>工具使用-BeEF</title>
-    <url>/2022/09/11/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-BeEF/</url>
-    <content><![CDATA[<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
-<li>Docker</li>
-<li>BeEF</li>
-<li>存在xss漏洞的Web App: DVWA</li>
+    <title>阅读列表-基础</title>
+    <url>/2022/03/25/%E9%98%85%E8%AF%BB%E5%88%97%E8%A1%A8-%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2018/01/assembly-language-primer.html">汇编语言入门教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/11/byte-order.html">理解字节序</a></li>
+<li><a href="http://jalan.space/2019/11/26/2019/binary-show/">深入浅出：举个例子解读原码、反码与补码</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/30007037">C/C++内存对齐详解</a></li>
+<li><a href="https://www.jianshu.com/p/5092d6d5caa3">彻底搞清楚 GOT 和 PLT</a></li>
+<li><a href="https://blog.frytea.com/archives/504/">加速各种 GitHub 资源拉取</a></li>
+<li><a href="https://cloverkits.github.io/2018/08/12/%E5%A6%82%E4%BD%95%E7%94%A8%E5%A5%BD%E8%B0%B7%E6%AD%8C%E7%AD%89%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">如何用好谷歌等搜索引擎</a></li>
+<li><a href="http://deerchao.net/tutorials/regex/regex.htm">正则表达式30分钟入门教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/07/yaml.html">YAML 语言教程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html">理解OAuth 2.0</a></li>
+<li><a href="https://www.ruanyifeng.com/blog/2022/08/dns-query.html">DNS 查询原理详解</a></li>
+<li><a href="https://www.jianshu.com/p/65225f50fe76">基于python flask详述 OAuth 2.0 的运作流程</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2018/10/restful-api-best-practices.html">RESTful API 最佳实践</a></li>
+<li><a href="https://www.zhihu.com/question/19793879">基于python的scrapy爬虫，关于增量爬取是怎么处理的？</a></li>
+<li><a href="https://juejin.cn/post/6898093501376905230">用js写一个js解释器</a></li>
+<li><a href="https://www.iosdevlog.com/2019-01-03-nlp/">自然语言处理简明教程</a></li>
+<li><a href="https://www.codesky.me/archives/mweb-to-blog-publish.wind">MWeb 发布到任意系统的研究</a></li>
+<li><a href="https://yuanfentiank789.github.io/2017/09/21/Gradle%E5%92%8CGroovy/">Gradle和Groovy</a></li>
 </ul>
-<h2 id="建立环境"><a href="#建立环境" class="headerlink" title="建立环境"></a>建立环境</h2><h3 id="启动Docker"><a href="#启动Docker" class="headerlink" title="启动Docker"></a>启动Docker</h3><h3 id="BeEF"><a href="#BeEF" class="headerlink" title="BeEF"></a>BeEF</h3><ol>
-<li><p>命令行：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull janes&#x2F;beef</span><br><span class="line"></span><br><span class="line">docker run -d --name BeEF -p 0.0.0.0:3000:3000  janes&#x2F;beef:latest</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>浏览器：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost:3000&#x2F;ui&#x2F;authentication</span><br><span class="line"></span><br><span class="line">Username: beef</span><br><span class="line">Password: beef</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="Web-App-DVWA"><a href="#Web-App-DVWA" class="headerlink" title="Web App: DVWA"></a>Web App: DVWA</h3><ol>
-<li><p>命令行：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker pull citizenstig&#x2F;dvwa</span><br><span class="line"></span><br><span class="line">docker run -d --name DVWA -p 0.0.0.0:80:80  citizenstig&#x2F;dvwa:latest</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>浏览器：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost</span><br><span class="line"></span><br><span class="line">Username: admin</span><br><span class="line">Password: password</span><br><span class="line"></span><br><span class="line">把 DVWA 的 Security Level 调整为 low</span><br><span class="line"></span><br><span class="line">打开 XSS(Reflected)页面</span><br><span class="line">http:&#x2F;&#x2F;localhost&#x2F;vulnerabilities&#x2F;xss_r&#x2F; </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>浏览器：What’s your name?</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">输入</span><br><span class="line">&lt;script src&#x3D;&quot;http:&#x2F;&#x2F;192.168.1.100:3000&#x2F;hook.js&quot;&gt;&lt;&#x2F;script&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">注意：192.168.1.100是运行BeEF机器的ip地址</span><br><span class="line"></span><br><span class="line">注意：保持这个页面一直打开，不要关闭</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
-    <title>工具使用-unidbg</title>
-    <url>/2021/07/07/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8-unidbg/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="unidbg"><a href="#unidbg" class="headerlink" title="unidbg"></a>unidbg</h2><ul>
-<li>版本：0.9.3</li>
-<li>下载地址：</li>
+<h2 id="课程"><a href="#课程" class="headerlink" title="课程"></a>课程</h2><ul>
+<li><a href="https://time.geekbang.org/column/intro/219">编译原理之美</a></li>
+<li><a href="https://time.geekbang.org/column/intro/100017301">数据结构与算法之美</a></li>
+<li><a href="https://time.geekbang.org/column/intro/450">编程高手必学的内存知识</a></li>
 </ul>
-<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
-<li>app: <code>ddan.1.27.1.1028.1607website.434.apk</code></li>
-<li>so: libInnoSecure.so</li>
-</ul>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><ul>
-<li>类</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">unidbg</th>
-<th>java</th>
-<th>smail</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">ByteArray</td>
-<td>byte[]</td>
-<td>[B</td>
-</tr>
-<tr>
-<td align="left">StringObject</td>
-<td>String</td>
-<td></td>
-</tr>
-</tbody></table>
-<ul>
-<li><p>创建</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1. </span><br><span class="line">byte[] data &#x3D; new byte[16];</span><br><span class="line">new ByteArray(vm, data)</span><br><span class="line"></span><br><span class="line">2. </span><br><span class="line">new StringObject(vm, &quot;12345&quot;)</span><br><span class="line"></span><br><span class="line">3.</span><br><span class="line">DvmInteger dvmInt &#x3D; DvmInteger.valueof(vm, 2)</span><br><span class="line"></span><br><span class="line">3. </span><br><span class="line">DvmObject&lt;?&gt; context &#x3D; vm.resolveClass(&quot;android&#x2F;content&#x2F;Context&quot;).newObject(null)</span><br><span class="line">vm.addLocalObject(context)</span><br><span class="line"></span><br><span class="line">4.</span><br><span class="line">class UnidbgPointer extends Pointer </span><br><span class="line"></span><br><span class="line">模块</span><br><span class="line">AndroidModule   extends VirtualModule&lt;VM&gt;</span><br><span class="line">DalvikModule</span><br><span class="line">Module</span><br><span class="line">LinuxModule     extends Module      </span><br></pre></td></tr></table></figure>
-</li>
-<li><p>打补丁</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int patchCode &#x3D; 0x4FF00100; &#x2F;&#x2F;0x4FF00100：mov r0,1的机器码</span><br><span class="line">emulator.getMemory().pointer(module.base + 0x1E86).setInt(0,patchCode);</span><br><span class="line"></span><br><span class="line">Pointer pointer &#x3D; UnidbgPointer.pointer(emulator, module.base + 0x1E86);</span><br><span class="line">byte[] patch</span><br><span class="line">pointer.write(0, patch, 0, patch.length);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h3 id="定义类"><a href="#定义类" class="headerlink" title="定义类"></a>定义类</h3><ul>
-<li>位置</li>
-</ul>
-<p><code>unidbg-android/src/test/java/com/</code>包下新建一个包，名字自己定，比如：jason.qjp</p>
-<p>在自己建的包下新建类，名字自己定，比如：TestDanDan</p>
-<ul>
-<li>有二种方式</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">方式一：extends方式</span><br><span class="line">public class TestDanDan  extends AbstractJni &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">方式二：</span><br><span class="line">public class TestDanDan &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>推荐用方式一：<code>public class TestDanDan  extends AbstractJni</code></p>
-<ul>
-<li>2种方式的区别：</li>
-</ul>
-<p>extends方式：方式二适用的场景，全部适用，还能解决方式二不适用的场景</p>
-<h3 id="变量值"><a href="#变量值" class="headerlink" title="变量值"></a>变量值</h3><p>需要确定的变量值：</p>
-<ol>
-<li>for32Bit() / for64Bit()</li>
-<li>classPath</li>
-</ol>
-<ul>
-<li>32位还是64位</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;for32Bit(), for64Bit() 可选</span><br><span class="line">emulator &#x3D; AndroidEmulatorBuilder.for32Bit().setProcessName(&quot;com.jifen.dandan&quot;).build();</span><br></pre></td></tr></table></figure>
-<p>确定方法：<br><strong>方法一：</strong>试错法<br>在确定apk内有<code>libInnoSecure.so</code>的情况下，先试<code>for64Bit()</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.IllegalStateException: load library failed: InnoSecure</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.BaseVM.loadLibrary(BaseVM.java:206)</span><br><span class="line">	at com.jason.qjp.TestDanDan.&lt;init&gt;(TestDanDan.java:61)</span><br><span class="line">	at com.jason.qjp.TestDanDan.main(TestDanDan.java:28)</span><br></pre></td></tr></table></figure>
-<p>发现出错了，改为<code>for32Bit()</code></p>
-<p><strong>方法二：</strong>file命令查看<code>libInnoSecure.so</code></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">➜ file libInnoSecure.so</span><br><span class="line">libInnoSecure.so: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, BuildID[sha1]&#x3D;aa4d75912e8c15080bdf1eafaeb45c3267b5e4b8, stripped</span><br></pre></td></tr></table></figure>
-
-<p><strong>方法三：</strong> 查看apk的lib目录</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lib</span><br><span class="line">    armeabi-v7a&#x2F;</span><br><span class="line">        libInnoSecure.so</span><br><span class="line">    x86&#x2F;</span><br><span class="line">        libInnoSecure.so</span><br></pre></td></tr></table></figure>
-<p><code>armeabi-v7a</code>为32位</p>
-<ul>
-<li>classPath</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String classPath &#x3D; &quot;com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils&quot;;</span><br><span class="line">vm.resolveClass(classPath);</span><br></pre></td></tr></table></figure>
-<p>jadx-gui反编译apk，在里面搜索<code>System.loadLibrary(&quot;InnoSecure&quot;);</code>，所在的类为：<code>com.inno.innosecure.InnoSecureUtils</code>， 把<code>.</code>替换为<code>/</code>即为classPath的值</p>
-<ul>
-<li>libso </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String libso &#x3D; &quot;InnoSecure&quot;;</span><br><span class="line">DalvikModule dm &#x3D; vm.loadLibrary( libso,false);</span><br></pre></td></tr></table></figure>
-<p>这里只给了so的名字<code>InnoSecure</code>，<code>vm.loadLibrary</code>知道从哪里加载。<br>因为有写如下代码：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vm &#x3D; emulator.createDalvikVM(new File(apkFilePath));</span><br><span class="line">vm.setVerbose(true);</span><br><span class="line">vm.setJni(this);</span><br><span class="line">new AndroidModule(emulator, vm).register(memory);</span><br></pre></td></tr></table></figure>
-
-<p>这里的场景是：只给了一个apk，没有单独的so文件，把apk做为AndroidModule加载到内存register(memory)，<code>vm.loadLibrary</code>从内存memory加载so</p>
-<h2 id="函数调用"><a href="#函数调用" class="headerlink" title="函数调用"></a>函数调用</h2><ul>
-<li><p>DvmClass</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DvmObject callStaticJniMethodObject(Emulator&lt;?&gt; emulator, String method, Object...args)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Module</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Number[] callFunction(Emulator&lt;?&gt; emulator, long offset, Object... args)</span><br><span class="line"></span><br><span class="line">Number[] callFunction(Emulator&lt;?&gt; emulator, String symbolName, Object... args)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F;获取JNIEnv *</span><br><span class="line">Pointer jniEnv &#x3D; vm.getJNIEnv();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;创建jobject对象</span><br><span class="line">DvmObject&lt;?&gt; thiz &#x3D; vm.resolveClass(&quot;com.kanxue.test2&quot;).newObject(null);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;准备入参</span><br><span class="line">List&lt;Object&gt; args &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">args.add(jniEnv);</span><br><span class="line">args.add(vm.addLocalObject(thiz));</span><br><span class="line">args.add(vm.addLocalObject(new StringObject(vm,&quot;XuE&quot;)));</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;根据地址调用</span><br><span class="line">Number[] numbers &#x3D; module.callFunction(emulator, 0x9180 + 1, args.toArray());</span><br><span class="line">System.out.println(numbers[0].intValue());</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<h2 id="AbstractJni方法重写"><a href="#AbstractJni方法重写" class="headerlink" title="AbstractJni方法重写"></a>AbstractJni方法重写</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">String apkFilePath &#x3D; &quot;&#x2F;Users&#x2F;zhoujie&#x2F;Downloads&#x2F;ddan.1.27.1.1028.1607website.434.apk&quot;;        </span><br><span class="line">String classPath &#x3D; &quot;com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils&quot;;</span><br><span class="line">String libso &#x3D; &quot;InnoSecure&quot;;</span><br><span class="line">TestDanDan test &#x3D; new TestDanDan(apkFilePath, libso, classPath);</span><br><span class="line">test.destroy();</span><br></pre></td></tr></table></figure>
-<p>运行输出如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">JNIEnv-&gt;FindClass(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils) was called from RX@0x4000245d[libInnoSecure.so]0x245d</span><br><span class="line">JNIEnv-&gt;RegisterNatives(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, RW@0x4000a004[libInnoSecure.so]0xa004, 4) was called from RX@0x40002473[libInnoSecure.so]0x2473</span><br><span class="line">RegisterNative(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, secure(Ljava&#x2F;lang&#x2F;String;Ljava&#x2F;lang&#x2F;String;Ljava&#x2F;lang&#x2F;String;[B)[B, RX@0x40005d75[libInnoSecure.so]0x5d75)</span><br><span class="line">RegisterNative(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, decode([BLjava&#x2F;lang&#x2F;String;[B)[B, RX@0x40005edd[libInnoSecure.so]0x5edd)</span><br><span class="line">RegisterNative(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, getn()Ljava&#x2F;lang&#x2F;String;, RX@0x40006069[libInnoSecure.so]0x6069)</span><br><span class="line">RegisterNative(com&#x2F;inno&#x2F;innosecure&#x2F;InnoSecureUtils, getv([B)Ljava&#x2F;lang&#x2F;String;, RX@0x400060ed[libInnoSecure.so]0x60ed)</span><br></pre></td></tr></table></figure>
-<p>是因为设置了如下代码：<code>vm.setVerbose(true)</code>，设置是否打印Jni调用细节<br>从输出可以看出<code>libInnoSecure.so</code>动态注册了4个方法</p>
-<ul>
-<li>调用so中方法</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// java中的声明：public native String getn();</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDanDan</span>  <span class="keyword">extends</span> <span class="title">AbstractJni</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> DvmClass MainActivity;</span><br><span class="line">    MainActivity = vm.resolveClass(classPath);</span><br><span class="line">    <span class="function">String <span class="title">getn</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        DvmObject obj = MainActivity.newObject(<span class="keyword">null</span>);</span><br><span class="line">        DvmObject result = obj.callJniMethodObject(emulator, <span class="string">&quot;getn()Ljava/lang/String;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>  result.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">DvmObject&lt;String&gt; result = obj.callJniMethodObject(emulator, <span class="string">&quot;getn()Ljava/lang/String;&quot;</span>);</span><br><span class="line"><span class="keyword">return</span> result.getValue();</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="comment">//......</span></span><br><span class="line">    TestDanDan test = <span class="keyword">new</span> TestDanDan(apkFilePath, libso, classPath);</span><br><span class="line">    String r = test.getn();</span><br><span class="line">    System.out.println(r);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 出错：</span></span><br><span class="line">JNIEnv-&gt;CallStaticObjectMethod(<span class="class"><span class="keyword">class</span> <span class="title">android</span>/<span class="title">app</span>/<span class="title">ActivityThread</span>, <span class="title">currentApplication</span>()<span class="title">Landroid</span>/<span class="title">app</span>/<span class="title">Application</span></span>;) was called from RX@<span class="number">0x40001d73</span>[libInnoSecure.so]<span class="number">0x1d73</span></span><br><span class="line">[<span class="number">10</span>:<span class="number">19</span>:<span class="number">55</span> <span class="number">045</span>]  WARN [com.github.unidbg.linux.ARM32SyscallHandler] (ARM32SyscallHandler:<span class="number">436</span>) - handleInterrupt intno=<span class="number">2</span>, NR=-<span class="number">1073744048</span>, svcNumber=<span class="number">0x12e</span>, PC=unidbg@<span class="number">0xfffe0374</span>[libandroid.so]<span class="number">0x374</span>, syscall=<span class="keyword">null</span></span><br><span class="line">java.lang.UnsupportedOperationException: android/app/ActivityThread-&gt;currentApplication()Landroid/app/Application;</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.AbstractJni.callStaticObjectMethod(AbstractJni.java:<span class="number">340</span>)</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.AbstractJni.callStaticObjectMethod(AbstractJni.java:<span class="number">335</span>)</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.DvmMethod.callStaticObjectMethod(DvmMethod.java:<span class="number">55</span>)</span><br><span class="line">	at com.github.unidbg.linux.android.dvm.DalvikVM$<span class="number">47.</span>handle(DalvikVM.java:<span class="number">1032</span>)</span><br><span class="line">	at com.github.unidbg.linux.ARM32SyscallHandler.hook(ARM32SyscallHandler.java:<span class="number">93</span>)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>添加<code>callStaticObjectMethod</code></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> DvmObject&lt;?&gt; callStaticObjectMethod(BaseVM vm, DvmClass dvmClass, String signature, VarArg varArg) &#123;</span><br><span class="line">    <span class="keyword">if</span> (signature.equals(<span class="string">&quot;android/app/ActivityThread-&gt;currentApplication()Landroid/app/Application;&quot;</span>)) &#123;</span><br><span class="line">        <span class="keyword">return</span> vm.resolveClass(<span class="string">&quot;android/app/Application&quot;</span>, vm.resolveClass(<span class="string">&quot;android/content/ContextWrapper&quot;</span>, vm.resolveClass(<span class="string">&quot;android/content/Context&quot;</span>))).newObject(signature);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">super</span>.callStaticObjectMethod(vm,dvmClass,signature,varArg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>callStaticObjectMethod</code> vs <code>callStaticObjectMethodV</code></li>
-<li><code>callObjectMethod</code> vs <code>callObjectMethodV</code> </li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> DvmObject&lt;?&gt; callStaticObjectMethod(BaseVM vm, DvmClass dvmClass, String signature, VarArg varArg) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(signature);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> DvmObject&lt;?&gt; callStaticObjectMethodV(BaseVM vm, DvmClass dvmClass, String signature, VaList vaList) &#123;</span><br><span class="line">    <span class="comment">//...... 一大堆代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public DvmObject&lt;?&gt; callObjectMethod(BaseVM vm, DvmObject&lt;?&gt; dvmObject, String signature, VarArg varArg) &#123;</span><br><span class="line">    &#x2F;&#x2F;...... 一大堆代码</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public DvmObject&lt;?&gt; callObjectMethodV(BaseVM vm, DvmObject&lt;?&gt; dvmObject, String signature, VaList vaList) &#123;</span><br><span class="line">    &#x2F;&#x2F;...... 一大堆代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>优先重写<code>callStaticObjectMethod</code>和<code>callObjectMethod</code></li>
-<li>带V的一般没调用到</li>
-</ol>
-<ul>
-<li>被调用的系统API</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">android&#x2F;app&#x2F;ActivityThread-&gt;currentApplication()Landroid&#x2F;app&#x2F;Application;</span><br><span class="line">android&#x2F;app&#x2F;Application-&gt;getPackageManager()Landroid&#x2F;content&#x2F;pm&#x2F;PackageManager;</span><br><span class="line">android&#x2F;app&#x2F;Application-&gt;getPackageName()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">android&#x2F;content&#x2F;pm&#x2F;PackageManager-&gt;getPackageInfo(Ljava&#x2F;lang&#x2F;String;I)Landroid&#x2F;content&#x2F;pm&#x2F;PackageInfo;</span><br><span class="line">android&#x2F;content&#x2F;pm&#x2F;Signature-&gt;toCharsString()Ljava&#x2F;lang&#x2F;String;</span><br><span class="line">java&#x2F;lang&#x2F;String-&gt;getBytes(Ljava&#x2F;lang&#x2F;String;)[B</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><ul>
-<li>AndroidEmulator<br><img src="https://gitee.com/zhoujie903/image-repo/raw/master/img/AndroidEmulator.png" alt="AndroidEmulator"></li>
-<li>VM<br><img src="https://gitee.com/zhoujie903/image-repo/raw/master/img/VM.png" alt="VM"></li>
+<h2 id="图书"><a href="#图书" class="headerlink" title="图书"></a>图书</h2><ul>
+<li><a href="https://book.douban.com/subject/2039913/">Professional Assembly Language</a></li>
+<li><a href="https://book.douban.com/subject/25837796/">汇编语言：基于linux环境（第3版）</a></li>
+<li><a href="https://book.douban.com/subject/3652388/">程序员的自我修养</a></li>
+<li><a href="https://item.jd.com/11942019.html">图解密码技术</a></li>
+<li><a href="https://book.douban.com/subject/24841239/">SQL基础教程（第2版）</a></li>
+<li><a href="https://book.douban.com/subject/27082372/">ANTLR 4权威指南</a></li>
+<li><a href="https://book.douban.com/subject/10546925/">白帽子讲Web安全</a></li>
 </ul>
 ]]></content>
   </entry>
